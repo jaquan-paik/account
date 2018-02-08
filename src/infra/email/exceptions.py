@@ -1,0 +1,4 @@
+
+
+class EmailSendErrorException(Exception):
+    pass

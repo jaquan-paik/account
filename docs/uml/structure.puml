@@ -1,0 +1,114 @@
+@startuml
+
+' django 프레임워크
+folder django {
+    [django.setting]
+}
+
+' 서로 참조하지 않는다.
+' lib를 참조하지 않는다.
+folder infra {
+    [infra.email]
+    [infra.email] -up-> [django.setting]
+
+    folder infra.network {
+        [infra.network.constants]
+    }
+
+    [infra.config]
+
+    [infra.storage.database]
+    [infra.storage.database] -up-> [django.setting]
+
+    [infra.storage.redis]
+    [infra.storage.redis] -up-> [django.setting]
+}
+
+' 상위 노드가 하위노드를 참조하지 않는다.
+' 동일 노드끼리는 참조하지 않는다.
+folder lib {
+    node first {
+        [lib.base]
+
+        folder lib.utils {
+            [lib.utils.excel_builder]
+            [lib.utils.format]
+            [lib.utils.ip]
+            [lib.utils.singleton]
+            [lib.utils.string]
+            [lib.utils.date] -up-> [lib.utils.format]
+        }
+
+        [lib.log]
+        [lib.log] -up-> [infra.config]
+
+        [lib.crypto]
+        [lib.crypto] -up-> [infra.network.constants]
+    }
+
+    node second {
+        folder lib.django {
+            [lib.django.admin]
+
+            [lib.django.db]
+            [lib.django.db] -up-> [infra.config]
+            [lib.django.db] -up-> [lib.crypto]
+
+            [lib.django.forms]
+
+            [lib.django.views]
+            [lib.django.views] -up-> [infra.network.constants]
+            [lib.django.views] -up-> [lib.base]
+
+            [lib.django.command]
+            [lib.django.command] -up-> [lib.log]
+            [lib.django.command] -up-> [lib.utils.format]
+
+            [lib.django.app]
+            [lib.django.app] -up-> [infra.storage.database]
+            [lib.django.app] -up-> [lib.base]
+        }
+
+        [lib.lock]
+        [lib.lock] -up-> [infra.storage.redis]
+        [lib.lock] -up-> [infra.network.constants]
+        [lib.lock] -up-> [lib.log]
+
+        [lib.cache]
+        [lib.cache] -up-> [infra.network.constants]
+
+        [lib.ridibooks]
+        [lib.ridibooks] -up-> [lib.base]
+        [lib.ridibooks] --> [lib.utils.ip]
+
+        [decorators]
+        [decorators] -up-> [lib.log]
+        [decorators] -up-> [lib.utils.ip]
+    }
+
+    node third {
+        [lib.settings]
+        [lib.settings] -up-> [django.setting]
+        [lib.settings] -up-> [infra.storage.redis]
+        [lib.settings] -up-> [lib.crypto]
+
+        [lib.email]
+        [lib.email] -up-> [infra.email]
+        [lib.email] -up-> [lib.base]
+        [lib.email] -up-> [lib.log]
+        [lib.email] -up-> [lib.utils.string]
+        [lib.email] -up-> [lib.django.form]
+        [lib.email] -up-> [lib.django.admin]
+
+        [slow_query_analysis]
+        [slow_query_analysis] -up-> [lib.django.command]
+        [slow_query_analysis] -up-> [lib.email]
+
+        [lib.admin_access_log]
+        [lib.admin_access_log] -up-> [lib.base]
+        [lib.admin_access_log] -up-> [lib.django.admin]
+        [lib.admin_access_log] -up-> [lib.django.model]
+    }
+}
+
+@enduml

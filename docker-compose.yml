@@ -1,0 +1,87 @@
+version: '3.4'
+
+services:
+  mariadb:
+    image: mariadb:10.1
+    container_name: mariadb
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - ./.tmp/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: account
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: test
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+  memcached:
+    image: memcached:1.5.4
+    container_name: account-memcached
+    restart: always
+    ports:
+      - 11211:11211
+  redis:
+    image: redis:4.0.6
+    container_name: account-redis
+    restart: always
+    ports:
+      - 6379:6379
+  account-admin:
+    image: ridibooks/python:bootstrap-django-2017.02.01
+    container_name: account-admin
+    volumes:
+      - .:/htdocs/www
+    ports:
+      - 7000:1000
+    command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h mariadb -u root -proot', 'make run-admin']
+    depends_on:
+      - memcached
+      - redis
+      - mariadb
+    links:
+      - memcached
+      - redis
+      - mariadb
+  account-www:
+    image: ridibooks/python:bootstrap-django-2017.02.01
+    container_name: account-www
+    volumes:
+      - .:/htdocs/www
+    ports:
+      - 7001:7001
+    command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h mariadb -u root -proot', 'make run-www']
+    depends_on:
+      - memcached
+      - redis
+      - mariadb
+    links:
+      - memcached
+      - redis
+      - mariadb
+  flower:
+    image: ridibooks/python:flower
+    container_name: account-flower
+    restart: always
+    depends_on:
+      - redis
+    links:
+      - redis
+  nginx:
+    image: nginx:stable
+    container_name: account-nginx
+    restart: always
+    volumes:
+      - ./docs/dev/nginx:/etc/nginx/conf.d:ro
+      - ./docs/dev/cert:/etc/nginx/cert/:ro
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - account-admin
+      - account-www
+      - flower
+    links:
+      - account-admin
+      - account-www
+      - flower
