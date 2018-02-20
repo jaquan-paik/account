@@ -11,7 +11,7 @@ SITE = SiteType.ADMIN
 
 MIDDLEWARE += [
     'lib.ridibooks.middlewares.RidiIPFilterMiddleware',
-    'lib.admin_access_log.middlewares.AdminAccessLoggingMiddleware'
+    'lib.admin_access_log.middlewares.AdminAccessLoggingMiddleware',
 ]
 
 SESSION_COOKIE_AGE = 7200  # 60 * 60 * 2
