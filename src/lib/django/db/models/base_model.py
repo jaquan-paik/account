@@ -4,7 +4,7 @@ from django.db import models
 
 class BaseModel(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
-    last_modified = models.DateTimeField(auto_now=True, verbose_name='수정일')
+    last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
 
     class Meta:
         abstract = True
