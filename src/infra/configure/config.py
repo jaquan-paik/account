@@ -18,10 +18,6 @@ class GeneralConfig:
     def get_site() -> str:
         return settings.SITE
 
-    @staticmethod
-    def is_enforce_2fa() -> bool:
-        return settings.ENFORCE_TWO_FACTOR_AUTH
-
 
 class FilterConfig:
     @staticmethod
