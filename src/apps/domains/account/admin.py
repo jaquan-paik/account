@@ -5,8 +5,20 @@ from django.contrib import admin
 from django.contrib.auth import admin as django_user_admin
 from two_factor.utils import default_device
 
-from apps.domains.account.models import Staff, User
+from apps.domains.account.models import Oauth2User, Staff, User
 from lib.django.admin.base_admin import BaseModelAdmin
+
+
+class Oauth2UserAdmin(BaseModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('id', 'name',)}),
+        ('관련 날짜', {'fields': ('created', 'last_modified',)}),
+    )
+    readonly_fields = ('id', 'created', 'last_modified',)
+    list_display = ('name', 'created', 'last_modified',)
+
+    def has_add_permission(self, request) -> bool:
+        return True
 
 
 class StaffAdmin(django_user_admin.UserAdmin):
@@ -70,3 +82,4 @@ class UserAdmin(BaseModelAdmin):
 
 admin.site.register(Staff, StaffAdmin)
 admin.site.register(User, UserAdmin)
+admin.site.register(Oauth2User, Oauth2UserAdmin)
