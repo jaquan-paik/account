@@ -20,9 +20,6 @@ class SecretKeyName:
 
     SECRET_KEY = 'secret_key'
 
-    ADMIN_DOMAIN = 'admin_domain'
-    WWW_DOMAIN = 'www_domain'
-
     MEMCACHED_LOCATION = 'memcached_location'
 
     WRITE_DB_HOST = 'write_db_host'

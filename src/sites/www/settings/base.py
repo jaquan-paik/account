@@ -10,7 +10,7 @@ MIDDLEWARE += [
 ROOT_URLCONF = 'sites.www.urls'
 WSGI_APPLICATION = 'sites.www.wsgi.application'
 SITE = SiteType.WWW
-ALLOWED_HOSTS = [Secret().get(SecretKeyName.WWW_DOMAIN), ]
+ALLOWED_HOSTS = ['https://account.ridibooks.com', 'https://account.dev.ridi.com', ]
 
 
 LOGIN_URL = 'https://ridibooks.com/account/login?return_url=https%3A%2F%2Faccount.ridibooks.com'
