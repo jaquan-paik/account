@@ -10,6 +10,7 @@ SITE = SiteType.ADMIN
 
 
 MIDDLEWARE += [
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'lib.ridibooks.middlewares.RidiIPFilterMiddleware',
     'lib.admin_access_log.middlewares.AdminAccessLoggingMiddleware',
 ]

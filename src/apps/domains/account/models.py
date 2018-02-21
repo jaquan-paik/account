@@ -38,25 +38,12 @@ class Staff(PermissionsMixin, BaseUserModel):
 
 
 class User(BaseUserModel):
-    email = models.EmailField(max_length=254, unique=True, verbose_name='이메일', )
+    idx = models.AutoField(primary_key=True, editable=False, verbose_name='u_idx')
+    id = models.CharField(max_length=16, unique=True, editable=False, verbose_name='u_id', )
 
-    is_active = models.BooleanField(default=True, verbose_name='계정 활성화 여부', )
-
-    last_change_password_date = models.DateTimeField(null=True, verbose_name='마지막 패스워드 변경일')
-
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'id'
 
     objects = UserManager()
-
-    def get_full_name(self) -> str:
-        return str(self.email)
-
-    def get_short_name(self) -> str:
-        return str(self.email)
-
-    def set_password(self, raw_password) -> None:
-        super().set_password(raw_password=raw_password)
-        self.last_change_password_date = datetime.now()
 
     class Meta:
         db_table = 'tb_user'
