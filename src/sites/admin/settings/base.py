@@ -10,6 +10,7 @@ SITE = SiteType.ADMIN
 
 
 MIDDLEWARE += [
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'lib.ridibooks.middlewares.RidiIPFilterMiddleware',
     'lib.admin_access_log.middlewares.AdminAccessLoggingMiddleware',
 ]
@@ -17,4 +18,4 @@ MIDDLEWARE += [
 SESSION_COOKIE_AGE = 7200  # 60 * 60 * 2
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-ALLOWED_HOSTS = [Secret().get(SecretKeyName.ADMIN_DOMAIN), ]
+ALLOWED_HOSTS = ['https://account-admin.ridibooks.com', 'https://account-admin.dev.ridi.com', ]
