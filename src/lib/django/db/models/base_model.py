@@ -8,7 +8,7 @@ class BaseModel(models.Model):
     last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
 
     objects = Manager()
-    
+
     class Meta:
         abstract = True
 
