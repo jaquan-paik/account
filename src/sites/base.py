@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'lib.email.apps.EmailConfig',
     'rest_framework',
+    'corsheaders',
 
     # django api 문서화 라이브러리
     'drf_yasg',
