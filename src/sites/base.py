@@ -177,7 +177,7 @@ LOGGING_CONFIG = None
 LOG_DIR = os.path.join(ROOT_DIR, 'logs')
 
 
-AUTH_USER_MODEL = 'account.User'
+AUTH_USER_MODEL = 'account_app.User'
 
 
 # celery setting

@@ -5,7 +5,7 @@ from sites.base import *  # flake8: noqa: F403  # pylint:disable=wildcard-import
 
 ROOT_URLCONF = 'sites.admin.urls'
 WSGI_APPLICATION = 'sites.admin.wsgi.application'
-AUTH_USER_MODEL = 'account.Staff'
+AUTH_USER_MODEL = 'account_app.Staff'
 SITE = SiteType.ADMIN
 
 
