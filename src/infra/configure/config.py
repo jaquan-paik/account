@@ -18,6 +18,14 @@ class GeneralConfig:
     def get_site() -> str:
         return settings.SITE
 
+    @staticmethod
+    def get_site_domain() -> str:
+        return settings.SITE_DOMAIN
+
+    @staticmethod
+    def get_ridibooks_login_url() -> str:
+        return settings.RIDIBOOKS_LOGIN_URL
+
 
 class FilterConfig:
     @staticmethod
