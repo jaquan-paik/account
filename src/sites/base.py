@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'lib.email.apps.EmailConfig',
     'rest_framework',
+    'oauth2_provider',
     'corsheaders',
 
     # django api 문서화 라이브러리
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
 
     # app
     'apps.domains.account.apps.AccountConfig',
+    'apps.domains.oauth2.apps.OAuth2Config',
 ]
 
 MIDDLEWARE = [
@@ -132,6 +134,9 @@ DATABASES = {
     },
 }
 
+DATABASE_APPS_MAPPING = {
+    'oauth2_app': 'account',
+}
 
 CACHES = {
     'default': {
@@ -192,7 +197,30 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 RIDIBOOKS_LOGIN_URL = 'https://ridibooks.com/account/login'
 
+OAUTH2_PROVIDER = {
+    'SCOPES': {
+        'all': 'All(for internal service)',
+    },
+
+    'OAUTH2_SERVER_CLASS': 'apps.domains.oauth2.server.RidiServer',
+
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 60 * 60,  # 3600, 1hour
+    'REFRESH_TOKEN_EXPIRE_SECONDS': 60 * 60 * 24 * 30,  # 2,592,000 30days
+    'ALLOWED_REDIRECT_URI_SCHEMES': ['https'],
+    'AUTHORIZATION_CODE_EXPIRE_SECONDS': 60 * 10,  # 600 10min
+    'ROTATE_REFRESH_TOKEN': True,
+}
+
 OAUTH2_ACCESS_JWT_SECRET = Secret().get(SecretKeyName.OAUTH2_ACCESS_JWT_SECRET)
+
+OAUTH2_PROVIDER_APPLICATION_MODEL = 'oauth2_app.Application'
+OAUTH2_PROVIDER_GRANT_MODEL = 'oauth2_app.Grant'
+OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = 'oauth2_app.AccessToken'
+OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'oauth2_app.RefreshToken'
+
+# TODO: 버그로 인해 해당 셋팅 추가. 버젼이 1.0.0 <  이 되면 제거
+# https://github.com/evonove/django-oauth-toolkit/commit/65af7372a0fb208a19899fa75982163bdff713f9
+OAUTH2_PROVIDER_REFRESH_MODEL = 'oauth2_app.RefreshToken'
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
