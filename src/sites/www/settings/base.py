@@ -10,7 +10,6 @@ MIDDLEWARE += [
 ROOT_URLCONF = 'sites.www.urls'
 WSGI_APPLICATION = 'sites.www.wsgi.application'
 SITE = SiteType.WWW
-ALLOWED_HOSTS = ['account.ridibooks.com', 'account.dev.ridi.com', ]
 
-
-LOGIN_URL = 'https://ridibooks.com/account/login?return_url=https%3A%2F%2Faccount.ridibooks.com'
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'

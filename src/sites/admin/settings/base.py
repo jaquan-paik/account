@@ -17,5 +17,3 @@ MIDDLEWARE += [
 
 SESSION_COOKIE_AGE = 7200  # 60 * 60 * 2
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
-ALLOWED_HOSTS = ['account-admin.ridibooks.com', 'account-admin.dev.ridi.com', ]

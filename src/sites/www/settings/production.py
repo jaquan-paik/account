@@ -15,3 +15,6 @@ RAVEN_CONFIG = {
         'common.exceptions.MsgException',
     ],
 }
+
+SITE_DOMAIN = 'account.ridibooks.com'
+ALLOWED_HOSTS = [SITE_DOMAIN, ]
