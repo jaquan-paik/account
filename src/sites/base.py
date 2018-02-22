@@ -189,6 +189,7 @@ CELERY_IMPORTS = [
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+RIDIBOOKS_LOGIN_URL = 'https://ridibooks.com/account/login'
 
 OAUTH2_ACCESS_JWT_SECRET = Secret().get(SecretKeyName.OAUTH2_ACCESS_JWT_SECRET)
 
