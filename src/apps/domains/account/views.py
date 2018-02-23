@@ -6,7 +6,7 @@ from lib.base.exceptions import ErrorException
 from lib.utils.url import generate_query_url
 
 
-class RidiLoginView(LoginView):
+class RidiLoginView(LoginView):  # pylint: disable=too-many-ancestors
     def get(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
             # 로그인 되어 있으면 Next로 이동한다.

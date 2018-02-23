@@ -12,7 +12,7 @@ def cache_for(key: str, get_ttl_fn: Callable = None):
         def _wrapper(*args, **kwargs):
             result = cache.get(key, None)
             if result is None:
-                logger.debug('Cache miss: %s' % key)
+                logger.debug('Cache miss: %s', key)
                 result = func(*args, **kwargs)
                 ttl = get_ttl_fn() if get_ttl_fn is not None else 3600
                 cache.set(key, result, ttl)

@@ -1,5 +1,5 @@
 import re
-import string
+import string as string_lib
 import random
 
 _emoji_pattern = re.compile(
@@ -37,4 +37,4 @@ def is_last_char_has_batchim(char: str) -> bool:
 
 
 def generate_random_str(n: int) -> str:
-    return ''.join(random.choices(string.ascii_letters + string.digits + string.punctuation, k=n))
+    return ''.join(random.choices(string_lib.ascii_letters + string_lib.digits + string_lib.punctuation, k=n))

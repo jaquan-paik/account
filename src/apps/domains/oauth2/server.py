@@ -24,7 +24,7 @@ def jwt_token_generator(request, refresh_token=False):
     if client.jwt_alg == JwtAlg.HS256:
         return jwt.encode(payload, client.jwt_hs_256_secret, algorithm=JwtAlg.HS256).decode()
 
-    raise NotImplemented(f'Jwt alg is not implemented: {client.jwt_alg}')
+    raise NotImplementedError(f'Jwt alg is not implemented: {client.jwt_alg}')
 
 
 class RidiServer(Server):
