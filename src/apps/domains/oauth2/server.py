@@ -1,14 +1,14 @@
 from datetime import datetime
 
 import jwt
-from django.conf import settings
 from oauth2_provider.settings import oauth2_settings
 from oauthlib.oauth2 import Server
 from oauthlib.oauth2.rfc6749.tokens import random_token_generator
 
+from apps.domains.oauth2.constants import JwtAlg
+
 
 def jwt_token_generator(request, refresh_token=False):
-    secret = settings.OAUTH2_ACCESS_JWT_SECRET
     user = request.user
     client = request.client
     scopes = request.scopes
@@ -21,7 +21,10 @@ def jwt_token_generator(request, refresh_token=False):
         'scope': scopes
     }
 
-    return jwt.encode(payload, secret, algorithm='HS256').decode()
+    if client.jwt_alg == JwtAlg.HS256:
+        return jwt.encode(payload, client.jwt_hs_256_secret, algorithm=JwtAlg.HS256).decode()
+
+    raise NotImplemented(f'Jwt alg is not implemented: {client.jwt_alg}')
 
 
 class RidiServer(Server):
