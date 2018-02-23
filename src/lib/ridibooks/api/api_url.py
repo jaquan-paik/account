@@ -31,4 +31,4 @@ class RidiStoreApiUrl(RidiApiUrl):
 
     @classmethod
     def _get_dev_domain(cls):
-        return  _DEV_RIDI_STORE_DOMAIN
+        return _DEV_RIDI_STORE_DOMAIN
