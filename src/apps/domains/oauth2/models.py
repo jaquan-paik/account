@@ -1,7 +1,7 @@
 from django.db import models
 from oauth2_provider.models import AbstractAccessToken, AbstractApplication, AbstractGrant, AbstractRefreshToken
 
-from apps.domains.account.models import Oauth2User
+from apps.domains.account.models import Oauth2User, User
 from apps.domains.oauth2.constants import JwtAlg
 from lib.utils.string import generate_random_str
 
@@ -41,6 +41,8 @@ class Application(AbstractApplication):
 
 
 class Grant(AbstractGrant):
+    user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
+
     updated = None
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
     last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
@@ -51,6 +53,8 @@ class Grant(AbstractGrant):
 
 
 class AccessToken(AbstractAccessToken):
+    user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
+
     token = models.TextField(verbose_name='JWT 토큰', )
 
     updated = None
@@ -63,6 +67,8 @@ class AccessToken(AbstractAccessToken):
 
 
 class RefreshToken(AbstractRefreshToken):
+    user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
+
     updated = None
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
     last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
