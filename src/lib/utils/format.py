@@ -7,3 +7,4 @@ class DateTimeFormat:
     YMD = '%Y-%m-%d'
     SHORT_YMD = '%y%m%d'
     KOREAN_YMD = '%Y년 %m월 %d일'
+    COOKIE = '%a, %d-%b-%Y %H:%M:%S GMT'
