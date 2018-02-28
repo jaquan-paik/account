@@ -2,7 +2,6 @@ from typing import Tuple
 
 import requests
 from django.core.exceptions import PermissionDenied
-from oauth2_provider.models import AbstractApplication
 from oauth2_provider.settings import oauth2_settings
 
 from apps.domains.callback.dtos import OAuth2Data, TokenData
@@ -44,10 +43,4 @@ class TokenHelper:
 
     @classmethod
     def get_tokens(cls, oauth2_data: OAuth2Data) -> Tuple[TokenData, TokenData]:
-        client = Application.objects.get(client_id=oauth2_data.client_id)
-
-        #  Authorization code 방식만 구현됨
-        if client.authorization_grant_type != AbstractApplication.GRANT_AUTHORIZATION_CODE:
-            raise NotImplementedError()
-
-        return cls._take_token(client, oauth2_data.code, oauth2_data.state)
+        return cls._take_token(oauth2_data.client, oauth2_data.code, oauth2_data.state)

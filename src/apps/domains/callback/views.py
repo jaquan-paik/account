@@ -18,6 +18,8 @@ class LoginView(View):
         redirect_uri = request.GET.get('redirect_uri', None)
 
         oauth2_data = OAuth2Data(state, client_id, redirect_uri)
+        oauth2_data.validate_client()
+
         OAuth2PersistentHelper.set(request.session, oauth2_data)
 
         url = generate_query_url(reverse('oauth2_provider:authorize'), {
@@ -43,8 +45,9 @@ class CallbackView(View):
         state = request.GET.get('state', None)
 
         oauth2_data = OAuth2PersistentHelper.get(request.session)
-        oauth2_data.validate(state)
         oauth2_data.code = code
+        oauth2_data.validate_state(state)
+        oauth2_data.validate_client()
 
         access_token, refresh_token = TokenHelper.get_tokens(oauth2_data)
 
