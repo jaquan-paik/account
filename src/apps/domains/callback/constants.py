@@ -1,0 +1,2 @@
+ACCESS_TOKEN_COOKIE_KEY = 'ridi-at'
+REFRESH_TOKEN_COOKIE_KEY = 'ridi-rt'
