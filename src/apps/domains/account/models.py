@@ -4,7 +4,7 @@ from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.db import models
 
 from apps.domains.account.managers import StaffManager
-from lib.django.db.models.base_model import BaseUserModel, BaseModel
+from lib.django.db.models.base_model import BaseModel, BaseUserModel
 
 
 class Staff(PermissionsMixin, BaseUserModel):
