@@ -19,6 +19,7 @@ class LoginView(View):
 
         oauth2_data = OAuth2Data(state, client_id, redirect_uri)
         oauth2_data.validate_client()
+        oauth2_data.validate_redirect_uri()
 
         OAuth2PersistentHelper.set(request.session, oauth2_data)
 
@@ -48,6 +49,7 @@ class CallbackView(View):
         oauth2_data.code = code
         oauth2_data.validate_state(state)
         oauth2_data.validate_client()
+        oauth2_data.validate_redirect_uri()
 
         access_token, refresh_token = TokenHelper.get_tokens(oauth2_data)
 

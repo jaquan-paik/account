@@ -1,3 +1,5 @@
+from urllib.parse import urlparse, parse_qsl
+
 from django.db import models
 from oauth2_provider.models import AbstractAccessToken, AbstractApplication, AbstractGrant, AbstractRefreshToken
 
