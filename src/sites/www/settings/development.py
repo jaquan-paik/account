@@ -10,6 +10,7 @@ DEBUG = True
 setup_logging(SITE, LogLevel.DEBUG, LOG_DIR)
 
 SITE_DOMAIN = 'account.ridibooks.com'
+ROOT_DOMAIN = 'ridibooks.com'
 ALLOWED_HOSTS = [SITE_DOMAIN, ]
 
 
