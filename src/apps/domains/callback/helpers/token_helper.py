@@ -2,13 +2,12 @@ from typing import Tuple
 
 import requests
 from django.core.exceptions import PermissionDenied
-from django.urls import reverse
 from oauth2_provider.models import AbstractApplication
 from oauth2_provider.settings import oauth2_settings
 
 from apps.domains.callback.dtos import OAuth2Data, TokenData
+from apps.domains.callback.helpers.url_helper import UrlHelper
 from apps.domains.oauth2.models import Application
-from infra.configure.config import GeneralConfig
 
 
 class TokenHelper:
@@ -29,11 +28,10 @@ class TokenHelper:
 
     @classmethod
     def _take_token(cls, client: Application, code: str, state: str) -> Tuple[TokenData, TokenData]:
-        url = reverse('oauth2_provider:token')
-        req = requests.post(f'https://{GeneralConfig.get_site_domain()}{url}', data={
+        req = requests.post(UrlHelper.get_token(), data={
             'client_id': client.client_id,
             'code': code,
-            'redirect_uri': f'https://{GeneralConfig.get_site_domain()}{reverse("callback:callback")}',
+            'redirect_uri': UrlHelper.get_redirect_uri(),
             'client_secret': client.client_secret,
             'grant_type': 'authorization_code',
             'state': state,

@@ -6,6 +6,7 @@ from apps.domains.callback.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOK
 from apps.domains.callback.dtos import OAuth2Data, TokenData
 from apps.domains.callback.helpers.oauth2_data_helper import OAuth2PersistentHelper
 from apps.domains.callback.helpers.token_helper import TokenHelper
+from apps.domains.callback.helpers.url_helper import UrlHelper
 from infra.configure.config import GeneralConfig
 from lib.utils.url import generate_query_url
 
@@ -21,8 +22,8 @@ class LoginView(View):
 
         url = generate_query_url(reverse('oauth2_provider:authorize'), {
             'state': state,
-            'client_id': client_id,
-            'redirect_uri': f'https://{GeneralConfig.get_site_domain()}{reverse("callback:callback")}',
+            'client_id': oauth2_data.client_id,
+            'redirect_uri': UrlHelper.get_redirect_uri(),
             'response_type': 'code',
         })
 
