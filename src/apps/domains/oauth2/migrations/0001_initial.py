@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                 ('authorization_grant_type', models.CharField(choices=[('authorization-code', 'Authorization code')], default='authorization-code', max_length=32)),
                 ('created', models.DateTimeField(auto_now_add=True, verbose_name='등록일')),
                 ('last_modified', models.DateTimeField(auto_now=True, verbose_name='수정일')),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='oauth2_app_application', to='account_app.Oauth2User')),
+                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='oauth2_app_application', to='account_app.OAuth2User')),
             ],
             options={
                 'db_table': 'tb_oauth2_application',

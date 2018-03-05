@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import jwt
 from oauth2_provider.settings import oauth2_settings
 from oauthlib.oauth2 import Server
 from oauthlib.oauth2.rfc6749.tokens import random_token_generator
@@ -9,6 +8,8 @@ from apps.domains.oauth2.constants import JwtAlg
 
 
 def jwt_token_generator(request, refresh_token=False):
+    import jwt
+
     user = request.user
     client = request.client
     scopes = request.scopes
