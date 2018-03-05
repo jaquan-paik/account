@@ -12,6 +12,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelTable(
             name='oauth2user',
-            table='tb_oauth2_user',
+            table='oauth2_user',
         ),
     ]

@@ -37,7 +37,7 @@ class Application(AbstractApplication):
 
     class Meta(AbstractApplication.Meta):
         swappable = 'OAUTH2_PROVIDER_APPLICATION_MODEL'
-        db_table = 'tb_oauth2_application'
+        db_table = 'oauth2_application'
 
 
 class Grant(AbstractGrant):
@@ -47,7 +47,7 @@ class Grant(AbstractGrant):
 
     class Meta(AbstractGrant.Meta):
         swappable = 'OAUTH2_PROVIDER_GRANT_MODEL'
-        db_table = 'tb_oauth2_grant'
+        db_table = 'oauth2_grant'
 
 
 class AccessToken(AbstractAccessToken):
@@ -59,7 +59,7 @@ class AccessToken(AbstractAccessToken):
 
     class Meta(AbstractAccessToken.Meta):
         swappable = 'OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL'
-        db_table = 'tb_oauth2_accesstoken'
+        db_table = 'oauth2_accesstoken'
 
 
 class RefreshToken(AbstractRefreshToken):
@@ -69,4 +69,4 @@ class RefreshToken(AbstractRefreshToken):
 
     class Meta(AbstractRefreshToken.Meta):
         swappable = 'OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL'
-        db_table = 'tb_oauth2_refreshtoken'
+        db_table = 'oauth2_refreshtoken'

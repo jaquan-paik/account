@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                 ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='oauth2_app_application', to='account_app.OAuth2User')),
             ],
             options={
-                'db_table': 'tb_oauth2_application',
+                'db_table': 'oauth2_application',
                 'abstract': False,
                 'swappable': 'OAUTH2_PROVIDER_APPLICATION_MODEL',
             },
@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='oauth2_app_grant', to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'db_table': 'tb_oauth2_grant',
+                'db_table': 'oauth2_grant',
                 'abstract': False,
                 'swappable': 'OAUTH2_PROVIDER_GRANT_MODEL',
             },
@@ -72,7 +72,7 @@ class Migration(migrations.Migration):
                 ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='oauth2_app_accesstoken', to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'db_table': 'tb_oauth2_accesstoken',
+                'db_table': 'oauth2_accesstoken',
                 'abstract': False,
                 'swappable': 'OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL',
             },
@@ -89,7 +89,7 @@ class Migration(migrations.Migration):
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='oauth2_app_refreshtoken', to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'db_table': 'tb_oauth2_refreshtoken',
+                'db_table': 'oauth2_refreshtoken',
                 'abstract': False,
                 'swappable': 'OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL',
             },
