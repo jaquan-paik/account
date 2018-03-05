@@ -205,9 +205,10 @@ OAUTH2_PROVIDER = {
     },
 
     'OAUTH2_SERVER_CLASS': 'apps.domains.oauth2.server.RidiServer',
+    'OAUTH2_VALIDATOR_CLASS': 'apps.domains.oauth2.oauth2_validators.RidiOAuth2Validator',
 
     'ACCESS_TOKEN_EXPIRE_SECONDS': 60 * 60,  # 3600, 1hour
-    'REFRESH_TOKEN_EXPIRE_SECONDS': 60 * 60 * 24 * 30,  # 2,592,000 30days
+    'REFRESH_TOKEN_EXPIRE_SECONDS': 60 * 60 * 24 * 7,  # 604,800 7days
     'ALLOWED_REDIRECT_URI_SCHEMES': ['https'],
     'AUTHORIZATION_CODE_EXPIRE_SECONDS': 60 * 10,  # 600 10min
     'ROTATE_REFRESH_TOKEN': True,
