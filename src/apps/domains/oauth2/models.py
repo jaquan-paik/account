@@ -1,9 +1,8 @@
-from urllib.parse import urlparse, parse_qsl
-
 from django.db import models
 from oauth2_provider.models import AbstractAccessToken, AbstractApplication, AbstractGrant, AbstractRefreshToken
 
-from apps.domains.account.models import Oauth2User, User
+from apps.domains.account.models import OAuth2User
+from apps.domains.account.models import User
 from apps.domains.oauth2.constants import JwtAlg
 from lib.utils.string import generate_random_str
 
@@ -18,7 +17,7 @@ class Application(AbstractApplication):
     GRANT_TYPES = ((AbstractApplication.GRANT_AUTHORIZATION_CODE, 'Authorization code'), )
     CLIENT_TYPES = ((AbstractApplication.CLIENT_CONFIDENTIAL, 'Confidential'),)
 
-    user = models.ForeignKey(Oauth2User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(OAuth2User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
 
     client_type = models.CharField(
         max_length=32, choices=CLIENT_TYPES, default=AbstractApplication.CLIENT_CONFIDENTIAL, verbose_name='Client 종류',
@@ -39,7 +38,7 @@ class Application(AbstractApplication):
 
     class Meta(AbstractApplication.Meta):
         swappable = 'OAUTH2_PROVIDER_APPLICATION_MODEL'
-        db_table = 'tb_oauth2_application'
+        db_table = 'oauth2_application'
 
 
 class Grant(AbstractGrant):
@@ -51,7 +50,7 @@ class Grant(AbstractGrant):
 
     class Meta(AbstractGrant.Meta):
         swappable = 'OAUTH2_PROVIDER_GRANT_MODEL'
-        db_table = 'tb_oauth2_grant'
+        db_table = 'oauth2_grant'
 
 
 class AccessToken(AbstractAccessToken):
@@ -65,7 +64,7 @@ class AccessToken(AbstractAccessToken):
 
     class Meta(AbstractAccessToken.Meta):
         swappable = 'OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL'
-        db_table = 'tb_oauth2_accesstoken'
+        db_table = 'oauth2_accesstoken'
 
 
 class RefreshToken(AbstractRefreshToken):
@@ -77,4 +76,4 @@ class RefreshToken(AbstractRefreshToken):
 
     class Meta(AbstractRefreshToken.Meta):
         swappable = 'OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL'
-        db_table = 'tb_oauth2_refreshtoken'
+        db_table = 'oauth2_refreshtoken'

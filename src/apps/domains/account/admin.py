@@ -3,13 +3,12 @@ from datetime import date
 
 from django.contrib import admin
 from django.contrib.auth import admin as django_user_admin
-from two_factor.utils import default_device
 
-from apps.domains.account.models import Oauth2User, Staff, User
+from apps.domains.account.models import OAuth2User, Staff, User
 from lib.django.admin.base_admin import BaseModelAdmin
 
 
-class Oauth2UserAdmin(BaseModelAdmin):
+class OAuth2UserAdmin(BaseModelAdmin):
     fieldsets = (
         (None, {'fields': ('id', 'name',)}),
         ('관련 날짜', {'fields': ('created', 'last_modified',)}),
@@ -25,7 +24,7 @@ class StaffAdmin(django_user_admin.UserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password',)}),
         ('개인 정보', {'fields': ('email',)}),
-        ('상태 정보', {'fields': ('is_active', 'is_staff', 'is_superuser', 'is_enabled_2fa', )}),
+        ('상태 정보', {'fields': ('is_active', 'is_staff', 'is_superuser', )}),
         ('권한 정보', {'fields': ('groups', 'user_permissions',)}),
         ('관련 날짜', {'fields': ('last_login', 'last_change_password_date', 'created', 'last_modified', )}),
     )
@@ -38,18 +37,13 @@ class StaffAdmin(django_user_admin.UserAdmin):
 
     readonly_fields = ('last_login', 'last_change_password_date', 'created', 'last_modified', )
     list_display = (
-        'email', 'print_group', 'print_user_permissions', 'is_active', 'is_superuser', 'is_enabled_2fa', 'last_login',
+        'email', 'print_group', 'print_user_permissions', 'is_active', 'is_superuser', 'last_login',
         'print_last_change_password_date',
     )
     list_filter = ('is_active', 'is_superuser', )
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ('groups', 'user_permissions',)
-
-    def is_enabled_2fa(self, obj):
-        return default_device(obj) is not None
-    is_enabled_2fa.short_description = '2FA 여부'
-    is_enabled_2fa.boolean = True
 
     def print_group(self, obj) -> str:
         return ','.join([g.name for g in obj.groups.all()]) if obj.groups.count() else '지정된 그룹이 없습니다.'
@@ -82,4 +76,4 @@ class UserAdmin(BaseModelAdmin):
 
 admin.site.register(Staff, StaffAdmin)
 admin.site.register(User, UserAdmin)
-admin.site.register(Oauth2User, Oauth2UserAdmin)
+admin.site.register(OAuth2User, OAuth2UserAdmin)
