@@ -70,6 +70,12 @@ class AccessToken(AbstractAccessToken):
 class RefreshToken(AbstractRefreshToken):
     user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
 
+    access_token = None
+
+    scope = models.TextField(blank=True, editable=False, verbose_name='Scope')
+
+    expires = models.DateTimeField(editable=False, verbose_name='만료일')
+
     updated = None
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
     last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
