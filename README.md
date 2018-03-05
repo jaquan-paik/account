@@ -8,7 +8,7 @@ python3 --version
 
 ## Create virtual environment
 ```
-python3 -m venv venv
+python3.6 -m venv venv
 ```
 
 ## Activate virtual environment
