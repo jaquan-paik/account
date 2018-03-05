@@ -51,7 +51,7 @@ class User(BaseUserModel):
         verbose_name_plural = '사용자 계정 리스트'
 
 
-class Oauth2User(BaseModel):
+class OAuth2User(BaseModel):
     name = models.CharField(max_length=16, unique=True, verbose_name='이름', )
 
     def __str__(self):
