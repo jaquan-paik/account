@@ -9,7 +9,7 @@ from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.models import Application
 
 
-class JwtTokenHandler:
+class JwtHandler:
     @staticmethod
     def _get_client_from_token(token: str):
         # JWT의 secret을 가져오기 위해 verify 을 하지 않고 decode를 한다.
