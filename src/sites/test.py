@@ -16,6 +16,4 @@ CACHES = {
     }
 }
 
-AUTH_USER_MODEL = 'account.User'
-
 SITE = SiteType.TEST

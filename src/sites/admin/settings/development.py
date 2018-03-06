@@ -8,3 +8,19 @@ from .base import *  # flake8: noqa: F403  # pylint:disable=wildcard-import
 DEBUG = True
 
 setup_logging(SITE, LogLevel.DEBUG, LOG_DIR)
+
+SITE_DOMAIN = 'account-admin.ridibooks.com'
+ALLOWED_HOSTS = [SITE_DOMAIN, ]
+
+# django-debug-toolbar
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": 'lib.ridibooks.utils.is_ridi_ip_from_request',
+}
+
+INSTALLED_APPS = INSTALLED_APPS + [
+    'debug_toolbar',
+]
+
+MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+] + MIDDLEWARE

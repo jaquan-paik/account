@@ -5,7 +5,7 @@ from sites.base import *  # flake8: noqa: F403  # pylint:disable=wildcard-import
 
 ROOT_URLCONF = 'sites.admin.urls'
 WSGI_APPLICATION = 'sites.admin.wsgi.application'
-AUTH_USER_MODEL = 'account.Staff'
+AUTH_USER_MODEL = 'account_app.Staff'
 SITE = SiteType.ADMIN
 
 
@@ -17,5 +17,3 @@ MIDDLEWARE += [
 
 SESSION_COOKIE_AGE = 7200  # 60 * 60 * 2
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
-ALLOWED_HOSTS = ['https://account-admin.ridibooks.com', 'https://account-admin.dev.ridi.com', ]

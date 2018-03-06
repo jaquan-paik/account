@@ -4,7 +4,7 @@ from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.db import models
 
 from apps.domains.account.managers import StaffManager
-from lib.django.db.models.base_model import BaseUserModel
+from lib.django.db.models.base_model import BaseUserModel, BaseModel
 
 
 class Staff(PermissionsMixin, BaseUserModel):
@@ -32,7 +32,7 @@ class Staff(PermissionsMixin, BaseUserModel):
         self.last_change_password_date = datetime.now()
 
     class Meta:
-        db_table = 'tb_staff'
+        db_table = 'staff'
         verbose_name = '관리자 계정'
         verbose_name_plural = '관리자 계정 리스트'
 
@@ -46,6 +46,18 @@ class User(BaseUserModel):
     objects = UserManager()
 
     class Meta:
-        db_table = 'tb_user'
+        db_table = 'user'
         verbose_name = '사용자 계정'
         verbose_name_plural = '사용자 계정 리스트'
+
+
+class OAuth2User(BaseModel):
+    name = models.CharField(max_length=16, unique=True, verbose_name='이름', )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'oauth2_user'
+        verbose_name = 'oauth2 사용자 계정'
+        verbose_name_plural = 'oauth2 사용자 계정 리스트'

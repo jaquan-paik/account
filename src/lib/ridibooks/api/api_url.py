@@ -15,11 +15,11 @@ class RidiApiUrl:
 
     @classmethod
     def _get_prod_domain(cls):
-        raise NotImplemented
+        raise NotImplementedError
 
     @classmethod
     def _get_dev_domain(cls):
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class RidiStoreApiUrl(RidiApiUrl):
@@ -31,4 +31,4 @@ class RidiStoreApiUrl(RidiApiUrl):
 
     @classmethod
     def _get_dev_domain(cls):
-        return  _DEV_RIDI_STORE_DOMAIN
+        return _DEV_RIDI_STORE_DOMAIN
