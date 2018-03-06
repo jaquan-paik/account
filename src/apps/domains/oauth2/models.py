@@ -66,6 +66,22 @@ class AccessToken(AbstractAccessToken):
         swappable = 'OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL'
         db_table = 'oauth2_accesstoken'
 
+    @classmethod
+    def from_payload(cls, token: str, payload: dict, client: Application=None) -> 'AccessToken':
+        _client = client
+        if _client is None:
+            _client = Application.objects.get(client_id=payload['client_id'])
+
+        user = User.objects.get(idx=payload['u_idx'])
+
+        return cls(
+            user=user,
+            token=token,
+            application=_client,
+            expires=payload['exp'],
+            scope=payload['scope'],
+        )
+
 
 class RefreshToken(AbstractRefreshToken):
     user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
