@@ -130,13 +130,13 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "c368c6b4-a9c6-4b52-ad8e-7496fb41b5ea",
+										"id": "94a8bfbf-2cfb-4221-98bc-5b0170f83e48",
 										"type": "text/javascript",
 										"exec": [
 											"const h = eval(globals.loadHelpers);",
 											"h.printResponseBody();",
-											"const cookie = postman.getResponseCookie('PHPSESSID').value",
-											"tests[\"Check login session\"] = cookie;",
+											"h.testStatus(200);",
+											"tests[\"Check login session\"] = postman.getResponseCookie('PHPSESSID').value;",
 											"                        "
 										]
 									}
@@ -321,15 +321,9 @@
 								"header": [],
 								"body": {},
 								"url": {
-									"raw": "{{host}}{{authorize_path}}?response_type=code&state={{state}}&client_id={{client_id}}&redirect_uri=https://dummy.com/receive/",
-									"protocol": "{{host}}{{authorize_path}}?response_type=code&state={{state}}&client_id={{client_id}}&redirect_uri=https",
+									"raw": "{{host}}{{authorize_path}}?response_type=code&state={{state}}&client_id={{client_id}}&redirect_uri={{redirect_uri}}",
 									"host": [
-										"dummy",
-										"com"
-									],
-									"path": [
-										"receive",
-										""
+										"{{host}}{{authorize_path}}"
 									],
 									"query": [
 										{
