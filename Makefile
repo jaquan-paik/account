@@ -15,6 +15,9 @@ run-www: python-package-install settings run-server-www
 
 
 # install
+npm-install:
+	@npm install
+
 python-package-install:
 	@pip3 install -r docs/requirements/development.txt
 
@@ -56,6 +59,9 @@ lint:
 
 test:
 	@python3.6 src/manage.py test test src
+
+pm-test:
+	@npm run test
 
 
 # docker
