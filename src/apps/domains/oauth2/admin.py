@@ -1,9 +1,9 @@
 from django.contrib import admin
-from oauth2_provider.models import get_application_model, get_refresh_token_model, get_access_token_model, get_grant_model
+from oauth2_provider.models import get_access_token_model, get_application_model, get_grant_model, get_refresh_token_model
 
 
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user', 'client_type', 'authorization_grant_type')
+    list_display = ('name', 'user', 'client_type', 'authorization_grant_type' 'created', 'last_modified',)
     list_filter = ('client_type', 'authorization_grant_type', 'skip_authorization')
     radio_fields = {
         'client_type': admin.HORIZONTAL,
@@ -13,18 +13,18 @@ class ApplicationAdmin(admin.ModelAdmin):
 
 
 class GrantAdmin(admin.ModelAdmin):
-    list_display = ('code', 'application', 'user', 'expires')
+    list_display = ('code', 'user', 'application', 'expires' 'created', 'last_modified', )
     raw_id_fields = ('user', )
 
 
 class AccessTokenAdmin(admin.ModelAdmin):
-    list_display = ('token', 'user', 'application', 'expires')
+    list_display = ('token', 'user', 'application', 'expires' 'created', 'last_modified', )
     raw_id_fields = ('user', )
 
 
 class RefreshTokenAdmin(admin.ModelAdmin):
-    list_display = ('token', 'user', 'application')
-    raw_id_fields = ('user', )
+    list_display = ('token', 'user', 'application', 'expires', 'scope', 'created', 'last_modified', )
+    raw_id_fields = ('user',)
 
 
 Application = get_application_model()
