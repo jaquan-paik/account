@@ -12,3 +12,6 @@ tmp
 /logs
 celerybeat-schedule
 celerybeat.pid
+
+
+node_modules

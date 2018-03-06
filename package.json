@@ -1,0 +1,27 @@
+{
+  "name": "account",
+  "version": "1.0.0",
+  "description": "## Install Python3.6 ``` brew install python3 python3 --version ```",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "newman": "^3.9.3"
+  },
+  "scripts": {
+    "test": "newman run docs/postman/Account.postman_collection.json -e docs/postman/Local.postman_environment.json --ignore-redirects --insecure",
+    "help": "newman run --help"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ridi/account.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ridi/account/issues"
+  },
+  "homepage": "https://github.com/ridi/account#readme"
+}
