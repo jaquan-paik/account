@@ -3,8 +3,8 @@ from oauth2_provider.models import get_access_token_model, get_application_model
 
 
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user', 'client_type', 'authorization_grant_type' 'created', 'last_modified',)
-    list_filter = ('client_type', 'authorization_grant_type', 'skip_authorization')
+    list_display = ('name', 'user', 'client_type', 'authorization_grant_type', 'created', 'last_modified',)
+    list_filter = ('client_type', 'authorization_grant_type', 'skip_authorization',)
     radio_fields = {
         'client_type': admin.HORIZONTAL,
         'authorization_grant_type': admin.VERTICAL,
@@ -13,12 +13,12 @@ class ApplicationAdmin(admin.ModelAdmin):
 
 
 class GrantAdmin(admin.ModelAdmin):
-    list_display = ('code', 'user', 'application', 'expires' 'created', 'last_modified', )
+    list_display = ('code', 'user', 'application', 'expires', 'created', 'last_modified', )
     raw_id_fields = ('user', )
 
 
 class AccessTokenAdmin(admin.ModelAdmin):
-    list_display = ('token', 'user', 'application', 'expires' 'created', 'last_modified', )
+    list_display = ('token', 'user', 'application', 'expires', 'created', 'last_modified', )
     raw_id_fields = ('user', )
 
 
