@@ -58,8 +58,8 @@ class AccessToken(AbstractAccessToken):
     token = models.TextField(verbose_name='JWT 토큰', )
 
     updated = None
-    created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
-    last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
+    created = None
+    last_modified = None
 
     class Meta(AbstractAccessToken.Meta):
         swappable = 'OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL'
