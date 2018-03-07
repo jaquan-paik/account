@@ -81,6 +81,9 @@ class AccessToken(AbstractAccessToken):
             scope=payload['scope'],
         )
 
+    def revoke(self):
+        raise NotImplementedError()
+
 
 class RefreshToken(AbstractRefreshToken):
     user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
