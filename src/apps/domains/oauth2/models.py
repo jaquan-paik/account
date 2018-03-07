@@ -1,8 +1,7 @@
 from django.db import models
 from oauth2_provider.models import AbstractAccessToken, AbstractApplication, AbstractGrant, AbstractRefreshToken
 
-from apps.domains.account.models import OAuth2User
-from apps.domains.account.models import User
+from apps.domains.account.models import OAuth2User, User
 from apps.domains.oauth2.constants import JwtAlg
 from lib.utils.string import generate_random_str
 

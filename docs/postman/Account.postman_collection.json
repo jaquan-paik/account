@@ -1159,6 +1159,331 @@
 					"_postman_isSubFolder": true
 				}
 			]
+		},
+		{
+			"name": "전역 변수 초기화",
+			"description": null,
+			"item": [
+				{
+					"name": "Pre Script",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"postman.setGlobalVariable(\"loadHelpers\", function loadHelpers() {",
+									"    let helpers = {};",
+									"    let escapedUtf16Regex = /\\\\\\\\u([\\\\d\\\\w]{4})/gi;",
+									"    helpers.printResponseBody = () => {",
+									"        // convert escpaped UTF-16 string to string",
+									"        // https://stackoverflow.com/questions/7885096/how-do-i-decode-a-string-with-escaped-unicode",
+									"        let body = responseBody.replace(escapedUtf16Regex, (match, grp) => String.fromCharCode(parseInt(grp, 16)));",
+									"        body = unescape(body);",
+									"        // remove html tags",
+									"        if (postman.getResponseHeader(\"Content-Type\") === 'text/html') {",
+									"            body = body.replace(/(<([^>]+)>)/gi);",
+									"        }",
+									"        console.log(body);",
+									"    };",
+									"    helpers.testStatus = (status) => {",
+									"        tests[`Check status code === ${status}`] = responseCode.code === status;",
+									"    };",
+									"    return helpers;",
+									"} + '; loadHelpers();'); // when eval\\'d out of globals, execute it",
+									"",
+									"postman.setGlobalVariable('state', Math.floor(Math.random() * (999999 - 100000)) + 100000);",
+									"tests[\"Global variables initialized\"] = true;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}",
+							"host": [
+								"{{host}}"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "callback",
+			"description": null,
+			"item": [
+				{
+					"name": "# 로그인",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"const h = eval(globals.loadHelpers);",
+									"h.printResponseBody();",
+									"h.testStatus(200);",
+									"tests[\"Check login session\"] = postman.getResponseCookie('PHPSESSID').value;",
+									"                        "
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_id",
+									"value": "{{user_id}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://ridibooks.com/account/action/login",
+							"protocol": "https",
+							"host": [
+								"ridibooks",
+								"com"
+							],
+							"path": [
+								"account",
+								"action",
+								"login"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "[403] 잘못된 client 인증 - client_id 변조",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"const h = eval(globals.loadHelpers);",
+									"h.printResponseBody();",
+									"h.testStatus(403);",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "refresh_token",
+									"type": "text"
+								},
+								{
+									"key": "refresh_token",
+									"value": "{{refresh_token}}",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "dummy-client-id",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{client_secret}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}{{callback_login}}?response_type=code&client_id={{not_in_house_client_id}}&state={{state}}&redirect_uri={{redirect_uri}}",
+							"host": [
+								"{{host}}{{callback_login}}"
+							],
+							"query": [
+								{
+									"key": "response_type",
+									"value": "code",
+									"equals": true
+								},
+								{
+									"key": "client_id",
+									"value": "{{not_in_house_client_id}}",
+									"equals": true
+								},
+								{
+									"key": "state",
+									"value": "{{state}}",
+									"equals": true
+								},
+								{
+									"key": "redirect_uri",
+									"value": "{{redirect_uri}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "[302] Callback 인증요청 -> authroize 페이지로 redirect",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "14ae7212-2382-4f37-ab87-706affbff94a",
+								"type": "text/javascript",
+								"exec": [
+									"const h = eval(globals.loadHelpers);",
+									"h.printResponseBody();",
+									"h.testStatus(302);",
+									"",
+									"tests[\"Redirect to authorize page\"] = postman.getResponseHeader(\"Location\").has(\"/oauth2/authorize/?\");",
+									"",
+									"postman.setGlobalVariable(\"callback_authroize_url\", postman.getResponseHeader(\"Location\"));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}{{callback_login}}?response_type=code&client_id={{client_id}}&state={{state}}&redirect_uri={{redirect_uri}}",
+							"host": [
+								"{{host}}{{callback_login}}"
+							],
+							"query": [
+								{
+									"key": "response_type",
+									"value": "code",
+									"equals": true
+								},
+								{
+									"key": "client_id",
+									"value": "{{client_id}}",
+									"equals": true
+								},
+								{
+									"key": "state",
+									"value": "{{state}}",
+									"equals": true
+								},
+								{
+									"key": "redirect_uri",
+									"value": "{{redirect_uri}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "[302] authorize -> callback",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7a4d8074-59ae-41f7-835b-aaad33efa39c",
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"const h = eval(globals.loadHelpers);",
+									"h.printResponseBody();",
+									"h.testStatus(302);",
+									"",
+									"tests[\"Redirect to callback page\"] = postman.getResponseHeader(\"Location\").has(\"/callback/?\");",
+									"",
+									"postman.setGlobalVariable(\"callback_code_uri\", postman.getResponseHeader(\"Location\"));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}{{callback_authroize_url}}",
+							"host": [
+								"{{host}}{{callback_authroize_url}}"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "[302] code 발급 완료 및 토큰 쿠키셋팅",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f778f6ba-5aab-4c0b-8c54-84c001c6ee38",
+								"type": "text/javascript",
+								"exec": [
+									"const h = eval(globals.loadHelpers);",
+									"h.printResponseBody();",
+									"h.testStatus(302);",
+									"",
+									"tests[\"Redirect to redirect_uri\"] = postman.getResponseHeader(\"Location\").has(\"https://fake.com/receive\");",
+									"tests[\"Set access token to cookie\"] = postman.getResponseCookie(\"ridi-at\");",
+									"tests[\"Set refresh token to cookie\"] = postman.getResponseCookie(\"ridi-rt\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{callback_code_uri}}",
+							"host": [
+								"{{callback_code_uri}}"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
