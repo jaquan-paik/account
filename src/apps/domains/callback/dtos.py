@@ -23,7 +23,7 @@ class OAuth2Data:
             try:
                 self._client = ClientHelper.get_client(self.client_id)
             except ObjectDoesNotExist:
-                PermissionDenied()
+                raise PermissionDenied()
         return self._client
 
     def validate_params(self):
