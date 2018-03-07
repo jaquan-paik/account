@@ -98,3 +98,6 @@ class RefreshToken(AbstractRefreshToken):
     class Meta(AbstractRefreshToken.Meta):
         swappable = 'OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL'
         db_table = 'oauth2_refreshtoken'
+
+    def revoke(self):
+        self.delete()
