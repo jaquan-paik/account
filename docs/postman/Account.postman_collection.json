@@ -1318,9 +1318,9 @@
 							]
 						},
 						"url": {
-							"raw": "{{host}}{{callback_login}}?response_type=code&client_id={{not_in_house_client_id}}&state={{state}}&redirect_uri={{redirect_uri}}",
+							"raw": "{{host}}{{callback_authorize_url}}?response_type=code&client_id={{not_in_house_client_id}}&state={{state}}&redirect_uri={{redirect_uri}}",
 							"host": [
-								"{{host}}{{callback_login}}"
+								"{{host}}{{callback_authorize_url}}"
 							],
 							"query": [
 								{
@@ -1377,9 +1377,9 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{host}}{{callback_login}}?response_type=code&client_id={{client_id}}&state={{state}}&redirect_uri={{redirect_uri}}",
+							"raw": "{{host}}{{callback_authorize_url}}?response_type=code&client_id={{client_id}}&state={{state}}&redirect_uri={{redirect_uri}}",
 							"host": [
-								"{{host}}{{callback_login}}"
+								"{{host}}{{callback_authorize_url}}"
 							],
 							"query": [
 								{
