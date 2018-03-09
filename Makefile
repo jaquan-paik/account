@@ -67,3 +67,15 @@ pm-test:
 # docker
 docker-up:
 	@docker-compose up --build
+
+
+# release
+ci-build-account:
+	@make ci-build-account-with-site site=www
+	@make ci-build-account-with-site site=admin
+
+ci-build-celery:
+	@docker build -t $(env)/account/celery:latest -f ./docs/docker/celery/Dockerfile .
+
+ci-build-account-with-site:
+	@docker build -t $(env)/account/$(site):latest -f ./docs/docker/account/Dockerfile . --build-arg SITE="$(site)"

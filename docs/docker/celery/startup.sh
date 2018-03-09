@@ -22,4 +22,3 @@ fi
     --logfile=/htdocs/www/logs/celery.log \
     --pidfile=/var/run/celery \
     --loglevel=INFO
-
