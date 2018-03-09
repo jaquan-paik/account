@@ -17,4 +17,5 @@ RAVEN_CONFIG = {
 }
 
 SITE_DOMAIN = 'account-admin.ridibooks.com'
+ROOT_DOMAIN = 'ridibooks.com'
 ALLOWED_HOSTS = [SITE_DOMAIN, ]

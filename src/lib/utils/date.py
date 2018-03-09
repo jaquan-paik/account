@@ -91,3 +91,7 @@ def make_tz_aware(dt_unaware: datetime) -> datetime:
 
 def get_current_timestamp() -> int:
     return int(round(time() * 1000))
+
+
+def generate_cookie_expire_time(expires_in: int):
+    return datetime.strftime(datetime.utcnow() + timedelta(seconds=expires_in), DateTimeFormat.COOKIE)

@@ -23,6 +23,10 @@ class GeneralConfig:
         return settings.SITE_DOMAIN
 
     @staticmethod
+    def get_root_domain() -> str:
+        return settings.ROOT_DOMAIN
+
+    @staticmethod
     def get_ridibooks_login_url() -> str:
         return settings.RIDIBOOKS_LOGIN_URL
 

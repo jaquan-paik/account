@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # app
     'apps.domains.account.apps.AccountConfig',
     'apps.domains.oauth2.apps.OAuth2Config',
+    'apps.domains.callback.apps.CallbackConfig',
 ]
 
 MIDDLEWARE = [
@@ -136,6 +137,7 @@ DATABASES = {
 
 DATABASE_APPS_MAPPING = {
     'oauth2_app': 'account',
+    'account_app': 'account',
 }
 
 CACHES = {
