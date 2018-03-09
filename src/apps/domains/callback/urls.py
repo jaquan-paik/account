@@ -5,6 +5,6 @@ from . import views
 app_name = 'callback_app'
 
 urlpatterns = [
-    path('', views.CallbackView.as_view(), name='callback'),
-    path('login/', views.LoginView.as_view(), name='login'),
+    path('callback/', views.CallbackView.as_view(), name='callback'),
+    path('authorize/', views.AuthorizeView.as_view(), name='authorize'),
 ]

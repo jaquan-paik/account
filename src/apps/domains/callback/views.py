@@ -11,7 +11,7 @@ from infra.configure.config import GeneralConfig
 from lib.utils.url import generate_query_url
 
 
-class LoginView(View):
+class AuthorizeView(View):
     def get(self, request):
         state = request.GET.get('state', None)
         client_id = request.GET.get('client_id', None)
@@ -53,7 +53,11 @@ class CallbackView(View):
 
         access_token, refresh_token = TokenHelper.get_tokens(oauth2_data)
 
-        response = HttpResponseRedirect(oauth2_data.redirect_uri)
+        redirect_uri = generate_query_url(oauth2_data.redirect_uri, {
+            'state': state,
+        })
+        response = HttpResponseRedirect(redirect_uri)
+
         self._set_token_cookie(response, ACCESS_TOKEN_COOKIE_KEY, access_token)
         self._set_token_cookie(response, REFRESH_TOKEN_COOKIE_KEY, refresh_token)
 
