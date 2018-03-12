@@ -14,12 +14,18 @@ services:
   - docker
   - redis-server
 
-install:
-  - pip3 install -r docs/requirements/production.txt
-  - make log
-  - make settings
+stage:
+ - test
+ - deploy
 
-script:
-  - make lint
-  - make test
-  - make check-deprecated
+jobs:
+  include:
+    - stage: test
+      install:
+        - pip3 install -r docs/requirements/production.txt
+        - make log
+        - make settings
+      script:
+        - make lint
+        - make test
+        - make check-deprecated
