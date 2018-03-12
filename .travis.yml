@@ -22,7 +22,7 @@ jobs:
   include:
     - stage: test
       install:
-        - pip3 install -r docs/requirements/production.txt
+        - pip3 install -r docs/requirements/test.txt
         - make log
         - make settings
       script:
