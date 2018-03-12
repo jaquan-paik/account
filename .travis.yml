@@ -1,5 +1,5 @@
 
-sudo: required
+sudo: required  # Docker사용시 sudo권한 필요 https://docs.travis-ci.com/user/docker/
 
 language: python
 python:
@@ -14,18 +14,11 @@ services:
   - docker
   - redis-server
 
-stage:
- - test
- - deploy
-
-jobs:
-  include:
-    - stage: test
-      install:
-        - pip3 install -r docs/requirements/test.txt
-        - make log
-        - make settings
-      script:
-        - make lint
-        - make test
-        - make check-deprecated
+install:
+  - pip3 install -r docs/requirements/test.txt
+  - make log
+  - make settings
+script:
+  - make lint
+  - make test
+  - make check-deprecated
