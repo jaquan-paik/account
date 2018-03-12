@@ -1,0 +1,20 @@
+
+sudo: required
+
+language: python
+python:
+  - "3.6"
+
+services:
+  - docker
+  - redis-server
+  - memcached
+
+install:
+  - pip3 install -r docs/requirements/production.txt
+  - make log
+
+script:
+  - make lint
+  - make test
+  - make check-deprecated
