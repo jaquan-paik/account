@@ -101,7 +101,6 @@ ci-tag-account-with-site:
 # -- Push -- #
 ci-push-account:
 	@make ci-push-account-with-site site=www
-	@make ci-push-account-with-site site=api
 	@make ci-push-account-with-site site=admin
 
 ci-push-celery:
