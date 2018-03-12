@@ -9,6 +9,7 @@ branches:
 only:
   - master
   - /^release\/*/
+  - test/development
 
 services:
   - docker
@@ -29,5 +30,4 @@ deploy:
     script: sh docs/travis/deploy.sh
     on:
       branch:
-        - release/development
-        - release/production
+        - test/development
