@@ -30,7 +30,7 @@ before_deploy:
 
 deploy:
   - provider: script
-    script: sh docs/travis/setup.sh && sh docs/travis/deploy.sh
+    script: bash docs/travis/setup.sh && bash docs/travis/deploy.sh
     on:
       branch:
         - test/development

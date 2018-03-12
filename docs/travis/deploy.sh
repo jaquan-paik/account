@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 COMMIT_SHA=${TRAVIS_COMMIT::8}
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 
 if [ "$TRAVIS_BRANCH" == "test/development" ]; then
