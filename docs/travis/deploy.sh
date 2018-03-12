@@ -1,6 +1,13 @@
 #!/bin/bash
 
+ENV=$1
+ACCOUNT_ECR=$2
+AWS_ACCESS_KEY_ID=$3
+AWS_SECRET_ACCESS_KEY=$4
 COMMIT_SHA=${TRAVIS_COMMIT::8}
+
+export AWS_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY
 
 # generate settings
 make ci-settings ns=$ENV access_key=$AWS_ACCESS_KEY_ID secret_key=$AWS_SECRET_ACCESS_KEY region=$AWS_DEFAULT_REGION
