@@ -8,11 +8,11 @@ python:
 services:
   - docker
   - redis-server
-  - memcached
 
 install:
   - pip3 install -r docs/requirements/production.txt
   - make log
+  - make settings
 
 script:
   - make lint
