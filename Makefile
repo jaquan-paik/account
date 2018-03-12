@@ -64,7 +64,7 @@ pm-test:
 	@npm run test
 
 check-deprecated:
-    @python3.6 src/script/check_deprecated_code.py
+	@python3.6 src/script/check_deprecated_code.py
 
 
 # docker
