@@ -24,10 +24,11 @@ script:
   - make test
   - make check-deprecated
 
-
 deploy:
   - provider: script
-    script: sh docs/travis/deploy.sh
+    script: sh docs/travis/setup.sh && sh docs/travis/deploy.sh
     on:
       branch:
         - test/development
+        - release/development
+        - release/production

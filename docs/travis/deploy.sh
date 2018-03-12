@@ -1,7 +1,12 @@
 #!/bin/sh
 
-echo $TRAVIS_COMMIT
-echo $TRAVIS_PULL_REQUEST_SHA
+COMMIT_SHA=${TRAVIS_COMMIT::8}
+
+echo $COMMIT_SHA
+echo $ENV
+echo $ACCOUNT_ECR
+echo $AWS_ACCESS_KEY_ID
+echo $AWS_SECRET_ACCESS_KEY
 
 # generate settings
 #make ci-settings ns=$ENV access_key=$AWS_ACCESS_KEY_ID secret_key=$AWS_SECRET_ACCESS_KEY region=$AWS_DEFAULT_REGION
@@ -14,18 +19,18 @@ echo $TRAVIS_PULL_REQUEST_SHA
 #make ci-build-celery env=$ENV
 #
 ## tag image
-#make ci-tag-library env=$ENV ecr_path=$LIBRARY_ECR tag=latest
-#make ci-tag-library env=$ENV ecr_path=$LIBRARY_ECR tag=$CI_COMMIT_SHA
-#make ci-tag-celery env=$ENV ecr_path=$LIBRARY_ECR tag=latest
-#make ci-tag-celery env=$ENV ecr_path=$LIBRARY_ECR tag=$CI_COMMIT_SHA
+#make ci-tag-library env=$ENV ecr_path=$ACCOUNT_ECR tag=latest
+#make ci-tag-library env=$ENV ecr_path=$ACCOUNT_ECR tag=$COMMIT_SHA
+#make ci-tag-celery env=$ENV ecr_path=$ACCOUNT_ECR tag=latest
+#make ci-tag-celery env=$ENV ecr_path=$ACCOUNT_ECR tag=$COMMIT_SHA
 #
 ## push image
-#- make ci-push-library env=$ENV ecr_path=$LIBRARY_ECR tag=latest
-#- make ci-push-library env=$ENV ecr_path=$LIBRARY_ECR tag=$CI_COMMIT_SHA
-#- make ci-push-celery env=$ENV ecr_path=$LIBRARY_ECR tag=latest
-#- make ci-push-celery env=$ENV ecr_path=$LIBRARY_ECR tag=$CI_COMMIT_SHA
+#make ci-push-library env=$ENV ecr_path=$ACCOUNT_ECR tag=latest
+#make ci-push-library env=$ENV ecr_path=$ACCOUNT_ECR tag=$COMMIT_SHA
+#make ci-push-celery env=$ENV ecr_path=$ACCOUNT_ECR tag=latest
+#make ci-push-celery env=$ENV ecr_path=$ACCOUNT_ECR tag=$COMMIT_SHA
 
 # deploy
-#- ecs deploy --tag=$CI_COMMIT_SHA --region=$AWS_DEFAULT_REGION --access-key-id=$AWS_ACCESS_KEY_ID --secret-access-key=$AWS_SECRET_ACCESS_KEY library-cluster library-service-all
-#- ecs deploy --tag=$CI_COMMIT_SHA --region=$AWS_DEFAULT_REGION --access-key-id=$AWS_ACCESS_KEY_ID --secret-access-key=$AWS_SECRET_ACCESS_KEY library-cluster library-service-api
-#- ecs deploy --tag=$CI_COMMIT_SHA --region=$AWS_DEFAULT_REGION --access-key-id=$AWS_ACCESS_KEY_ID --secret-access-key=$AWS_SECRET_ACCESS_KEY library-cluster library-service-www
+#- ecs deploy --tag=$COMMIT_SHA --region=$AWS_DEFAULT_REGION --access-key-id=$AWS_ACCESS_KEY_ID --secret-access-key=$AWS_SECRET_ACCESS_KEY library-cluster library-service-all
+#- ecs deploy --tag=$COMMIT_SHA --region=$AWS_DEFAULT_REGION --access-key-id=$AWS_ACCESS_KEY_ID --secret-access-key=$AWS_SECRET_ACCESS_KEY library-cluster library-service-api
+#- ecs deploy --tag=$COMMIT_SHA --region=$AWS_DEFAULT_REGION --access-key-id=$AWS_ACCESS_KEY_ID --secret-access-key=$AWS_SECRET_ACCESS_KEY library-cluster library-service-www
