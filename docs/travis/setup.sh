@@ -1,6 +1,12 @@
 #!/bin/sh
 
-if [ "$TRAVIS_BRANCH" == "release/development" ]; then
+
+if [ "$TRAVIS_BRANCH" == "test/development" ]; then
+    ENV="development"
+    ACCOUNT_ECR=$DEV_ACCOUNT_ECR
+    AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
+elif [ "$TRAVIS_BRANCH" == "release/development" ]; then
     ENV="development"
     ACCOUNT_ECR=$DEV_ACCOUNT_ECR
     AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID
