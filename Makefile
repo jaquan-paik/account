@@ -69,7 +69,14 @@ docker-up:
 	@docker-compose up --build
 
 
-# release
+# CI
+ci-settings:
+	@export AWS_ACCESS_KEY_ID=$(access_key)
+	@export AWS_SECRET_ACCESS_KEY=$(secret_key)
+	@export AWS_DEFAULT_REGION=$(region)
+	@python3.6 src/script/handle_secret_file.py generate_$(ns)
+
+# -- Build -- #
 ci-build-account:
 	@make ci-build-account-with-site site=www
 	@make ci-build-account-with-site site=admin
@@ -79,3 +86,26 @@ ci-build-celery:
 
 ci-build-account-with-site:
 	@docker build -t $(env)/account/$(site):latest -f ./docs/docker/account/Dockerfile . --build-arg SITE="$(site)"
+
+# -- Tag -- #
+ci-tag-account:
+	@make ci-tag-account-with-site site=www
+	@make ci-tag-account-with-site site=admin
+
+ci-tag-celery:
+	@make ci-tag-account-with-site site=celery
+
+ci-tag-account-with-site:
+	@docker tag $(env)/account/$(site):latest $(ecr_path)/$(env)/account/$(site):$(tag)
+
+# -- Push -- #
+ci-push-account:
+	@make ci-push-account-with-site site=www
+	@make ci-push-account-with-site site=api
+	@make ci-push-account-with-site site=admin
+
+ci-push-celery:
+	@make ci-push-account-with-site site=celery
+
+ci-push-account-with-site:
+	@docker push $(ecr_path)/$(env)/account/$(site):$(tag)
