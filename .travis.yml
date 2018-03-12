@@ -24,6 +24,11 @@ script:
   - make test
   - make check-deprecated
 
+
+before_deploy:
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
+
 deploy:
   - provider: script
     script: sh docs/travis/setup.sh && sh docs/travis/deploy.sh

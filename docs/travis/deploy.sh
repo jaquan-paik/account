@@ -8,11 +8,11 @@ echo $ACCOUNT_ECR
 echo $AWS_ACCESS_KEY_ID
 echo $AWS_SECRET_ACCESS_KEY
 
-# generate settings
+## generate settings
 #make ci-settings ns=$ENV access_key=$AWS_ACCESS_KEY_ID secret_key=$AWS_SECRET_ACCESS_KEY region=$AWS_DEFAULT_REGION
 #
 ## aws ecr login
-#"`aws ecr get-login --no-include-email --region=$AWS_DEFAULT_REGION`"
+#$(aws ecr get-login --no-include-email --region=$AWS_DEFAULT_REGION)
 #
 ## build image
 #make ci-build-account env=$ENV
@@ -30,7 +30,7 @@ echo $AWS_SECRET_ACCESS_KEY
 #make ci-push-celery env=$ENV ecr_path=$ACCOUNT_ECR tag=latest
 #make ci-push-celery env=$ENV ecr_path=$ACCOUNT_ECR tag=$COMMIT_SHA
 
-# deploy
+## deploy
 #- ecs deploy --tag=$COMMIT_SHA --region=$AWS_DEFAULT_REGION --access-key-id=$AWS_ACCESS_KEY_ID --secret-access-key=$AWS_SECRET_ACCESS_KEY library-cluster library-service-all
 #- ecs deploy --tag=$COMMIT_SHA --region=$AWS_DEFAULT_REGION --access-key-id=$AWS_ACCESS_KEY_ID --secret-access-key=$AWS_SECRET_ACCESS_KEY library-cluster library-service-api
 #- ecs deploy --tag=$COMMIT_SHA --region=$AWS_DEFAULT_REGION --access-key-id=$AWS_ACCESS_KEY_ID --secret-access-key=$AWS_SECRET_ACCESS_KEY library-cluster library-service-www
