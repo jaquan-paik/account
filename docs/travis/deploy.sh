@@ -6,6 +6,9 @@ AWS_ACCESS_KEY_ID=$3
 AWS_SECRET_ACCESS_KEY=$4
 COMMIT_SHA=${TRAVIS_COMMIT::8}
 
+export AWS_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY
+
 # generate settings
 make ci-settings ns=$ENV access_key=$AWS_ACCESS_KEY_ID secret_key=$AWS_SECRET_ACCESS_KEY region=$AWS_DEFAULT_REGION
 
@@ -17,14 +20,14 @@ make ci-build-account env=$ENV
 make ci-build-celery env=$ENV
 
 # tag image
-make ci-tag-library env=$ENV ecr_path=$ACCOUNT_ECR tag=latest
-make ci-tag-library env=$ENV ecr_path=$ACCOUNT_ECR tag=$COMMIT_SHA
+make ci-tag-account env=$ENV ecr_path=$ACCOUNT_ECR tag=latest
+make ci-tag-account env=$ENV ecr_path=$ACCOUNT_ECR tag=$COMMIT_SHA
 make ci-tag-celery env=$ENV ecr_path=$ACCOUNT_ECR tag=latest
 make ci-tag-celery env=$ENV ecr_path=$ACCOUNT_ECR tag=$COMMIT_SHA
 
 # push image
-make ci-push-library env=$ENV ecr_path=$ACCOUNT_ECR tag=latest
-make ci-push-library env=$ENV ecr_path=$ACCOUNT_ECR tag=$COMMIT_SHA
+make ci-push-account env=$ENV ecr_path=$ACCOUNT_ECR tag=latest
+make ci-push-account env=$ENV ecr_path=$ACCOUNT_ECR tag=$COMMIT_SHA
 make ci-push-celery env=$ENV ecr_path=$ACCOUNT_ECR tag=latest
 make ci-push-celery env=$ENV ecr_path=$ACCOUNT_ECR tag=$COMMIT_SHA
 
