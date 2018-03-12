@@ -28,11 +28,11 @@ script:
 before_deploy:
   - pip install awscli
 
+
 deploy:
   - provider: script
-    script: bash docs/travis/setup.sh && bash docs/travis/deploy.sh
+    script: bash docs/travis/deploy.sh development $DEV_ACCOUNT_ECR $DEV_AWS_ACCESS_KEY_ID $DEV_AWS_SECRET_ACCESS_KEY
     on:
       branch:
         - test/development
         - release/development
-        - release/production
