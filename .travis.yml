@@ -22,3 +22,12 @@ script:
   - make lint
   - make test
   - make check-deprecated
+
+
+deploy:
+  - provider: script
+    script: sh docs/travis/deploy.sh
+    on:
+      branch:
+        - release/development
+        - release/production
