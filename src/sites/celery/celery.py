@@ -1,9 +1,9 @@
 import os
 
-from infra.configure.constants import SecretKeyName
+from infra.configure.constants import SecretKeyName, SiteType
 from lib.secret.secret import Secret
+from lib.celery.app import generate_celery
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sites.celery.settings.' + Secret().get(SecretKeyName.ENVIRONMENT))
 
-# noinspection PyUnresolvedReferences
-from lib.celery.app import app as celery_app  # flake8: noqa: E402
+celery_app = generate_celery(SiteType.CELERY)
