@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function gracefulShutdown {
-    /usr/local/bin/celery multi stopwait worker --pidfile="/var/run/celery"
+    /usr/local/bin/celery multi stopwait worker
 }
 trap gracefulShutdown SIGTERM
 
@@ -11,7 +11,6 @@ then
         -A $CELERY_APP_NAME \
         -b $CELERY_BROKER_URL \
         --workdir=/htdocs/www/src \
-        --pidfile=/var/run/celery \
         --loglevel=INFO
 else
     /usr/local/bin/celery worker \
@@ -21,6 +20,5 @@ else
         -b $CELERY_BROKER_URL \
         -c $CELERY_WORKER_COUNT \
         --workdir=/htdocs/www/src \
-        --pidfile=/var/run/celery \
         --loglevel=INFO
 fi
