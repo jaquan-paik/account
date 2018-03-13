@@ -7,7 +7,8 @@ ADD . /htdocs/www/
 RUN chown -R www-data.www-data /htdocs/www/
 
 # Install dependencies
-RUN pip3.6 install -r /htdocs/www/docs/requirements/production.txt
+ARG ENVIRONMENT
+RUN pip3.6 install -r /htdocs/www/docs/requirements/$ENVIRONMENT.txt
 
 # Configure
 RUN mkdir -pv \
