@@ -10,4 +10,4 @@ RUN touch /var/run/nginx.pid && \
 
 ARG ENVIRONMENT
 COPY docs/docker/nginx/$ENVIRONMENT/www.conf /etc/nginx/conf.d
-COPY docs/docker/nginx/$ENVIRONMENT/admin.conf /etc/nginx/conf.d
+#COPY docs/docker/nginx/$ENVIRONMENT/admin.conf /etc/nginx/conf.d
