@@ -1,10 +1,11 @@
 FROM nginx:stable
 
-COPY docs/prod/nginx/conf/nginx.conf /etc/nginx/nginx.conf
+COPY docs/docker/nginx/conf/nginx.conf /etc/nginx/nginx.conf
 
 RUN touch /var/run/nginx.pid && \
   chown -R www-data:www-data /var/run/nginx.pid && \
   chown -R www-data:www-data /var/cache/nginx
 
-ARG SITE
-COPY docs/prod/nginx/conf/$SITE.conf /etc/nginx/conf.d
+ARG ENVIRONMENT
+COPY docs/docker/nginx/$ENVIRONMENT/www.conf /etc/nginx/conf.d
+COPY docs/docker/nginx/$ENVIRONMENT/admin.conf /etc/nginx/conf.d

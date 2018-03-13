@@ -111,3 +111,14 @@ ci-push-celery:
 
 ci-push-account-with-site:
 	@docker push $(ecr_path)/$(env)/account/$(site):$(tag)
+
+
+# -- Nginx -- #
+nginx-build-image:
+	@docker build -t $(env)/account/nginx:latest -f ./docs/docker/nginx/Dockerfile . --build-arg ENVIRONMENT="$(env)"
+
+nginx-tag-image:
+	@docker tag $(env)/account/nginx:latest $(ecr_path)/$(env)/account/nginx:$(tag)
+
+nginx-push-image:
+	@docker push $(ecr_path)/$(env)/account/nginx:$(tag)
