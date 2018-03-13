@@ -1,5 +1,7 @@
 FROM ridibooks/python:bootstrap-django-2017.02.01
 
+VOLUME ["/var/local/nginx/sockets"]
+
 # Add source
 ADD . /htdocs/www/
 RUN chown -R www-data.www-data /htdocs/www/
