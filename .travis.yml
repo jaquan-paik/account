@@ -31,7 +31,8 @@ script:
 
 
 before_deploy:
-  - pip install awscli
+  - pip3 install awscli
+  - pip3 install ecs-deploy
 
 deploy:
   - provider: script
