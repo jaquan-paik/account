@@ -44,7 +44,6 @@ ecs deploy --tag=$COMMIT_SHA --region=$AWS_DEFAULT_REGION \
     --timeout 600 \
     account-fixed-cluster account-fixed
 
-
 ecs deploy --tag=$COMMIT_SHA --region=$AWS_DEFAULT_REGION \
     --access-key-id=$AWS_ACCESS_KEY_ID --secret-access-key=$AWS_SECRET_ACCESS_KEY \
     -i account-nginx $ACCOUNT_ECR/$ENV/account/nginx-admin:latest \
