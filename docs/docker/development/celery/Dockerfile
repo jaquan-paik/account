@@ -11,4 +11,4 @@ RUN mkdir -pv \
 RUN pip3.6 install -r /htdocs/www/docs/requirements/production.txt
 
 ARG ENVIRONMENT
-CMD ["/htdocs/www/docs/docker/${ENVIRONMENT}/celery/startup.sh"]
+CMD /htdocs/www/docs/docker/$ENVIRONMENT/celery/startup.sh
