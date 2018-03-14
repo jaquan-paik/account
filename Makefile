@@ -85,10 +85,10 @@ ci-build-account:
 	@make ci-build-account-with-site site=admin
 
 ci-build-celery:
-	@docker build -t $(env)/account/celery:latest -f ./docs/docker/$(env)/celery/Dockerfile . --build-arg ENVIRONMENT="$(env)"
+	@docker build -t $(env)/account/celery:latest -f ./docs/docker/$(env)/celery/Dockerfile .
 
 ci-build-account-with-site:
-	@docker build -t $(env)/account/$(site):latest -f ./docs/docker/$(env)/account/Dockerfile . --build-arg SITE="$(site)" --build-arg ENVIRONMENT="$(env)"
+	@docker build -t $(env)/account/$(site):latest -f ./docs/docker/$(env)/account/Dockerfile . --build-arg SITE="$(site)"
 
 # -- Tag -- #
 ci-tag-account:
@@ -119,7 +119,7 @@ nginx-build-image:
 	@make nginx-build-image-with-site site=admin
 
 nginx-build-image-with-site:
-	@docker build -t $(env)/account/nginx-$(site):latest -f ./docs/docker/$(env)/nginx/Dockerfile . --build-arg ENVIRONMENT="$(env)" --build-arg SITE="$(site)"
+	@docker build -t $(env)/account/nginx-$(site):latest -f ./docs/docker/$(env)/nginx/Dockerfile . --build-arg SITE="$(site)"
 
 nginx-tag-image:
 	@make nginx-tag-image-with-site site=www
