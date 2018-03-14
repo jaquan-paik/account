@@ -1,5 +1,3 @@
-from urllib.parse import urlparse, parse_qsl
-
 from django.db import models
 from oauth2_provider.models import AbstractAccessToken, AbstractApplication, AbstractGrant, AbstractRefreshToken
 
@@ -60,16 +58,41 @@ class AccessToken(AbstractAccessToken):
     token = models.TextField(verbose_name='JWT 토큰', )
 
     updated = None
-    created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
-    last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
+    created = None
+    last_modified = None
 
     class Meta(AbstractAccessToken.Meta):
         swappable = 'OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL'
         db_table = 'oauth2_accesstoken'
 
+    @classmethod
+    def from_payload(cls, token: str, payload: dict, client: Application=None) -> 'AccessToken':
+        _client = client
+        if _client is None:
+            _client = Application.objects.get(client_id=payload['client_id'])
+
+        user = User.objects.get(idx=payload['u_idx'])
+
+        return cls(
+            user=user,
+            token=token,
+            application=_client,
+            expires=payload['exp'],
+            scope=payload['scope'],
+        )
+
+    def revoke(self):
+        raise NotImplementedError()
+
 
 class RefreshToken(AbstractRefreshToken):
     user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
+
+    access_token = None
+
+    scope = models.TextField(blank=True, editable=False, verbose_name='Scope')
+
+    expires = models.DateTimeField(editable=False, verbose_name='만료일')
 
     updated = None
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
@@ -78,3 +101,6 @@ class RefreshToken(AbstractRefreshToken):
     class Meta(AbstractRefreshToken.Meta):
         swappable = 'OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL'
         db_table = 'oauth2_refreshtoken'
+
+    def revoke(self):
+        self.delete()
