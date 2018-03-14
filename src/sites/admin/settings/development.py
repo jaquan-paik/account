@@ -9,8 +9,8 @@ DEBUG = True
 
 setup_logging(SITE, LogLevel.DEBUG, LOG_DIR)
 
-SITE_DOMAIN = 'account-admin.ridibooks.com'
-ROOT_DOMAIN = 'ridibooks.com'
+SITE_DOMAIN = 'account-admin.dev.ridi.io'
+ROOT_DOMAIN = 'dev.ridi.io'
 ALLOWED_HOSTS = [SITE_DOMAIN, ]
 
 # django-debug-toolbar
