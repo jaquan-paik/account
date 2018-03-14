@@ -85,7 +85,7 @@ ci-build-account:
 	@make ci-build-account-with-site site=admin
 
 ci-build-celery:
-	@docker build -t $(env)/account/celery:latest -f ./docs/docker/$(env)/celery/Dockerfile .
+	@docker build -t $(env)/account/celery:latest -f ./docs/docker/$(env)/celery/Dockerfile . --build-arg ENVIRONMENT="$(env)"
 
 ci-build-account-with-site:
 	@docker build -t $(env)/account/$(site):latest -f ./docs/docker/$(env)/account/Dockerfile . --build-arg SITE="$(site)" --build-arg ENVIRONMENT="$(env)"
@@ -115,22 +115,22 @@ ci-push-account-with-site:
 
 # -- Nginx -- #
 nginx-build-image:
-    @make nginx-build-with-site site=www
-    @make nginx-build-with-site site=admin
+	@make nginx-build-image-with-site site=www
+	@make nginx-build-image-with-site site=admin
 
-nginx-build-with-site:
+nginx-build-image-with-site:
 	@docker build -t $(env)/account/nginx-$(site):latest -f ./docs/docker/$(env)/nginx/Dockerfile . --build-arg ENVIRONMENT="$(env)" --build-arg SITE="$(site)"
 
 nginx-tag-image:
-    @make nginx-tag-image-with-site site=www
-    @make nginx-tag-image-with-site site=admin
+	@make nginx-tag-image-with-site site=www
+	@make nginx-tag-image-with-site site=admin
 
 nginx-tag-image-with-site:
 	@docker tag $(env)/account/nginx-$(site):latest $(ecr_path)/$(env)/account/nginx-$(site):$(tag)
 
 nginx-push-image:
-    @make nginx-push-image-with-site site=www
-    @make nginx-push-image-with-site site=admin
+	@make nginx-push-image-with-site site=www
+	@make nginx-push-image-with-site site=admin
 
 nginx-push-image-with-site:
 	@docker push $(ecr_path)/$(env)/account/nginx-$(site):$(tag)
