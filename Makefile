@@ -115,10 +115,22 @@ ci-push-account-with-site:
 
 # -- Nginx -- #
 nginx-build-image:
-	@docker build -t $(env)/account/nginx:latest -f ./docs/docker/nginx/Dockerfile . --build-arg ENVIRONMENT="$(env)"
+    @make nginx-build-with-site site=www
+    @make nginx-build-with-site site=admin
+
+nginx-build-with-site:
+	@docker build -t $(env)/account/nginx-$(site):latest -f ./docs/docker/$(env)/nginx/Dockerfile . --build-arg ENVIRONMENT="$(env)" --build-arg SITE="$(site)"
 
 nginx-tag-image:
-	@docker tag $(env)/account/nginx:latest $(ecr_path)/$(env)/account/nginx:$(tag)
+    @make nginx-tag-image-with-site site=www
+    @make nginx-tag-image-with-site site=admin
+
+nginx-tag-image-with-site:
+	@docker tag $(env)/account/nginx-$(site):latest $(ecr_path)/$(env)/account/nginx-$(site):$(tag)
 
 nginx-push-image:
-	@docker push $(ecr_path)/$(env)/account/nginx:$(tag)
+    @make nginx-push-image-with-site site=www
+    @make nginx-push-image-with-site site=admin
+
+nginx-push-image-with-site:
+	@docker push $(ecr_path)/$(env)/account/nginx-$(site):$(tag)
