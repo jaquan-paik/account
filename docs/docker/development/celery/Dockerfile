@@ -10,4 +10,4 @@ RUN mkdir -pv \
 # Install dependencies
 RUN pip3.6 install -r /htdocs/www/docs/requirements/production.txt
 
-CMD ["/htdocs/www/docs/docker/celery/startup.sh"]
+CMD ["/htdocs/www/docs/docker/$ENVIRONMENT/celery/startup.sh"]

@@ -20,6 +20,6 @@ RUN mkdir -pv \
         && chown -R www-data:www-data /htdocs/www/logs
 
 ARG SITE
-ADD ./docs/docker/account/$SITE/uwsgi.ini /etc/uwsgi/
+ADD ./docs/docker/$ENVIRONMENT/account/$SITE/uwsgi.ini /etc/uwsgi/
 
 CMD ["/usr/local/bin/uwsgi", "--ini", "/etc/uwsgi/uwsgi.ini"]

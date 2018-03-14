@@ -85,10 +85,10 @@ ci-build-account:
 	@make ci-build-account-with-site site=admin
 
 ci-build-celery:
-	@docker build -t $(env)/account/celery:latest -f ./docs/docker/celery/Dockerfile .
+	@docker build -t $(env)/account/celery:latest -f ./docs/docker/$(env)/celery/Dockerfile .
 
 ci-build-account-with-site:
-	@docker build -t $(env)/account/$(site):latest -f ./docs/docker/account/Dockerfile . --build-arg SITE="$(site)" --build-arg ENVIRONMENT="$(env)"
+	@docker build -t $(env)/account/$(site):latest -f ./docs/docker/$(env)/account/Dockerfile . --build-arg SITE="$(site)" --build-arg ENVIRONMENT="$(env)"
 
 # -- Tag -- #
 ci-tag-account:
