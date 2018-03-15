@@ -72,7 +72,4 @@ class TokenRefreshHelper(TokenHelper):
         data['refresh_token'] = refresh_token
         data['grant_type'] = 'refresh_token'
 
-        if state is not None:
-            data['state'] = state
-
         return data
