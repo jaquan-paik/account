@@ -3,7 +3,7 @@ from typing import Tuple
 import requests
 from django.core.exceptions import PermissionDenied
 
-from apps.domains.callback.dtos import OAuth2Data, TokenData
+from apps.domains.callback.dtos import TokenData
 from apps.domains.callback.helpers.url_helper import UrlHelper
 from apps.domains.oauth2.models import Application
 
