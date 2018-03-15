@@ -14,8 +14,9 @@ RUN mkdir -pv \
         /htdocs/www/logs \
         /htdocs/www/logs/uwsgi \
         /var/local/nginx \
-        /var/local/nginx/sockets \
-        && chown -R www-data:www-data /var/local/nginx/sockets \
+        /var/local/nginx/sockets
+
+RUN chown -R www-data:www-data /var/local/nginx/sockets \
         && chown -R www-data:www-data /htdocs/www/logs
 
 ARG SITE
