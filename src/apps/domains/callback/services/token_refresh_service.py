@@ -19,4 +19,4 @@ class TokenRefreshService:
         if not client.is_in_house:
             raise PermissionDenied()
 
-        return TokenRefreshHelper.get_tokens(client.client_id, refresh_token)
+        return TokenRefreshHelper.get_tokens(client, refresh_token)
