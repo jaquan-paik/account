@@ -3,7 +3,9 @@ from datetime import datetime
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 
 from apps.domains.callback.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 from apps.domains.callback.dtos import OAuth2Data, TokenData
@@ -86,6 +88,7 @@ class CallbackView(View):
         return response
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class TokenView(View):
     def post(self, request):
         cookie_access_token = request.COOKIE.get(ACCESS_TOKEN_COOKIE_KEY, None)
