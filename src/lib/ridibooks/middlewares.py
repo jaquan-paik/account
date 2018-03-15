@@ -22,7 +22,6 @@ class AuthenticationMiddleware(MiddlewareMixin):
         ridibooks_session_id = request.COOKIES.get('PHPSESSID', None)
 
         user = AnonymousUser()
-
         try:
             account_info = RidiApiHelper(phpsession_id=ridibooks_session_id).get_account_info()
         except RidibooksException:
