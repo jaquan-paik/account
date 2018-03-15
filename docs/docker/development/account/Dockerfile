@@ -21,4 +21,6 @@ RUN mkdir -pv \
 ARG SITE
 ADD ./docs/docker/development/account/$SITE/uwsgi.ini /etc/uwsgi/
 
+RUN python /htdocs/www/src/manage.py admin collectstatic --noinput
+
 CMD ["/usr/local/bin/uwsgi", "--ini", "/etc/uwsgi/uwsgi.ini"]
