@@ -108,8 +108,8 @@ class TokenView(View):
 
             else:
                 data = {
-                    'expire_at': new_access_token.expires_at,
-                    'expire_in': new_access_token.expires_in,
+                    'expires_at': new_access_token.expires_at,
+                    'expires_in': new_access_token.expires_in,
                 }
                 response = JsonResponse(data)
                 _add_token_cookie(response, new_access_token, new_refresh_token)
@@ -117,7 +117,7 @@ class TokenView(View):
 
         else:
             data = {
-                'expire_at': access_token.expires,
-                'expire_in': int(access_token.expires - datetime.now().timestamp()),
+                'expires_at': access_token.expires,
+                'expires_in': int(access_token.expires - datetime.now().timestamp()),
             }
             return JsonResponse(data)
