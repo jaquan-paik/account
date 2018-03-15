@@ -18,7 +18,7 @@ class RidiApiHelper:
 
         try:
             response = requests.get(RidiStoreApiUrl.get_url(RidiStoreApiUrl.ACCOUNT_INFO), cookies=cookies, verify=False)
-            # ssl인증서가 만료되었기떄문에 verify옵션을 False로주고 테스트한다.
+            # TODO ssl인증서가 만료되었기떄문에 verify옵션을 False로주고 테스트한다.
         except RequestException:
             raise RequestFailException
 
