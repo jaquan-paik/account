@@ -2,7 +2,6 @@ from typing import Tuple
 
 import requests
 from django.core.exceptions import PermissionDenied
-from oauth2_provider.settings import oauth2_settings
 
 from apps.domains.callback.dtos import OAuth2Data, TokenData
 from apps.domains.callback.helpers.url_helper import UrlHelper
@@ -27,14 +26,9 @@ class TokenHelper:
 
     @classmethod
     def _take_token(cls, client: Application, code: str, state: str) -> Tuple[TokenData, TokenData]:
-        req = requests.post(UrlHelper.get_token(), data={
-            'client_id': client.client_id,
-            'code': code,
-            'redirect_uri': UrlHelper.get_redirect_uri(),
-            'client_secret': client.client_secret,
-            'grant_type': 'authorization_code',
-            'state': state,
-        }, verify=False)  # TODO: 개발 완료되고 인증서 추가되면 verify 제거
+        req = requests.post(
+            UrlHelper.get_token(), data=cls._get_request_data(client, code, state), verify=False
+        )  # TODO: 개발 완료되고 인증서 추가되면 verify 제거
 
         json = req.json()
         cls._validate_response(json, state)
@@ -42,5 +36,44 @@ class TokenHelper:
         return cls._generate_token_from_json(json)
 
     @classmethod
-    def get_tokens(cls, oauth2_data: OAuth2Data) -> Tuple[TokenData, TokenData]:
-        return cls._take_token(oauth2_data.client, oauth2_data.code, oauth2_data.state)
+    def get_tokens(cls, client: Application, code: str, state: str=None) -> Tuple[TokenData, TokenData]:
+        return cls._take_token(client, code, state)
+
+    @staticmethod
+    def _get_request_data(client: Application, code: str, state: str):
+        raise NotImplementedError()
+
+    @staticmethod
+    def _get_default_request_data(client: Application):
+        return {
+            'client_id': client.client_id,
+            'redirect_uri': UrlHelper.get_redirect_uri(),
+            'client_secret': client.client_secret,
+        }
+
+
+class TokenCodeHelper(TokenHelper):
+    @classmethod
+    def _get_request_data(cls, client: Application, code: str, state: str) -> dict:
+        data = cls._get_default_request_data(client)
+        data['code'] = code
+        data['grant_type'] = 'authorization_code'
+
+        if state is not None:
+            data['state'] = state
+
+        return data
+
+
+class TokenRefreshHelper(TokenHelper):
+    @classmethod
+    def _get_request_data(cls, client: Application, refresh_token: str, state: str):
+        data = cls._get_default_request_data(client)
+        data['refresh_token'] = refresh_token
+        data['grant_type'] = 'refresh_token'
+
+        if state is not None:
+            data['state'] = state
+
+        return data
+
