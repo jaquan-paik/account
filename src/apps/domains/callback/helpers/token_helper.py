@@ -21,7 +21,7 @@ class TokenHelper:
         access_token_expires_in = response_json.get('expires_in', None)
 
         refresh_token = response_json.get('refresh_token', None)
-        refresh_token_expire_in = oauth2_settings.REFRESH_TOKEN_EXPIRE_SECONDS
+        refresh_token_expire_in = response_json.get('refresh_token_expires_in', None)
 
         return TokenData(access_token, access_token_expires_in), TokenData(refresh_token, refresh_token_expire_in)
 
