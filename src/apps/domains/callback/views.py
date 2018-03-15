@@ -84,3 +84,40 @@ class CallbackView(View):
         _add_token_cookie(response, access_token, refresh_token)
 
         return response
+
+
+class TokenView(View):
+    def post(self, request):
+        cookie_access_token = request.COOKIE.get(ACCESS_TOKEN_COOKIE_KEY, None)
+        cookie_refresh_token = request.COOKIE.get(REFRESH_TOKEN_COOKIE_KEY, None)
+
+        try:
+            access_token = JwtHandler.get_access_token(cookie_access_token)
+
+        except JwtTokenErrorException:
+            try:
+                new_access_token, new_refresh_token = TokenRefreshService.refresh(cookie_refresh_token)
+
+            except PermissionDenied:
+                response = HttpResponseUnauthorized()
+                _clear_token_cookie(response)
+                return response
+
+            else:
+                data = {
+                    'expire_at': new_access_token.expires_at,
+                    'expire_in': new_access_token.expires_in,
+                }
+                response = JsonResponse(data)
+                _add_token_cookie(response, new_access_token, new_refresh_token)
+                return response
+
+        else:
+            data = {
+                'expire_at': access_token.expires,
+                'expire_in': int((access_token.expires - datetime.now()).total_seconds()),
+            }
+            return JsonResponse(data)
+
+
+
