@@ -10,13 +10,13 @@ from apps.domains.oauth2.models import Application
 
 
 class TokenHelper:
-    @classmethod
-    def _validate_response(cls, json: dict, state: str) -> None:
+    @staticmethod
+    def _validate_response(json: dict, state: str) -> None:
         if json.get('state', None) != state:
             raise PermissionDenied()
 
-    @classmethod
-    def _generate_token_from_json(cls, response_json: dict) -> Tuple[TokenData, TokenData]:
+    @staticmethod
+    def _generate_token_from_json(response_json: dict) -> Tuple[TokenData, TokenData]:
         access_token = response_json.get('access_token', None)
         access_token_expires_in = response_json.get('expires_in', None)
 
