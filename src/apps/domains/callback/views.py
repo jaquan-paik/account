@@ -118,9 +118,6 @@ class TokenView(View):
         else:
             data = {
                 'expire_at': access_token.expires,
-                'expire_in': int((access_token.expires - datetime.now()).total_seconds()),
+                'expire_in': int(access_token.expires - datetime.now().timestamp()),
             }
             return JsonResponse(data)
-
-
-
