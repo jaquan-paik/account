@@ -91,8 +91,8 @@ class CallbackView(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class TokenView(View):
     def post(self, request):
-        cookie_access_token = request.COOKIE.get(ACCESS_TOKEN_COOKIE_KEY, None)
-        cookie_refresh_token = request.COOKIE.get(REFRESH_TOKEN_COOKIE_KEY, None)
+        cookie_access_token = request.COOKIES.get(ACCESS_TOKEN_COOKIE_KEY, None)
+        cookie_refresh_token = request.COOKIES.get(REFRESH_TOKEN_COOKIE_KEY, None)
 
         try:
             access_token = JwtHandler.get_access_token(cookie_access_token)
