@@ -6,8 +6,6 @@ from django.utils.deprecation import MiddlewareMixin
 from lib.ridibooks.utils import is_ridi_ip_from_request
 from .api.api_helper import RidiApiHelper
 from .exceptions import RidibooksException
-from lib.utils.ip import get_client_ip_from_request, is_internal_ip
-from .ridi_ip import RidiIP
 
 UserModel = get_user_model()
 
