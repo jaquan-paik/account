@@ -10,8 +10,7 @@ tmp
 .tmp
 /share
 /logs
+/src/static
 celerybeat-schedule
 celerybeat.pid
-
-
 node_modules
