@@ -76,4 +76,3 @@ class TokenRefreshHelper(TokenHelper):
             data['state'] = state
 
         return data
-
