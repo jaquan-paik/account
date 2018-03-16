@@ -7,7 +7,8 @@ ADD . /htdocs/www/
 RUN chown -R www-data.www-data /htdocs/www/
 
 # Install dependencies
-RUN pip3.6 install -r /htdocs/www/docs/requirements/development.txt
+ARG ENVIRONMENT
+RUN pip3.6 install -r /htdocs/www/docs/requirements/$ENVIRONMENT.txt
 
 # Configure
 RUN mkdir -pv \
@@ -20,7 +21,7 @@ RUN chown -R www-data:www-data /var/local/nginx/sockets \
         && chown -R www-data:www-data /htdocs/www/logs
 
 ARG SITE
-ADD ./docs/docker/development/account/$SITE/uwsgi.ini /etc/uwsgi/
+ADD ./docs/docker/account/$ENVIRONMENT/$SITE/uwsgi.ini /etc/uwsgi/
 
 RUN python3.6 /htdocs/www/src/manage.py $SITE collectstatic --noinput
 

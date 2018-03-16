@@ -9,6 +9,7 @@ RUN mkdir -pv \
 RUN chown -R www-data:www-data /htdocs/www/logs
 
 # Install dependencies
-RUN pip3.6 install -r /htdocs/www/docs/requirements/development.txt
+ARG ENVIRONMENT
+RUN pip3.6 install -r /htdocs/www/docs/requirements/$ENVIRONMENT.txt
 
-CMD /htdocs/www/docs/docker/development/celery/startup.sh
+CMD /htdocs/www/docs/docker/celery/startup.sh
