@@ -16,8 +16,7 @@ make ci-settings ns=$ENV access_key=$AWS_ACCESS_KEY_ID secret_key=$AWS_SECRET_AC
 $(aws ecr get-login --no-include-email --region=$AWS_DEFAULT_REGION)
 
 # build image
-make ci-build-account env=$ENV
-make ci-build-celery env=$ENV
+make ci-build-account env=$ENV & make ci-build-celery env=$ENV & wait
 
 # tag image
 make ci-tag-account env=$ENV ecr_path=$ACCOUNT_ECR tag=latest
