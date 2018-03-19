@@ -16,7 +16,7 @@ make ci-settings ns=$ENV access_key=$AWS_ACCESS_KEY_ID secret_key=$AWS_SECRET_AC
 $(aws ecr get-login --no-include-email --region=$AWS_DEFAULT_REGION)
 
 # build image
-make ci-build-account env=$ENV & make ci-build-celery env=$ENV & wait
+make ci-build-account env=$ENV & make ci-build-celery env=$ENV & wait $1 $2
 
 # tag image
 make ci-tag-account env=$ENV ecr_path=$ACCOUNT_ECR tag=latest
@@ -53,4 +53,4 @@ ecs deploy --tag=$COMMIT_SHA --region=$AWS_DEFAULT_REGION \
     --access-key-id=$AWS_ACCESS_KEY_ID --secret-access-key=$AWS_SECRET_ACCESS_KEY \
     --timeout 600 \
     account-fixed-cluster account-celery-low-worker & \
-wait
+wait $1 $2 $3 $4 $5
