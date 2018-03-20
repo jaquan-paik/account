@@ -9,12 +9,12 @@ DEBUG = True
 
 # setup_logging(SITE, LogLevel.DEBUG, LOG_DIR)
 
-SITE_DOMAIN = 'account.shelf.dev.ridi.io'
-ROOT_DOMAIN = 'shelf.dev.ridi.io'
-ALLOWED_HOSTS = [SITE_DOMAIN, ]
+SITE_DOMAIN = 'account.dev.ridi.io'
+ROOT_DOMAIN = 'dev.ridi.io'
+ALLOWED_HOSTS = [SITE_DOMAIN, 'account.dev.ridi.com']
 
 
-RIDIBOOKS_LOGIN_URL = 'https://shelf.dev.ridi.io/account/login'
+RIDIBOOKS_LOGIN_URL = 'https://dev.ridi.io/account/login'
 
 
 # django-debug-toolbar

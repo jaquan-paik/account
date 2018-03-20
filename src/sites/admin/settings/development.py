@@ -11,7 +11,7 @@ DEBUG = True
 
 SITE_DOMAIN = 'account-admin.dev.ridi.io'
 ROOT_DOMAIN = 'dev.ridi.io'
-ALLOWED_HOSTS = [SITE_DOMAIN, ]
+ALLOWED_HOSTS = [SITE_DOMAIN, 'account-admin.dev.ridi.com']
 
 # django-debug-toolbar
 DEBUG_TOOLBAR_CONFIG = {

@@ -1,6 +1,6 @@
 from infra.configure.config import GeneralConfig
 
-_DEV_RIDI_STORE_DOMAIN = 'https://shelf.dev.ridi.io'
+_DEV_RIDI_STORE_DOMAIN = 'https://dev.ridi.io'
 _PROD_RIDI_STORE_DOMAIN = 'https://ridibooks.com'
 
 
