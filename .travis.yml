@@ -13,10 +13,8 @@ env:
     - secure: nrZG66Hhmm7aH2OimyxlaQfIvJR6IkNR76S+zhov6o3kNpnnw4PGtr78whTXBuveeO5QAN/S3qA4yQUryQk0Or6xg3fShDJSVTwTdc92eRRd8kEV72vkP9Iy5p/GwmwB6yEb0JdCH7G+0IO5IDAOEyPnJNUFVgmxB+updiE9YlemAILVCTUKQmbuxwrmrcCuW9T5g1VOF8OOLz3fxqIdZrv2kv5q2CzEy+0KKDGKequDWvQRK2ejrdf8EEJwmZHDhjXITnOQFnduqfnwkU+lbX+1K8PH4ysRb6UxMsADp0NKeymC+aUchrg0qeD+1vIYAxwJS6Dns3EjwHfiktAJ44v1QwhF3GAbiKFkvso0SzZu8JqIHD26Ct+9+pBERPE679+9kp57i3zrTUCfe7cWYNFAyMYs+w1FNMPBMeZlywyGREnxy7l3LcNMk+QrbxdJrqVV1Pbu67BqmjoWZLfhU+JBBeG1qVlhohcU1sHq85C+HzVy6L6F6u0XN01YUwZpJc6ywxpU9BpibActGI2ILzxW4MRkCIGye4IOnkZAjKM8rAKOgZPITbPax3ogt1FAIFAFXkK33fARAZMUeN9/kIR184mx4/WUSv0PuqiA218ns6/ih/igADful2B7Mal2wyVAjYl4a9BASUsNlO3pmOxeCHUEWX8cjccXBw83Bdw=
     - secure: m60wLQKswtwoB31n21Zcqg0+VTICfSnjowLeB4B5Dwi+Fnx4qYPzyvl0Elus1EDGSMRij/UHVS4PjfwXyXpqdfBGC5RjLJFgbEuCCZFNeKGNbJf5tY4zFJXpeReT8cAATnsdAHxMsWb0WowYq8UDPX58jQehcoqRPnv2gzUcm0EHLGrPe/W4vpS0B8BlFiEnxkgCikQgOK5wbVWF6HsEYwYs9IK3KPiIIy2IL/tJOUJ/PnDtWpxAcdmLjkHlFL7sDJFldNkgVq75i7PL4cPLs7NMBNGbwn7gMffmrr8gt/hZIGGvyuAM50iji2TjzqngF8DofxGY0xmA34/z5Ak7lw9EIiNqOZxGCz5M46OjlNdxgIBS4wOL81HiMvcQD9RRDkmxwdrEjDVRgTENejMtGgDeoLf3FMCXQ7DIPZBmbRWJj49ff8Z6lEzmXTcDuz2DDznR0Ij4o8i/A8obndWofUQCY+ZgKjG7J6l/66Q4Sn8P3NkSfQpcI0TOmWJ3wc/mbBBoQSMn1ViECXbcsFJi7tPuPrrJi/457o9U0MiQmNdYkh8Lv/e2MrVdVqFTnYLeqQ1hAq8rxYMoPQMjlGZCQ+k2yuR6WqOx7hbhch9dr9l+P+KDlsqQzipu6O19K57Vai+Zf/K0v5Ld1/mWy0xZBSXBR4pW2aRxe5XDzNH7yGM=
   matrix:
-    - ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
-    - SITE=account
-    - SITE=celery
-
+    - SITE=account ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
+    - SITE=celery ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
 
 stages:
   - test
@@ -36,9 +34,11 @@ jobs:
         - pip3 install -r docs/requirements/development.txt
         - make log
         - make settings
-      script: make lint
-      script: make test
-      script: make check-deprecated
+      env:
+      script:
+        - make lint
+        - make test
+        - make check-deprecated
 
     - stage: pre_build
       script: bash docs/travis/pre_build.sh
