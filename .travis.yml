@@ -29,10 +29,9 @@ jobs:
         - pip3 install -r docs/requirements/development.txt
         - make log
         - make settings
-      script:
-        - make lint
-        - make test
-        - make check-deprecated
+      script: make lint
+    - script: make test
+    - script: make check-deprecated
 
     - stage: build
       before_script:
@@ -40,10 +39,8 @@ jobs:
       script:
         - bash docs/travis/build/$SITE.sh
       env:
-        matrix:
-          - SITE=account ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
-          - SITE=celery ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
-
+        - SITE=account ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
+        - SITE=celery ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
 
 #    - stage: push
 #      script: bash docs/travis/push/$SITE.sh
