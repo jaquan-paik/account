@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 COMMIT_SHA=${TRAVIS_COMMIT::8}
 
@@ -14,5 +14,4 @@ ecs deploy --tag=$COMMIT_SHA --region=$AWS_DEFAULT_REGION \
     -i account-nginx $ACCOUNT_ECR/$ENVIRONMENT/account/nginx-admin:latest \
     --timeout 600 \
     account-fixed-cluster account-fixed & \
-
 wait $1 $2

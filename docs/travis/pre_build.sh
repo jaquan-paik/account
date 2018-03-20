@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ENV=$1
 AWS_ACCESS_KEY_ID=$3
