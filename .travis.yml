@@ -16,7 +16,9 @@ env:
 stages:
   - test
   - name: pre_build
+    if: branch = release
   - name: build
+    if: branch = release
   - name: deploy
     if: branch = release
 
