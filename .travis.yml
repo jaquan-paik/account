@@ -15,8 +15,6 @@ env:
 
 stages:
   - test
-  - name: pre_build
-#    if: branch = release
   - name: build
 #    if: branch = release
   - name: push
@@ -36,14 +34,16 @@ jobs:
         - make test
         - make check-deprecated
 
-    - stage: pre_build
-      script: bash docs/travis/pre_build.sh
-      env:
-        - SITE=account ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
-        - SITE=celery ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
-
     - stage: build
-      script: bash docs/travis/build/$SITE.sh
+      before_script:
+        - bash docs/travis/pre_build.sh
+      script:
+        - bash docs/travis/build/$SITE.sh
+      env:
+        matrix:
+          - SITE=account ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
+          - SITE=celery ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
+
 
 #    - stage: push
 #      script: bash docs/travis/push/$SITE.sh
