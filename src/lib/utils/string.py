@@ -37,4 +37,13 @@ def is_last_char_has_batchim(char: str) -> bool:
 
 
 def generate_random_str(n: int) -> str:
-    return ''.join(random.choices(string_lib.ascii_letters + string_lib.digits + string_lib.punctuation, k=n))
+    return ''.join(random.choices(_filter_generatable_char(string_lib.ascii_letters + string_lib.digits + string_lib.punctuation), k=n))
+
+
+def _filter_generatable_char(generatable_char: str) -> str:
+    not_allow_chars = "\"'"
+
+    for char in not_allow_chars:
+        generatable_char = generatable_char.replace(char, "")
+
+    return generatable_char
