@@ -16,7 +16,6 @@ env:
     - SITE=account ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
     - SITE=celery ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
 
-
 install:
   - pip3 install -r docs/requirements/development.txt
 
@@ -28,7 +27,6 @@ script:
  - make lint
  - make test
  - make check-deprecated
-
 
 before_deploy:
   - pip3 install awscli
