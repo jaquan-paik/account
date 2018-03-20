@@ -1222,266 +1222,319 @@
 			"description": null,
 			"item": [
 				{
-					"name": "# 로그인",
-					"event": [
+					"name": "authorization",
+					"description": "",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"const h = eval(globals.loadHelpers);",
-									"h.printResponseBody();",
-									"h.testStatus(200);",
-									"tests[\"Check login session\"] = postman.getResponseCookie('PHPSESSID').value;",
-									"                        "
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
+							"name": "# 로그인",
+							"event": [
 								{
-									"key": "user_id",
-									"value": "{{user_id}}",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "{{password}}",
-									"type": "text"
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"const h = eval(globals.loadHelpers);",
+											"h.printResponseBody();",
+											"h.testStatus(200);",
+											"tests[\"Check login session\"] = postman.getResponseCookie('PHPSESSID').value;",
+											"                        "
+										]
+									}
 								}
-							]
-						},
-						"url": {
-							"raw": "https://ridibooks.com/account/action/login",
-							"protocol": "https",
-							"host": [
-								"ridibooks",
-								"com"
 							],
-							"path": [
-								"account",
-								"action",
-								"login"
-							]
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "user_id",
+											"value": "{{user_id}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://ridibooks.com/account/action/login",
+									"protocol": "https",
+									"host": [
+										"ridibooks",
+										"com"
+									],
+									"path": [
+										"account",
+										"action",
+										"login"
+									]
+								},
+								"description": null
+							},
+							"response": []
 						},
-						"description": null
-					},
-					"response": []
-				},
-				{
-					"name": "[403] 잘못된 client 인증 - client_id 변조",
-					"event": [
 						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"const h = eval(globals.loadHelpers);",
-									"h.printResponseBody();",
-									"h.testStatus(403);",
-									""
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
+							"name": "[403] 잘못된 client 인증 - client_id 변조",
+							"event": [
 								{
-									"key": "grant_type",
-									"value": "refresh_token",
-									"type": "text"
-								},
-								{
-									"key": "refresh_token",
-									"value": "{{refresh_token}}",
-									"type": "text"
-								},
-								{
-									"key": "client_id",
-									"value": "dummy-client-id",
-									"type": "text"
-								},
-								{
-									"key": "client_secret",
-									"value": "{{client_secret}}",
-									"type": "text"
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"const h = eval(globals.loadHelpers);",
+											"h.printResponseBody();",
+											"h.testStatus(403);",
+											""
+										]
+									}
 								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}{{callback_authorize_url}}?response_type=code&client_id={{not_in_house_client_id}}&state={{state}}&redirect_uri={{redirect_uri}}",
-							"host": [
-								"{{host}}{{callback_authorize_url}}"
 							],
-							"query": [
-								{
-									"key": "response_type",
-									"value": "code",
-									"equals": true
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "refresh_token",
+											"type": "text"
+										},
+										{
+											"key": "refresh_token",
+											"value": "{{refresh_token}}",
+											"type": "text"
+										},
+										{
+											"key": "client_id",
+											"value": "dummy-client-id",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "{{client_secret}}",
+											"type": "text"
+										}
+									]
 								},
-								{
-									"key": "client_id",
-									"value": "{{not_in_house_client_id}}",
-									"equals": true
+								"url": {
+									"raw": "{{host}}{{callback_authorize_url}}?response_type=code&client_id={{not_in_house_client_id}}&state={{state}}&redirect_uri={{redirect_uri}}",
+									"host": [
+										"{{host}}{{callback_authorize_url}}"
+									],
+									"query": [
+										{
+											"key": "response_type",
+											"value": "code",
+											"equals": true
+										},
+										{
+											"key": "client_id",
+											"value": "{{not_in_house_client_id}}",
+											"equals": true
+										},
+										{
+											"key": "state",
+											"value": "{{state}}",
+											"equals": true
+										},
+										{
+											"key": "redirect_uri",
+											"value": "{{redirect_uri}}",
+											"equals": true
+										}
+									]
 								},
-								{
-									"key": "state",
-									"value": "{{state}}",
-									"equals": true
-								},
-								{
-									"key": "redirect_uri",
-									"value": "{{redirect_uri}}",
-									"equals": true
-								}
-							]
+								"description": null
+							},
+							"response": []
 						},
-						"description": null
-					},
-					"response": []
-				},
-				{
-					"name": "[302] Callback 인증요청 -> authroize 페이지로 redirect",
-					"event": [
 						{
-							"listen": "test",
-							"script": {
-								"id": "14ae7212-2382-4f37-ab87-706affbff94a",
-								"type": "text/javascript",
-								"exec": [
-									"const h = eval(globals.loadHelpers);",
-									"h.printResponseBody();",
-									"h.testStatus(302);",
-									"",
-									"tests[\"Redirect to authorize page\"] = postman.getResponseHeader(\"Location\").has(\"/oauth2/authorize/?\");",
-									"",
-									"postman.setGlobalVariable(\"callback_authroize_url\", postman.getResponseHeader(\"Location\"));"
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{host}}{{callback_authorize_url}}?response_type=code&client_id={{client_id}}&state={{state}}&redirect_uri={{redirect_uri}}",
-							"host": [
-								"{{host}}{{callback_authorize_url}}"
+							"name": "[302] Callback 인증요청 -> authroize 페이지로 redirect",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d1bd9e7d-6974-4161-8be8-a658c2688c6d",
+										"type": "text/javascript",
+										"exec": [
+											"const h = eval(globals.loadHelpers);",
+											"h.printResponseBody();",
+											"h.testStatus(302);",
+											"",
+											"tests[\"Redirect to authorize page\"] = postman.getResponseHeader(\"Location\").has(\"/oauth2/authorize/?\");",
+											"",
+											"postman.setGlobalVariable(\"authorize_url\", postman.getResponseHeader(\"Location\"));"
+										]
+									}
+								}
 							],
-							"query": [
-								{
-									"key": "response_type",
-									"value": "code",
-									"equals": true
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
 								},
-								{
-									"key": "client_id",
-									"value": "{{client_id}}",
-									"equals": true
+								"url": {
+									"raw": "{{host}}{{callback_authorize_url}}?response_type=code&client_id={{client_id}}&state={{state}}&redirect_uri={{redirect_uri}}",
+									"host": [
+										"{{host}}{{callback_authorize_url}}"
+									],
+									"query": [
+										{
+											"key": "response_type",
+											"value": "code",
+											"equals": true
+										},
+										{
+											"key": "client_id",
+											"value": "{{client_id}}",
+											"equals": true
+										},
+										{
+											"key": "state",
+											"value": "{{state}}",
+											"equals": true
+										},
+										{
+											"key": "redirect_uri",
+											"value": "{{redirect_uri}}",
+											"equals": true
+										}
+									]
 								},
+								"description": null
+							},
+							"response": []
+						},
+						{
+							"name": "[302] authorize -> callback",
+							"event": [
 								{
-									"key": "state",
-									"value": "{{state}}",
-									"equals": true
-								},
-								{
-									"key": "redirect_uri",
-									"value": "{{redirect_uri}}",
-									"equals": true
+									"listen": "test",
+									"script": {
+										"id": "7a4d8074-59ae-41f7-835b-aaad33efa39c",
+										"type": "text/javascript",
+										"exec": [
+											"",
+											"const h = eval(globals.loadHelpers);",
+											"h.printResponseBody();",
+											"h.testStatus(302);",
+											"",
+											"tests[\"Redirect to callback page\"] = postman.getResponseHeader(\"Location\").has(\"/callback/?\");",
+											"",
+											"postman.setGlobalVariable(\"callback_code_uri\", postman.getResponseHeader(\"Location\"));"
+										]
+									}
 								}
-							]
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}{{authorize_url}}",
+									"host": [
+										"{{host}}{{authorize_url}}"
+									]
+								},
+								"description": null
+							},
+							"response": []
 						},
-						"description": null
-					},
-					"response": []
-				},
-				{
-					"name": "[302] authorize -> callback",
-					"event": [
 						{
-							"listen": "test",
-							"script": {
-								"id": "7a4d8074-59ae-41f7-835b-aaad33efa39c",
-								"type": "text/javascript",
-								"exec": [
-									"",
-									"const h = eval(globals.loadHelpers);",
-									"h.printResponseBody();",
-									"h.testStatus(302);",
-									"",
-									"tests[\"Redirect to callback page\"] = postman.getResponseHeader(\"Location\").has(\"/callback/?\");",
-									"",
-									"postman.setGlobalVariable(\"callback_code_uri\", postman.getResponseHeader(\"Location\"));"
-								]
-							}
+							"name": "[302] code 발급 완료 및 토큰 쿠키셋팅",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f778f6ba-5aab-4c0b-8c54-84c001c6ee38",
+										"type": "text/javascript",
+										"exec": [
+											"const h = eval(globals.loadHelpers);",
+											"h.printResponseBody();",
+											"h.testStatus(302);",
+											"",
+											"tests[\"Redirect to redirect_uri\"] = postman.getResponseHeader(\"Location\").has(\"https://fake.com/receive\");",
+											"tests[\"Set access token to cookie\"] = postman.getResponseCookie(\"ridi-at\");",
+											"tests[\"Set refresh token to cookie\"] = postman.getResponseCookie(\"ridi-rt\");"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{callback_code_uri}}",
+									"host": [
+										"{{callback_code_uri}}"
+									]
+								},
+								"description": null
+							},
+							"response": []
 						}
 					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{host}}{{callback_authroize_url}}",
-							"host": [
-								"{{host}}{{callback_authroize_url}}"
-							]
-						},
-						"description": null
-					},
-					"response": []
+					"_postman_isSubFolder": true
 				},
 				{
-					"name": "[302] code 발급 완료 및 토큰 쿠키셋팅",
-					"event": [
+					"name": "token",
+					"description": "",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"id": "f778f6ba-5aab-4c0b-8c54-84c001c6ee38",
-								"type": "text/javascript",
-								"exec": [
-									"const h = eval(globals.loadHelpers);",
-									"h.printResponseBody();",
-									"h.testStatus(302);",
-									"",
-									"tests[\"Redirect to redirect_uri\"] = postman.getResponseHeader(\"Location\").has(\"https://fake.com/receive\");",
-									"tests[\"Set access token to cookie\"] = postman.getResponseCookie(\"ridi-at\");",
-									"tests[\"Set refresh token to cookie\"] = postman.getResponseCookie(\"ridi-rt\");"
-								]
-							}
+							"name": "[200] 토큰 정보 확인",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "81c088e1-d6d5-4789-92c5-d2df860369e6",
+										"type": "text/javascript",
+										"exec": [
+											"const h = eval(globals.loadHelpers);",
+											"h.printResponseBody();",
+											"h.testStatus(200);",
+											"",
+											"const jsonData = JSON.parse(responseBody);",
+											"",
+											"tests[\"expire_at exists\"] = jsonData.expires_at;",
+											"tests[\"expire_in exists\"] = jsonData.expires_in;",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}{{callback_token_url}}",
+									"host": [
+										"{{host}}{{callback_token_url}}"
+									]
+								},
+								"description": null
+							},
+							"response": []
 						}
 					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{callback_code_uri}}",
-							"host": [
-								"{{callback_code_uri}}"
-							]
-						},
-						"description": null
-					},
-					"response": []
+					"_postman_isSubFolder": true
 				}
 			]
 		}

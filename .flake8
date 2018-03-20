@@ -10,3 +10,4 @@ exclude =
     ./docs
     ./venv
     migrations
+    node_modules

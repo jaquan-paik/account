@@ -6,6 +6,12 @@ from apps.domains.oauth2 import urls as oauth2_urls
 from apps.domains.callback import urls as callback_urls
 from .views import Index
 
+
+handler400 = 'sites.www.views.bad_request'
+handler403 = 'sites.www.views.permission_denied'
+handler404 = 'sites.www.views.page_not_found'
+handler500 = 'sites.www.views.server_error'
+
 urlpatterns = [
     path('', Index.as_view(), name='index'),
     path('accounts/', include(account_urls, namespace='account')),
