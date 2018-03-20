@@ -12,41 +12,33 @@ env:
     - secure: pVszyLSErkktF8G8fP4LeExPFcm/AliuzTH0jQlIvNTE3ImOgElCxXQW8IRmYpgzSPtNqRiHkhzl1MD7Q55WZXm2eQfITEEpWsHpu+y3K95qH4SXXBnvYEcx0SkT5n7hZ6DIXn0YseY9J4WogX0jh1Vv6/Wy+8y68PY625/8TNLl5I/GI/AIVIakxQ4QY6nIkXiY8rLkvf7PyVQpUMDu2QHUsKa7CB6O+y2JDol3WF4zEtiEWsFAxkE00dvTe98NEgUvtDUMGAsyYbFIHA3kl0W4o9exMw75xPXLGfzx06rY9dYO66+4JHpygRQnBqBopxeJgR2E3k2s37e+8wUNk6T+MxcYrR93Qd0L/ziGYDoJ6Cowz6p11YPHflSRBdt6xJwag8ndBM06o7HMdjAtsbIjgHHdcorCk7CjtGAgQhR4QAO3l60bGGzCt7L51RGIwxvvScJBcqXGqelEw0/GoU0OKiC4Xhb+JKr1ncc7eRUvU/d1nRFUcOvvxeBiqBsi/esWLptmn0dsdrlLiMpFadc3Hw9S6qdOj2E94kT8+nBsVtueP4iku2AybVaPUj7iVFGmG8g7o5zD47wS2rqCj8sGBjPE9jbjpckYzJJBCXxPiepMOr1nOBjvI4ewQcOiI/LgWjqHVWNTuilAvJ0169/gH8x89FS8avbowStwwLY=
     - secure: nrZG66Hhmm7aH2OimyxlaQfIvJR6IkNR76S+zhov6o3kNpnnw4PGtr78whTXBuveeO5QAN/S3qA4yQUryQk0Or6xg3fShDJSVTwTdc92eRRd8kEV72vkP9Iy5p/GwmwB6yEb0JdCH7G+0IO5IDAOEyPnJNUFVgmxB+updiE9YlemAILVCTUKQmbuxwrmrcCuW9T5g1VOF8OOLz3fxqIdZrv2kv5q2CzEy+0KKDGKequDWvQRK2ejrdf8EEJwmZHDhjXITnOQFnduqfnwkU+lbX+1K8PH4ysRb6UxMsADp0NKeymC+aUchrg0qeD+1vIYAxwJS6Dns3EjwHfiktAJ44v1QwhF3GAbiKFkvso0SzZu8JqIHD26Ct+9+pBERPE679+9kp57i3zrTUCfe7cWYNFAyMYs+w1FNMPBMeZlywyGREnxy7l3LcNMk+QrbxdJrqVV1Pbu67BqmjoWZLfhU+JBBeG1qVlhohcU1sHq85C+HzVy6L6F6u0XN01YUwZpJc6ywxpU9BpibActGI2ILzxW4MRkCIGye4IOnkZAjKM8rAKOgZPITbPax3ogt1FAIFAFXkK33fARAZMUeN9/kIR184mx4/WUSv0PuqiA218ns6/ih/igADful2B7Mal2wyVAjYl4a9BASUsNlO3pmOxeCHUEWX8cjccXBw83Bdw=
     - secure: m60wLQKswtwoB31n21Zcqg0+VTICfSnjowLeB4B5Dwi+Fnx4qYPzyvl0Elus1EDGSMRij/UHVS4PjfwXyXpqdfBGC5RjLJFgbEuCCZFNeKGNbJf5tY4zFJXpeReT8cAATnsdAHxMsWb0WowYq8UDPX58jQehcoqRPnv2gzUcm0EHLGrPe/W4vpS0B8BlFiEnxkgCikQgOK5wbVWF6HsEYwYs9IK3KPiIIy2IL/tJOUJ/PnDtWpxAcdmLjkHlFL7sDJFldNkgVq75i7PL4cPLs7NMBNGbwn7gMffmrr8gt/hZIGGvyuAM50iji2TjzqngF8DofxGY0xmA34/z5Ak7lw9EIiNqOZxGCz5M46OjlNdxgIBS4wOL81HiMvcQD9RRDkmxwdrEjDVRgTENejMtGgDeoLf3FMCXQ7DIPZBmbRWJj49ff8Z6lEzmXTcDuz2DDznR0Ij4o8i/A8obndWofUQCY+ZgKjG7J6l/66Q4Sn8P3NkSfQpcI0TOmWJ3wc/mbBBoQSMn1ViECXbcsFJi7tPuPrrJi/457o9U0MiQmNdYkh8Lv/e2MrVdVqFTnYLeqQ1hAq8rxYMoPQMjlGZCQ+k2yuR6WqOx7hbhch9dr9l+P+KDlsqQzipu6O19K57Vai+Zf/K0v5Ld1/mWy0xZBSXBR4pW2aRxe5XDzNH7yGM=
+  matrix:
+    - SITE=account ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
+    - SITE=celery ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
 
-stages:
-  - test
-  - name: build
-#    if: branch = release
-  - name: push
-    if: branch = release
-  - name: deploy
-    if: branch = release
 
-jobs:
-  include:
-    - stage: test
-      before_script:
-        - pip3 install -r docs/requirements/development.txt
-        - make log
-        - make settings
-      script: make lint
-    - script: make test
-    - script: make check-deprecated
+install:
+  - pip3 install -r docs/requirements/development.txt
 
-    - stage: build
-      before_script:
-        - bash docs/travis/pre_build.sh
-      script:
-        - bash docs/travis/build/$SITE.sh
-      env:
-        - SITE=account ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
-        - SITE=celery ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
+before_script:
+  - make log
+  - make settings
 
-#    - stage: push
-#      script: bash docs/travis/push/$SITE.sh
-#
-#    - stage: deploy
-#      install:
-#        - pip3 install awscli
-#        - pip3 install ecs-deploy
-#      script: bash docs/travis/deploy/$SITE.sh
+script:
+ - make lint
+ - make test
+ - make check-deprecated
+
+
+before_deploy:
+  - pip3 install awscli
+  - pip3 install ecs-deploy
+  - bash docs/travis/pre_build.sh
+  - bash docs/travis/build/$SITE.sh
+
+deploy:
+  provider: script
+  script: bash docs/travis/deploy/$SITE.sh
+  on:
+    branch:
+      release
