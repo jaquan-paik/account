@@ -31,7 +31,6 @@ jobs:
         - pip3 install -r docs/requirements/development.txt
         - make log
         - make settings
-      env:
       script:
         - make lint
         - make test
@@ -39,9 +38,9 @@ jobs:
 
     - stage: pre_build
       script: bash docs/travis/pre_build.sh
-      matrix:
-      - SITE=account ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
-      - SITE=celery ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
+      env:
+        - SITE=account ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
+        - SITE=celery ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
 
     - stage: build
       script: bash docs/travis/build/$SITE.sh
@@ -50,7 +49,7 @@ jobs:
 #      script: bash docs/travis/push/$SITE.sh
 #
 #    - stage: deploy
-#      before_script:
+#      install:
 #        - pip3 install awscli
 #        - pip3 install ecs-deploy
 #      script: bash docs/travis/deploy/$SITE.sh
