@@ -1,6 +1,6 @@
 from infra.configure.config import GeneralConfig
 
-_DEV_RIDI_STORE_DOMAIN = 'http://dev.ridi.com'
+_DEV_RIDI_STORE_DOMAIN = 'https://dev.ridi.io'
 _PROD_RIDI_STORE_DOMAIN = 'https://ridibooks.com'
 
 
@@ -11,7 +11,7 @@ class RidiApiUrl:
 
     @classmethod
     def _get_domain(cls) -> str:
-        return cls._get_prod_domain() if GeneralConfig.is_dev() else cls._get_dev_domain()
+        return cls._get_dev_domain() if GeneralConfig.is_dev() else cls._get_prod_domain()
 
     @classmethod
     def _get_prod_domain(cls):

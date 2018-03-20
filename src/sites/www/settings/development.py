@@ -7,11 +7,14 @@ from .base import *  # flake8: noqa: F403  # pylint:disable=wildcard-import
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-setup_logging(SITE, LogLevel.DEBUG, LOG_DIR)
+# setup_logging(SITE, LogLevel.DEBUG, LOG_DIR)
 
-SITE_DOMAIN = 'account.ridibooks.com'
-ROOT_DOMAIN = 'ridibooks.com'
-ALLOWED_HOSTS = [SITE_DOMAIN, ]
+SITE_DOMAIN = 'account.dev.ridi.io'
+ROOT_DOMAIN = 'dev.ridi.io'
+ALLOWED_HOSTS = [SITE_DOMAIN, 'account.dev.ridi.com']
+
+
+RIDIBOOKS_LOGIN_URL = 'https://dev.ridi.io/account/login'
 
 
 # django-debug-toolbar

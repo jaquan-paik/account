@@ -17,7 +17,8 @@ class RidiApiHelper:
         cookies = dict(PHPSESSID=self.phpsession_id)
 
         try:
-            response = requests.get(RidiStoreApiUrl.get_url(RidiStoreApiUrl.ACCOUNT_INFO), cookies=cookies)
+            response = requests.get(RidiStoreApiUrl.get_url(RidiStoreApiUrl.ACCOUNT_INFO), cookies=cookies, verify=False)
+            # TODO ssl인증서가 만료되었기떄문에 verify옵션을 False로주고 테스트한다.
         except RequestException:
             raise RequestFailException
 

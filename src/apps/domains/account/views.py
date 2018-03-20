@@ -8,10 +8,10 @@ from lib.utils.url import generate_query_url
 
 class RidiLoginView(LoginView):  # pylint: disable=too-many-ancestors
     def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
+        if request.user.is_authenticated:
             # 로그인 되어 있으면 Next로 이동한다.
             redirect_to = self.get_success_url()
-            if redirect_to == self.request.path:
+            if redirect_to == request.path:
                 raise ErrorException('LOGIN REDIRECT URL IS SAME!')
         else:
             # 로그인 안되어 있으면 리디북스 홈페이지로 이동하고 돌아온다.
