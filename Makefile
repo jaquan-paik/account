@@ -19,7 +19,7 @@ npm-install:
 	@npm install
 
 python-package-install:
-	@pip3 install -r docs/requirements/local.txt
+	@pip3 install -r docs/requirements/development.txt
 
 settings:
 	@cp docs/dev/settings/secrets.json ./secrets.json && python3.6 src/script/handle_secret_file.py encrypt
