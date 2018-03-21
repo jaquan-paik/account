@@ -1,6 +1,6 @@
 #!/bin/bash
 
-make ci-settings ns=$ENV
+make ci-settings ns=$ENVIRONMENT
 
 $(aws ecr get-login --no-include-email --region=$AWS_DEFAULT_REGION)
 
