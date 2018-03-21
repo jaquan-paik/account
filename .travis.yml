@@ -32,6 +32,6 @@ before_deploy:
 
 deploy:
   provider: script
-  script: bash scripts/deploy.sh
+  script: bash docs/travis/deploy.sh
   on:
     branch: release
