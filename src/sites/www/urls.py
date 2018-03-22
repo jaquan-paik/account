@@ -14,7 +14,7 @@ handler500 = 'sites.www.views.server_error'
 
 urlpatterns = [
     path('', Index.as_view(), name='index'),
-    path('token_refresher/', TokenRefresherView.as_view(), name='index'),
+    path('token-refresher/', TokenRefresherView.as_view(), name='index'),
 
     path('accounts/', include(account_urls, namespace='account')),
     path('ridi/', include(callback_urls, namespace='ridi')),
