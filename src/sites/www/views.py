@@ -1,6 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.cache import never_cache
+
+from lib.cache.mixins import CachePageMixin
+from lib.utils.file import FileHandler
 
 
 class Index(LoginRequiredMixin, View):
@@ -8,9 +14,13 @@ class Index(LoginRequiredMixin, View):
         return render(request, 'www/index.html')
 
 
-class TokenRefresherView(View):
+@method_decorator(never_cache, 'dispatch')
+class TokenRefresherView(CachePageMixin, View):
+    PAGE_CACHE_TTL = 1200
+
     def get(self, request):
-        pass
+        file = FileHandler('templates/script/ridi_token_refresher.js').load()
+        return HttpResponse(content=file, content_type='application/javascript')
 
 
 # HTTP Error 400

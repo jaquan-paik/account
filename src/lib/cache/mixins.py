@@ -13,15 +13,25 @@ class CachePageMixin:
 
     @classmethod
     def get_key_prefix(cls, request) -> str:
-        version = request.META.get(CustomHttpHeader.API_VERSION_HEADER) or '1'
-        key_prefix = 'apiv_' + version
+        return cls.__name__ + cls.get_hourly_suffix()
+
+    @classmethod
+    def get_hourly_suffix(cls):
         if cls.INVALIDATE_CACHE_HOURLY is True:
-            key_prefix += datetime.now().strftime('%H')
-        return key_prefix
+            return datetime.now().strftime('%H')
+        return ''
 
     @classmethod
     def as_view(cls, **initkwargs):
         return cache_page(cls.PAGE_CACHE_TTL, get_key_prefix=cls.get_key_prefix)(super().as_view(**initkwargs))
+
+
+class CacheApiMixin(CachePageMixin):
+    @classmethod
+    def get_key_prefix(cls, request) -> str:
+        version = request.META.get(CustomHttpHeader.API_VERSION_HEADER, '1')
+        key_prefix = 'apiv_' + version
+        return key_prefix + cls.get_hourly_suffix()
 
 
 class ConditionalCachePageMixin(CachePageMixin):
