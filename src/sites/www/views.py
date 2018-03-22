@@ -8,6 +8,11 @@ class Index(LoginRequiredMixin, View):
         return render(request, 'www/index.html')
 
 
+class TokenRefresherView(View):
+    def get(self, request):
+        pass
+
+
 # HTTP Error 400
 def bad_request(request, exception):
     context = {
