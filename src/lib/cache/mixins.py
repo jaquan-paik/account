@@ -13,7 +13,11 @@ class CachePageMixin:
 
     @classmethod
     def get_key_prefix(cls, request) -> str:
-        return cls.__name__ + cls.get_hourly_suffix()
+        return cls.get_key_head(request) + cls.get_hourly_suffix()
+
+    @classmethod
+    def get_key_head(cls, request):
+        return cls.__name__
 
     @classmethod
     def get_hourly_suffix(cls):
@@ -28,13 +32,13 @@ class CachePageMixin:
 
 class CacheApiMixin(CachePageMixin):
     @classmethod
-    def get_key_prefix(cls, request) -> str:
+    def get_key_head(cls, request):
         version = request.META.get(CustomHttpHeader.API_VERSION_HEADER, '1')
         key_prefix = 'apiv_' + version
-        return key_prefix + cls.get_hourly_suffix()
+        return key_prefix
 
 
-class ConditionalCachePageMixin(CachePageMixin):
+class ConditionalCachePageMixin(CacheApiMixin):
     @classmethod
     def as_view(cls, **initkwargs):
         real_view_func = super().as_view(**initkwargs)
