@@ -16,11 +16,11 @@ class CachePageMixin:
         return cls.get_key_head(request) + cls.get_hourly_suffix()
 
     @classmethod
-    def get_key_head(cls, request):
+    def get_key_head(cls, request) -> str:
         return cls.__name__
 
     @classmethod
-    def get_hourly_suffix(cls):
+    def get_hourly_suffix(cls) -> str:
         if cls.INVALIDATE_CACHE_HOURLY is True:
             return datetime.now().strftime('%H')
         return ''
@@ -32,7 +32,7 @@ class CachePageMixin:
 
 class CacheApiMixin(CachePageMixin):
     @classmethod
-    def get_key_head(cls, request):
+    def get_key_head(cls, request) -> str:
         version = request.META.get(CustomHttpHeader.API_VERSION_HEADER, '1')
         key_prefix = 'apiv_' + version
         return key_prefix
