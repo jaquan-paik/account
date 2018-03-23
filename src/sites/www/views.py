@@ -1,6 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views import View
+from django.views.decorators.cache import never_cache, cache_page
+from django.views.static import serve
+
+
+script_serve = cache_page(timeout=1200, key_prefix='script-serve')(never_cache(serve))
 
 
 class Index(LoginRequiredMixin, View):

@@ -96,7 +96,6 @@ class TokenView(View):
 
         try:
             access_token = JwtHandler.get_access_token(cookie_access_token)
-
         except JwtTokenErrorException:
             try:
                 new_access_token, new_refresh_token = TokenRefreshService.refresh(cookie_refresh_token)
