@@ -4,7 +4,7 @@ import jwt
 from oauth2_provider.oauth2_validators import AccessToken
 from oauth2_provider.settings import oauth2_settings
 
-from apps.domains.oauth2.constants import JwtAlg
+from apps.domains.oauth2.constants import JwtAlg, JWT_VERIFY_MARGIN
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.models import Application
 
@@ -42,7 +42,7 @@ class JwtHandler:
     def validate(cls, token: str, client: Application) -> dict:
         try:
             if client.jwt_alg == JwtAlg.HS256:
-                return jwt.decode(token, key=client.jwt_hs_256_secret, algorithm=JwtAlg.HS256)
+                return jwt.decode(token, key=client.jwt_hs_256_secret, algorithm=JwtAlg.HS256, leeway=JWT_VERIFY_MARGIN)
         except jwt.exceptions.InvalidTokenError:
             raise JwtTokenErrorException()
 
