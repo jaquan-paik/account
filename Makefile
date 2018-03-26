@@ -5,7 +5,7 @@ help:
 
 all: install run
 
-install: set-githook python-package-install settings log
+install: set-githook python-package-install settings
 
 run: lint test run-www
 
@@ -26,9 +26,6 @@ settings:
 
 migrate:
 	@python3.6 src/manage.py admin migrate
-
-log:
-	-@mkdir logs
 
 
 # git
