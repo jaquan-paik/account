@@ -27,9 +27,6 @@ settings:
 migrate:
 	@python3.6 src/manage.py admin migrate
 
-log:
-	-@mkdir logs
-
 
 # git
 set-githook:

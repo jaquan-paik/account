@@ -12,13 +12,10 @@ RUN pip3.6 install -r /htdocs/www/docs/requirements/$ENVIRONMENT.txt
 
 # Configure
 RUN mkdir -pv \
-        /htdocs/www/logs \
-        /htdocs/www/logs/uwsgi \
         /var/local/nginx \
         /var/local/nginx/sockets
 
-RUN chown -R www-data:www-data /var/local/nginx/sockets \
-        && chown -R www-data:www-data /htdocs/www/logs
+RUN chown -R www-data:www-data /var/local/nginx/sockets
 
 ARG SITE
 ADD ./docs/docker/account/$ENVIRONMENT/$SITE/uwsgi.ini /etc/uwsgi/
