@@ -2,8 +2,11 @@ import logging.config
 
 import sys
 
+from infra.configure.constants import LogLevel
 
-def setup_logging(log_level: str) -> None:
+
+def setup_logging(debug: bool=False) -> None:
+    log_level = LogLevel.DEBUG if debug else LogLevel.INFO
     logging.config.dictConfig({
         'version': 1,
         'disable_existing_loggers': False,
