@@ -5,7 +5,7 @@ help:
 
 all: install run
 
-install: set-githook python-package-install settings log
+install: set-githook python-package-install settings
 
 run: lint test run-www
 

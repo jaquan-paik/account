@@ -181,7 +181,6 @@ ENFORCE_TWO_FACTOR_AUTH = False
 # Logging
 IGNORE_404_FILTER_URLS = []
 LOGGING_CONFIG = None
-LOG_DIR = os.path.join(ROOT_DIR, 'logs')
 
 
 AUTH_USER_MODEL = 'account_app.User'
