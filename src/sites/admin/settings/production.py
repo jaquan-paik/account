@@ -4,7 +4,7 @@ from lib.log.setup import setup_logging
 # noinspection PyUnresolvedReferences
 from .base import *  # flake8: noqa: F403  # pylint:disable=wildcard-import
 
-setup_logging(SITE, LogLevel.DEBUG, LOG_DIR)
+setup_logging(LogLevel.DEBUG)
 
 # Sentry
 RAVEN_CONFIG = {

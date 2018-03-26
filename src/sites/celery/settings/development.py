@@ -7,4 +7,4 @@ from .base import *  # flake8: noqa: F403  # pylint:disable=wildcard-import
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-setup_logging(SITE, LogLevel.DEBUG, LOG_DIR)
+setup_logging(LogLevel.DEBUG)
