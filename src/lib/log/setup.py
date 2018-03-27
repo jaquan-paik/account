@@ -26,7 +26,7 @@ def setup_logging(debug: bool=False) -> None:
             'stream': {
                 'level': log_level,
                 'class': 'logging.StreamHandler',
-                'stream': sys.stdout,
+                'stream': sys.stderr,
                 'formatter': 'verbose'
             }
         },

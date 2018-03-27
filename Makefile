@@ -68,6 +68,9 @@ check-deprecated:
 docker-up:
 	@docker-compose up --build
 
+docker-logs:
+	@docker ps -a -q -f name=$(container) | awk '{print $1}' | xargs docker logs -f
+
 
 # CI
 ci-settings:
