@@ -19,4 +19,4 @@ MIDDLEWARE += [
 SESSION_COOKIE_AGE = 7200  # 60 * 60 * 2
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-RIDI_CMS_RPC_URL = 'http://cms.dev.ridi.io/'
+RIDI_CMS_RPC_URL = Secret().get(SecretKeyName.RIDI_CMS_RPC_URL)
