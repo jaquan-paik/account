@@ -4,25 +4,25 @@ from lib.base.exceptions import ErrorException
 
 
 class StaffManager(BaseUserManager):
-    def create_user(self, email, password, **kwargs):
-        user = self.model(email=self.normalize_email(email), is_staff=True, is_active=True, **kwargs)
-        user.set_password(password)
+    def create_user(self, admin_id: str, **kwargs):
+        user = self.model(admin_id=admin_id, **kwargs)
+        user.set_unusable_password()
         user.save()
         return user
 
-    def create_superuser(self, email, password, **kwargs):
-        user = self.model(email=self.normalize_email(email), is_staff=True, is_superuser=True, is_active=True, **kwargs)
-        user.set_password(password)
+    def create_superuser(self, admin_id: str, **kwargs):
+        user = self.model(admin_id=admin_id, **kwargs)
+        user.set_unusable_password()
         user.save()
         return user
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password, **kwargs):
-        user = self.model(email=self.normalize_email(email), is_staff=False, is_active=True, **kwargs)
-        user.set_password(password)
+    def create_user(self, idx: int, id: str, **kwargs):  # pylint: disable=redefined-builtin
+        user = self.model(idx=idx, id=id, **kwargs)
+        user.set_unusable_password()
         user.save()
         return user
 
-    def create_superuser(self, email, password, **kwargs):
+    def create_superuser(self, idx: int, id: str, **kwargs):  # pylint: disable=redefined-builtin
         raise ErrorException('관리자유저를 회원 테이블에서 만들 수 없습니다.')
