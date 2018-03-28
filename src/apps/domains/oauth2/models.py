@@ -3,6 +3,7 @@ from oauth2_provider.models import AbstractAccessToken, AbstractApplication, Abs
 
 from apps.domains.account.models import OAuth2User, User
 from apps.domains.oauth2.constants import JwtAlg
+from apps.domains.oauth2.managers import GrantManager, RefreshTokenManager
 from lib.utils.string import generate_random_str
 
 JWT_HS_256_SECRET_LEN = 32
@@ -46,6 +47,8 @@ class Grant(AbstractGrant):
     updated = None
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
     last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
+
+    objects = GrantManager()
 
     class Meta(AbstractGrant.Meta):
         swappable = 'OAUTH2_PROVIDER_GRANT_MODEL'
@@ -97,6 +100,8 @@ class RefreshToken(AbstractRefreshToken):
     updated = None
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
     last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
+
+    objects = RefreshTokenManager()
 
     class Meta(AbstractRefreshToken.Meta):
         swappable = 'OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL'
