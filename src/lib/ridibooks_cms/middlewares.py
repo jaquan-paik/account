@@ -16,13 +16,12 @@ class AuthenticationMiddleware(MiddlewareMixin):
 
         config = CmsConfig.get_config()
         admin_auth = AdminAuth(config)
-        token = request.cookies.get(COOKIE_CMS_TOKEN)
+        token = request.COOKIES.get(COOKIE_CMS_TOKEN)
 
         login_session = LoginSession(config, token)
-
         if not admin_auth.authorize(login_session=login_session, check_url=request.path):
-            login_url = admin_auth.getLoginUrl(request.path)
-            return redirect(login_url)
+            login_url = admin_auth.getLoginUrl(request.build_absolute_uri())
+            return redirect(config.RPC_URL + login_url)
 
         staff = Staff.objects.get_or_create(admin_id=login_session.getAdminId())
         login(request, staff)
