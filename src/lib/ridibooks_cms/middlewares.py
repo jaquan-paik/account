@@ -23,6 +23,6 @@ class AuthenticationMiddleware(MiddlewareMixin):
             login_url = admin_auth.getLoginUrl(request.build_absolute_uri())
             return redirect(config.RPC_URL + login_url)
 
-        staff = Staff.objects.get_or_create(admin_id=login_session.getAdminId())
+        staff, _ = Staff.objects.get_or_create(admin_id=login_session.getAdminId())
         login(request, staff)
         return None

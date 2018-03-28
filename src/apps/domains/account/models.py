@@ -1,11 +1,14 @@
+from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
 from apps.domains.account.managers import StaffManager, UserManager
 from lib.django.db.models.base_model import BaseModel, BaseUserModel
 
 
-class Staff(BaseUserModel):
+class Staff(PermissionsMixin, BaseUserModel):
     admin_id = models.CharField(max_length=128, unique=True, null=False, verbose_name='어드민 ID')
+
+    is_staff = True
 
     USERNAME_FIELD = 'admin_id'
 
