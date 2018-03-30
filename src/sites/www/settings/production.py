@@ -1,3 +1,4 @@
+from apps.domains.callback.constants import CookieRootDomains
 from lib.log.setup import setup_logging
 
 # noinspection PyUnresolvedReferences
@@ -17,5 +18,6 @@ RAVEN_CONFIG = {
 }
 
 SITE_DOMAIN = 'account.ridibooks.com'
-ROOT_DOMAIN_WHITELIST = ['ridibooks.com']
-ALLOWED_HOSTS = [SITE_DOMAIN, ] + ROOT_DOMAIN_WHITELIST
+
+# noinspection PyUnresolvedReferences
+ALLOWED_HOSTS = [SITE_DOMAIN, ] + CookieRootDomains.get_root_whitelist(DEBUG)

@@ -1,3 +1,4 @@
+from apps.domains.callback.constants import CookieRootDomains
 from lib.log.setup import setup_logging
 
 # noinspection PyUnresolvedReferences
@@ -9,8 +10,7 @@ DEBUG = True
 setup_logging(DEBUG)
 
 SITE_DOMAIN = 'account.dev.ridi.io'
-ROOT_DOMAIN_WHITELIST = ['dev.ridi.io', 'dev.ridi.com']
-ALLOWED_HOSTS = [SITE_DOMAIN, 'account.dev.ridi.com'] + ROOT_DOMAIN_WHITELIST
+ALLOWED_HOSTS = [SITE_DOMAIN, 'account.dev.ridi.com'] + CookieRootDomains.get_root_whitelist(DEBUG)
 
 
 RIDIBOOKS_LOGIN_URL = 'https://dev.ridi.io/account/login'

@@ -17,5 +17,4 @@ RAVEN_CONFIG = {
 }
 
 SITE_DOMAIN = 'account-admin.ridibooks.com'
-ROOT_DOMAIN_WHITELIST = ['ridibooks.com']
 ALLOWED_HOSTS = [SITE_DOMAIN, ]
