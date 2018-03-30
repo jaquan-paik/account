@@ -1,7 +1,7 @@
 from caching.base import CachingManager
 
 from .constants import DEFAULT_CACHE_TTL
-from .queryset import BaseCachingQuerySet, UniqueCachingQuerySet
+from .queryset import BaseCachingQuerySet
 
 
 class BaseCachingManager(CachingManager):
@@ -11,7 +11,7 @@ class BaseCachingManager(CachingManager):
     def get_queryset(self):
         return BaseCachingQuerySet(self.model, using=self._db)
 
-    def _get_queryset(self, no_cache: bool=False, is_fresh: bool=False):
+    def get_fresh_queryset(self, no_cache: bool=False, is_fresh: bool=False):
         if is_fresh:
             return self.get_queryset().using(self._get_master_database())
 
@@ -25,8 +25,3 @@ class BaseCachingManager(CachingManager):
             raise NotImplementedError('MASTER_DATABASE를 설정하지 않았습니다.')
 
         return self.MASTER_DATABASE
-
-
-class UniqueCachingManager(BaseCachingManager):
-    def get_queryset(self):
-        return UniqueCachingQuerySet(self.model, using=self._db)
