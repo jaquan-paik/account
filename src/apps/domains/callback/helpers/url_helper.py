@@ -19,6 +19,10 @@ class UrlHelper:
         return f'https://{GeneralConfig.get_site_domain()}{reverse("oauth2_provider:token")}'
 
     @staticmethod
-    @memorize
-    def get_root_domains() -> typing.List[str]:
-        return CookieRootDomains.get_root_whitelist(debug=GeneralConfig.is_dev())
+    def get_root_domain(request) -> str:
+        host = request.get_host()
+        root_domains = CookieRootDomains.get_root_whitelist(debug=GeneralConfig.is_dev())
+
+        for root_domain in root_domains:
+            if root_domain in host:
+                return root_domain

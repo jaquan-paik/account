@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
-from apps.domains.callback.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
+from apps.domains.callback.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY, ROOT_DOMAIN_SESSION_KEY, CookieRootDomains
 from apps.domains.callback.dtos import OAuth2Data
 from apps.domains.callback.helpers.oauth2_data_helper import OAuth2PersistentHelper
 from apps.domains.callback.helpers.token_helper import TokenCodeHelper
@@ -31,6 +31,7 @@ class AuthorizeView(View):
         oauth2_data.validate_redirect_uri()
 
         OAuth2PersistentHelper.set(request.session, oauth2_data)
+        request.session[ROOT_DOMAIN_SESSION_KEY] = CookieRootDomains.to_value(UrlHelper.get_root_domain(request))
 
         params = {
             'client_id': oauth2_data.client_id,
@@ -61,8 +62,9 @@ class CallbackView(View):
             'state': state,
         })
 
+        root_domain = CookieRootDomains.to_string(request.session[ROOT_DOMAIN_SESSION_KEY])
         response = HttpResponseRedirect(redirect_uri)
-        CookieService.add_token_cookie(response, access_token, refresh_token)
+        CookieService.add_token_cookie(response, access_token, refresh_token, root_domain)
 
         return response
 
@@ -72,6 +74,7 @@ class TokenView(View):
     def post(self, request):
         cookie_access_token = request.COOKIES.get(ACCESS_TOKEN_COOKIE_KEY, None)
         cookie_refresh_token = request.COOKIES.get(REFRESH_TOKEN_COOKIE_KEY, None)
+        root_domain = UrlHelper.get_root_domain(request)
 
         try:
             access_token = JwtHandler.get_access_token(cookie_access_token)
@@ -81,7 +84,7 @@ class TokenView(View):
 
             except PermissionDenied:
                 response = HttpResponseUnauthorized()
-                CookieService.clear_token_cookie(response)
+                CookieService.clear_token_cookie(response, root_domain)
                 return response
 
             else:
@@ -90,7 +93,7 @@ class TokenView(View):
                     'expires_in': new_access_token.expires_in,
                 }
                 response = JsonResponse(data)
-                CookieService.add_token_cookie(response, new_access_token, new_refresh_token)
+                CookieService.add_token_cookie(response, new_access_token, new_refresh_token, root_domain)
                 return response
 
         else:

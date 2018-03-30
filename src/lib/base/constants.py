@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 
 class BaseConstant:
@@ -16,6 +16,14 @@ class BaseConstant:
     @classmethod
     def to_string(cls, item) -> str:
         return cls._STRING_MAP[item]
+
+    @classmethod
+    def to_value(cls, string: str) -> Optional[int]:
+        for k, v in cls._STRING_MAP:
+            if v == string:
+                return k
+
+        return None
 
     @classmethod
     def get_string_map(cls) -> Dict:
