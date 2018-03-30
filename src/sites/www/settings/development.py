@@ -9,8 +9,8 @@ DEBUG = True
 setup_logging(DEBUG)
 
 SITE_DOMAIN = 'account.dev.ridi.io'
-ROOT_DOMAIN = 'dev.ridi.io'
-ALLOWED_HOSTS = [SITE_DOMAIN, 'account.dev.ridi.com']
+ROOT_DOMAIN_WHITELIST = ['dev.ridi.io', 'dev.ridi.com']
+ALLOWED_HOSTS = [SITE_DOMAIN, 'account.dev.ridi.com'] + ROOT_DOMAIN_WHITELIST
 
 
 RIDIBOOKS_LOGIN_URL = 'https://dev.ridi.io/account/login'
