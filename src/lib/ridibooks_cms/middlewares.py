@@ -6,6 +6,7 @@ from ridi.cms.cms_client import AdminAuth
 from ridi.cms.login_session import COOKIE_CMS_TOKEN, LoginSession
 
 from apps.domains.account.models import Staff
+from infra.configure.config import GeneralConfig
 from lib.ridibooks_cms.config import CmsConfig
 
 
@@ -21,7 +22,7 @@ class AuthenticationMiddleware(MiddlewareMixin):
         login_session = LoginSession(config, token)
         if not admin_auth.authorize(login_session=login_session, check_url=request.path):
             login_url = admin_auth.getLoginUrl(request.build_absolute_uri())
-            return redirect(config.RPC_URL + login_url)
+            return redirect(GeneralConfig.get_site_domain() + login_url)
 
         staff, _ = Staff.objects.get_or_create(admin_id=login_session.getAdminId())
         login(request, staff)
