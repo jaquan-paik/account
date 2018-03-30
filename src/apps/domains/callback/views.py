@@ -60,7 +60,7 @@ class CallbackView(View):
         })
 
         response = HttpResponseRedirect(redirect_uri)
-        _add_token_cookie(response, access_token, refresh_token)
+        CookieService.add_token_cookie(request, response, access_token, refresh_token)
 
         return response
 
@@ -79,7 +79,7 @@ class TokenView(View):
 
             except PermissionDenied:
                 response = HttpResponseUnauthorized()
-                _clear_token_cookie(response)
+                CookieService.clear_token_cookie(request, response)
                 return response
 
             else:
@@ -88,7 +88,7 @@ class TokenView(View):
                     'expires_in': new_access_token.expires_in,
                 }
                 response = JsonResponse(data)
-                _add_token_cookie(response, new_access_token, new_refresh_token)
+                CookieService.add_token_cookie(request, response, new_access_token, new_refresh_token)
                 return response
 
         else:
