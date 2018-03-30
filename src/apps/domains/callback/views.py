@@ -32,13 +32,15 @@ class AuthorizeView(View):
 
         OAuth2PersistentHelper.set(request.session, oauth2_data)
 
-        url = generate_query_url(reverse('oauth2_provider:authorize'), {
-            'state': state,
+        params = {
             'client_id': oauth2_data.client_id,
             'redirect_uri': UrlHelper.get_redirect_uri(),
             'response_type': 'code',
-        })
+        }
+        if state:
+            params['state'] = state
 
+        url = generate_query_url(reverse('oauth2_provider:authorize'), params)
         return HttpResponseRedirect(url)
 
 
