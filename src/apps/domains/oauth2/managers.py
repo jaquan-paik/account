@@ -3,8 +3,22 @@ from datetime import datetime
 from django.db import connection
 from django.db.models import Manager
 
+from infra.storage.database.constants import Database
+from lib.django.db.caching.managers import BaseCachingManager
 
-class RefreshTokenManager(Manager):
+APPLICATION_CACHE_TTL = 60 * 60
+REFRESH_TOKEN_CACHE_TTL = 60 * 5
+
+
+class ApplicationManager(BaseCachingManager):
+    CACHE_TTL = APPLICATION_CACHE_TTL
+    MASTER_DATABASE = Database.WRITE
+
+
+class RefreshTokenManager(BaseCachingManager):
+    CACHE_TTL = REFRESH_TOKEN_CACHE_TTL
+    MASTER_DATABASE = Database.WRITE
+
     def revoke_by_expire_date(self, expire_date: datetime, limit):
         table_name = self.model._meta.db_table  # pylint:disable=protected-access
         with connection.cursor() as c:
