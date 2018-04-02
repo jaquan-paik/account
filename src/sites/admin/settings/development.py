@@ -7,8 +7,8 @@ from .base import *  # flake8: noqa: F403  # pylint:disable=wildcard-import
 DEBUG = True
 setup_logging(DEBUG)
 
-SITE_DOMAIN = 'account-admin.dev.ridi.io'
-ALLOWED_HOSTS = [SITE_DOMAIN, 'account-admin.dev.ridi.com']
+SITE_DOMAIN = 'admin.dev.ridi.io'
+ALLOWED_HOSTS = [SITE_DOMAIN, 'admin.dev.ridi.com']
 
 # django-debug-toolbar
 DEBUG_TOOLBAR_CONFIG = {
