@@ -74,9 +74,6 @@ docker-logs:
 
 # CI
 ci-settings:
-	@export AWS_ACCESS_KEY_ID=$(access_key)
-	@export AWS_SECRET_ACCESS_KEY=$(secret_key)
-	@export AWS_DEFAULT_REGION=$(region)
 	@python3.6 src/script/handle_secret_file.py generate_$(ns)
 
 ci-build-account:
