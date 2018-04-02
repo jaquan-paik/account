@@ -13,7 +13,3 @@ class JwtAlg(BaseConstant):
         HS256: 'HS256',
         RS256: 'RS256',
     }
-
-
-APPLICATION_CACHE_TTL = 60 * 60
-REFRESH_TOKEN_CACHE_TTL = 60 * 5

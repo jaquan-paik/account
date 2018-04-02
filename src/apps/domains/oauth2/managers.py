@@ -3,9 +3,11 @@ from datetime import datetime
 from django.db import connection
 from django.db.models import Manager
 
-from apps.domains.oauth2.constants import REFRESH_TOKEN_CACHE_TTL, APPLICATION_CACHE_TTL
 from infra.storage.database.constants import Database
 from lib.django.db.caching.managers import BaseCachingManager
+
+APPLICATION_CACHE_TTL = 60 * 60
+REFRESH_TOKEN_CACHE_TTL = 60 * 5
 
 
 class ApplicationManager(BaseCachingManager):
