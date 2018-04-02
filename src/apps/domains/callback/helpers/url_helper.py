@@ -3,6 +3,7 @@ import typing
 from django.urls import reverse
 
 from apps.domains.callback.constants import CookieRootDomains
+from apps.domains.callback.exceptions import NotAllowedRootDomainException
 from infra.configure.config import GeneralConfig
 from lib.cache.memorize import memorize
 
@@ -26,3 +27,5 @@ class UrlHelper:
         for root_domain in root_domains:
             if root_domain in host:
                 return root_domain
+
+        raise NotAllowedRootDomainException('허용하지 않는 루트도메인입니다.')

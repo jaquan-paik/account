@@ -12,7 +12,7 @@ from apps.domains.callback.dtos import OAuth2Data
 from apps.domains.callback.helpers.oauth2_data_helper import OAuth2PersistentHelper
 from apps.domains.callback.helpers.token_helper import TokenCodeHelper
 from apps.domains.callback.helpers.url_helper import UrlHelper
-from apps.domains.callback.services.cookie_service import CookieService
+from apps.domains.callback.mixins import TokenCookieMixin
 from apps.domains.callback.services.token_refresh_service import TokenRefreshService
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
@@ -20,7 +20,7 @@ from lib.django.http.response import HttpResponseUnauthorized
 from lib.utils.url import generate_query_url
 
 
-class AuthorizeView(View):
+class AuthorizeView(TokenCookieMixin, View):
     def get(self, request):
         state = request.GET.get('state', None)
         client_id = request.GET.get('client_id', None)
@@ -31,7 +31,7 @@ class AuthorizeView(View):
         oauth2_data.validate_redirect_uri()
 
         OAuth2PersistentHelper.set(request.session, oauth2_data)
-        request.session[ROOT_DOMAIN_SESSION_KEY] = CookieRootDomains.to_value(UrlHelper.get_root_domain(request))
+        request.session[ROOT_DOMAIN_SESSION_KEY] = self.get_root_domain(request=request)
 
         params = {
             'client_id': oauth2_data.client_id,
@@ -45,7 +45,7 @@ class AuthorizeView(View):
         return HttpResponseRedirect(url)
 
 
-class CallbackView(View):
+class CallbackView(TokenCookieMixin, View):
     def get(self, request):
         code = request.GET.get('code', None)
         state = request.GET.get('state', None)
@@ -64,16 +64,16 @@ class CallbackView(View):
 
         root_domain = CookieRootDomains.to_string(request.session[ROOT_DOMAIN_SESSION_KEY])
         response = HttpResponseRedirect(redirect_uri)
-        CookieService.add_token_cookie(response, access_token, refresh_token, root_domain)
+        self.add_token_cookie(response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain)
 
         return response
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class TokenView(View):
+class TokenView(TokenCookieMixin, View):
     def post(self, request):
-        cookie_access_token = request.COOKIES.get(ACCESS_TOKEN_COOKIE_KEY, None)
-        cookie_refresh_token = request.COOKIES.get(REFRESH_TOKEN_COOKIE_KEY, None)
+        cookie_access_token = self.get_cookie(request, ACCESS_TOKEN_COOKIE_KEY)
+        cookie_refresh_token = self.get_cookie(request, REFRESH_TOKEN_COOKIE_KEY)
         root_domain = UrlHelper.get_root_domain(request)
 
         try:
@@ -84,7 +84,7 @@ class TokenView(View):
 
             except PermissionDenied:
                 response = HttpResponseUnauthorized()
-                CookieService.clear_token_cookie(response, root_domain)
+                self.clear_token_cookie(response=response, root_domain=root_domain)
                 return response
 
             else:
@@ -93,7 +93,9 @@ class TokenView(View):
                     'expires_in': new_access_token.expires_in,
                 }
                 response = JsonResponse(data)
-                CookieService.add_token_cookie(response, new_access_token, new_refresh_token, root_domain)
+                self.add_token_cookie(
+                    response=response, access_token=new_access_token, refresh_token=new_refresh_token, root_domain=root_domain
+                )
                 return response
 
         else:
