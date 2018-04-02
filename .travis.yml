@@ -29,8 +29,8 @@ before_deploy:
 - pip3 install awscli
 - pip3 install ecs-deploy
 - bash docs/travis/pre_build.sh
-- bash docs/travis/build/account.sh & bash docs/travis/build/celery.sh & wait $1 $2
-- bash docs/travis/push/account.sh & bash docs/travis/push/celery.sh & wait $1 $2
+- bash docs/travis/build/account.sh
+- bash docs/travis/push/account.sh
 
 deploy:
   provider: script
