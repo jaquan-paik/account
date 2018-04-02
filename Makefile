@@ -77,7 +77,7 @@ ci-settings:
 	@python3.6 src/script/handle_secret_file.py generate_$(ns)
 
 ci-build-account:
-	@docker build -t $(env)/account/www:latest -f ./docs/docker/account/Dockerfile .
+	@docker build -t $(env)/account/www:latest -f ./docs/docker/account/Dockerfile . --build-arg ENVIRONMENT="$(env)"
 
 ci-tag-account:
 	@docker tag $(env)/account/www:latest $(ecr_path)/$(env)/account/www:$(tag)
