@@ -19,5 +19,5 @@ class TokenCookieMixin(CookieMixin):
         self.clear_cookie(response=response, key=ACCESS_TOKEN_COOKIE_KEY, domain=root_domain)
         self.clear_cookie(response=response, key=REFRESH_TOKEN_COOKIE_KEY, domain=root_domain)
 
-    def get_root_domain(self, request) -> int:
-        return CookieRootDomains.to_value(UrlHelper.get_root_domain(request))
+    def get_root_domain(self, request) -> str:
+        return UrlHelper.get_root_domain(request)

@@ -31,7 +31,7 @@ class AuthorizeView(TokenCookieMixin, View):
         oauth2_data.validate_redirect_uri()
 
         OAuth2PersistentHelper.set(request.session, oauth2_data)
-        request.session[ROOT_DOMAIN_SESSION_KEY] = self.get_root_domain(request=request)
+        request.session[ROOT_DOMAIN_SESSION_KEY] = CookieRootDomains.to_value(self.get_root_domain(request=request))
 
         params = {
             'client_id': oauth2_data.client_id,
@@ -72,9 +72,9 @@ class CallbackView(TokenCookieMixin, View):
 @method_decorator(csrf_exempt, name='dispatch')
 class TokenView(TokenCookieMixin, View):
     def post(self, request):
+        root_domain = self.get_root_domain(request)
         cookie_access_token = self.get_cookie(request, ACCESS_TOKEN_COOKIE_KEY)
         cookie_refresh_token = self.get_cookie(request, REFRESH_TOKEN_COOKIE_KEY)
-        root_domain = UrlHelper.get_root_domain(request)
 
         try:
             access_token = JwtHandler.get_access_token(cookie_access_token)
@@ -104,3 +104,13 @@ class TokenView(TokenCookieMixin, View):
                 'expires_in': int(access_token.expires - datetime.now().timestamp()),
             }
             return JsonResponse(data)
+
+
+class LogoutView(TokenCookieMixin, View):
+    def get(self, request):
+        root_domain = self.get_root_domain(request)
+        return_url = request.GET.get('return_url', None)
+
+        response = HttpResponseRedirect(return_url)
+        self.clear_token_cookie(response=response, root_domain=root_domain)
+        return response
