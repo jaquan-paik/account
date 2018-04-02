@@ -12,6 +12,6 @@ RAVEN_CONFIG = {
     'release': '',
     'ignore_exceptions': [
         'django.exceptions.http.Http404',
-        'common.exceptions.MsgException',
+        'lib.base.exceptions.MsgException',
     ],
 }

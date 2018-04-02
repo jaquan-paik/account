@@ -8,4 +8,5 @@ urlpatterns = [
     path('callback/', views.CallbackView.as_view(), name='callback'),
     path('authorize/', views.AuthorizeView.as_view(), name='authorize'),
     path('token/', views.TokenView.as_view(), name='token'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
 ]

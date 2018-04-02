@@ -1,4 +1,6 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
+
+from lib.base.exceptions import MsgException
 
 
 class BaseConstant:
@@ -16,6 +18,14 @@ class BaseConstant:
     @classmethod
     def to_string(cls, item) -> str:
         return cls._STRING_MAP[item]
+
+    @classmethod
+    def to_value(cls, string: str) -> int:
+        for k, v in cls._STRING_MAP:
+            if v == string:
+                return k
+
+        raise MsgException('존재하지 않는 값입니다.')
 
     @classmethod
     def get_string_map(cls) -> Dict:

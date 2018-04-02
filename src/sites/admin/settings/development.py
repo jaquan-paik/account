@@ -8,7 +8,6 @@ DEBUG = True
 setup_logging(DEBUG)
 
 SITE_DOMAIN = 'admin.dev.ridi.io'
-ROOT_DOMAIN = 'dev.ridi.io'
 ALLOWED_HOSTS = [SITE_DOMAIN, 'admin.dev.ridi.com']
 
 # django-debug-toolbar

@@ -12,10 +12,9 @@ RAVEN_CONFIG = {
     'release': '',
     'ignore_exceptions': [
         'django.exceptions.http.Http404',
-        'common.exceptions.MsgException',
+        'lib.base.exceptions.MsgException',
     ],
 }
 
 SITE_DOMAIN = 'admin.ridibooks.com'
-ROOT_DOMAIN = 'ridibooks.com'
 ALLOWED_HOSTS = [SITE_DOMAIN, ]

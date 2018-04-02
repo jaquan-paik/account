@@ -1,3 +1,4 @@
+from apps.domains.callback.constants import CookieRootDomains
 from lib.log.setup import setup_logging
 
 # noinspection PyUnresolvedReferences
@@ -12,10 +13,11 @@ RAVEN_CONFIG = {
     'release': '',
     'ignore_exceptions': [
         'django.exceptions.http.Http404',
-        'common.exceptions.MsgException',
+        'lib.base.exceptions.MsgException',
     ],
 }
 
 SITE_DOMAIN = 'account.ridibooks.com'
-ROOT_DOMAIN = 'ridibooks.com'
-ALLOWED_HOSTS = [SITE_DOMAIN, ]
+
+# noinspection PyUnresolvedReferences
+ALLOWED_HOSTS = [SITE_DOMAIN, 'ridibooks.com']
