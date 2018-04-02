@@ -1,6 +1,6 @@
 #!/bin/bash
 
-make ci-settings ns=$ENVIRONMENT
+make ci-settings ns=$ENVIRONMENT access_key=$AWS_ACCESS_KEY_ID secret_key=$AWS_SECRET_ACCESS_KEY region=$AWS_DEFAULT_REGION
 
 $(aws ecr get-login --no-include-email --region=$AWS_DEFAULT_REGION)
 

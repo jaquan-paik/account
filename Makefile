@@ -74,60 +74,27 @@ docker-logs:
 
 # CI
 ci-settings:
+	@export AWS_ACCESS_KEY_ID=$(access_key)
+	@export AWS_SECRET_ACCESS_KEY=$(secret_key)
+	@export AWS_DEFAULT_REGION=$(region)
 	@python3.6 src/script/handle_secret_file.py generate_$(ns)
 
-# -- Build -- #
 ci-build-account:
-	@make ci-build-account-with-site site=www
-	@make ci-build-account-with-site site=admin
+	@docker build -t $(env)/account/www:latest -f ./docs/docker/account/Dockerfile .
 
-ci-build-celery:
-	@docker build -t $(env)/account/celery:latest -f ./docs/docker//celery/Dockerfile . --build-arg ENVIRONMENT="$(env)"
-
-ci-build-account-with-site:
-	@docker build -t $(env)/account/$(site):latest -f ./docs/docker/account/Dockerfile . --build-arg ENVIRONMENT="$(env)" --build-arg SITE="$(site)"
-
-# -- Tag -- #
 ci-tag-account:
-	@make ci-tag-account-with-site site=www
-	@make ci-tag-account-with-site site=admin
+	@docker tag $(env)/account/www:latest $(ecr_path)/$(env)/account/www:$(tag)
 
-ci-tag-celery:
-	@make ci-tag-account-with-site site=celery
-
-ci-tag-account-with-site:
-	@docker tag $(env)/account/$(site):latest $(ecr_path)/$(env)/account/$(site):$(tag)
-
-# -- Push -- #
 ci-push-account:
-	@make ci-push-account-with-site site=www
-	@make ci-push-account-with-site site=admin
-
-ci-push-celery:
-	@make ci-push-account-with-site site=celery
-
-ci-push-account-with-site:
-	@docker push $(ecr_path)/$(env)/account/$(site):$(tag)
+	@docker push $(ecr_path)/$(env)/account/www:$(tag)
 
 
 # -- Nginx -- #
 nginx-build-image:
-	@make nginx-build-image-with-site site=www
-	@make nginx-build-image-with-site site=admin
-
-nginx-build-image-with-site:
-	@docker build -t $(env)/account/nginx-$(site):latest -f ./docs/docker/nginx/Dockerfile . --build-arg ENVIRONMENT="$(env)" --build-arg SITE="$(site)"
+	@docker build -t $(env)/account/nginx:latest -f ./docs/docker/nginx/Dockerfile . --build-arg ENVIRONMENT="$(env)"
 
 nginx-tag-image:
-	@make nginx-tag-image-with-site site=www
-	@make nginx-tag-image-with-site site=admin
-
-nginx-tag-image-with-site:
-	@docker tag $(env)/account/nginx-$(site):latest $(ecr_path)/$(env)/account/nginx-$(site):$(tag)
+	@docker tag $(env)/account/nginx:latest $(ecr_path)/$(env)/account/nginx:$(tag)
 
 nginx-push-image:
-	@make nginx-push-image-with-site site=www
-	@make nginx-push-image-with-site site=admin
-
-nginx-push-image-with-site:
-	@docker push $(ecr_path)/$(env)/account/nginx-$(site):$(tag)
+	@docker push $(ecr_path)/$(env)/account/nginx:$(tag)

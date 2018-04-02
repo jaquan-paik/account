@@ -33,7 +33,7 @@ services:
     volumes:
       - .:/htdocs/www
     ports:
-      - 7000:1000
+      - 7000:7000
     command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h mariadb -u root -proot', 'make run-admin']
     depends_on:
       - memcached
