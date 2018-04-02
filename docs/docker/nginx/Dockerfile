@@ -3,11 +3,8 @@ FROM nginx:stable
 ARG ENVIRONMENT
 COPY docs/docker/nginx/$ENVIRONMENT/conf/nginx.conf /etc/nginx/nginx.conf
 
-VOLUME ["/var/local/nginx/sockets"]
-
 RUN touch /var/run/nginx.pid && \
   chown -R www-data:www-data /var/run/nginx.pid && \
   chown -R www-data:www-data /var/cache/nginx
 
-ARG SITE
-COPY docs/docker/nginx/$ENVIRONMENT/conf/$SITE.conf /etc/nginx/conf.d
+COPY docs/docker/nginx/$ENVIRONMENT/conf/account.conf /etc/nginx/conf.d
