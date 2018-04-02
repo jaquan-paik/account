@@ -1,5 +1,7 @@
 from typing import Dict, List, Optional
 
+from lib.base.exceptions import MsgException
+
 
 class BaseConstant:
     _LIST = []
@@ -18,12 +20,12 @@ class BaseConstant:
         return cls._STRING_MAP[item]
 
     @classmethod
-    def to_value(cls, string: str) -> Optional[int]:
+    def to_value(cls, string: str) -> int:
         for k, v in cls._STRING_MAP:
             if v == string:
                 return k
 
-        return None
+        raise MsgException('존재하지 않는 값입니다.')
 
     @classmethod
     def get_string_map(cls) -> Dict:
