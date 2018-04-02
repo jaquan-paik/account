@@ -10,7 +10,7 @@ DEBUG = True
 setup_logging(DEBUG)
 
 SITE_DOMAIN = 'account.dev.ridi.io'
-ALLOWED_HOSTS = [SITE_DOMAIN, 'account.dev.ridi.com'] + CookieRootDomains.get_root_whitelist(DEBUG)
+ALLOWED_HOSTS = [SITE_DOMAIN, 'account.dev.ridi.com', 'dev.ridi.com', 'dev.ridi.io']
 
 
 RIDIBOOKS_LOGIN_URL = 'https://dev.ridi.io/account/login'

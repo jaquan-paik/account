@@ -20,4 +20,4 @@ RAVEN_CONFIG = {
 SITE_DOMAIN = 'account.ridibooks.com'
 
 # noinspection PyUnresolvedReferences
-ALLOWED_HOSTS = [SITE_DOMAIN, ] + CookieRootDomains.get_root_whitelist(DEBUG)
+ALLOWED_HOSTS = [SITE_DOMAIN, 'ridibooks.com']
