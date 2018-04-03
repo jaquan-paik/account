@@ -14,7 +14,7 @@ def jwt_hs_256_secret():
     return generate_random_str(JWT_HS_256_SECRET_LEN)
 
 
-class Application(CachingMixin, AbstractApplication):
+class Application(AbstractApplication):
     GRANT_TYPES = ((AbstractApplication.GRANT_AUTHORIZATION_CODE, 'Authorization code'), )
     CLIENT_TYPES = ((AbstractApplication.CLIENT_CONFIDENTIAL, 'Confidential'),)
 
@@ -91,7 +91,7 @@ class AccessToken(AbstractAccessToken):
         raise NotImplementedError()
 
 
-class RefreshToken(CachingMixin, AbstractRefreshToken):
+class RefreshToken(AbstractRefreshToken):
     user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
 
     access_token = None
