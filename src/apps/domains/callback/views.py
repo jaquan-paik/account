@@ -7,10 +7,10 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
-from apps.domains.callback.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY, ROOT_DOMAIN_SESSION_KEY, CookieRootDomains
+from apps.domains.callback.constants import ACCESS_TOKEN_COOKIE_KEY, CookieRootDomains, REFRESH_TOKEN_COOKIE_KEY, ROOT_DOMAIN_SESSION_KEY
 from apps.domains.callback.helpers.token_helper import TokenCodeHelper
 from apps.domains.callback.helpers.url_helper import UrlHelper
-from apps.domains.callback.mixins import TokenCookieMixin, OAuth2SessionMixin
+from apps.domains.callback.mixins import OAuth2SessionMixin, TokenCookieMixin
 from apps.domains.callback.services.token_refresh_service import TokenRefreshService
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
