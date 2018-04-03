@@ -17,6 +17,8 @@ CACHES = {
 }
 
 SITE = SiteType.TEST
+SITE_DOMAIN = 'account.ridibooks.com'
+ALLOWED_HOSTS = [SITE_DOMAIN, 'dev.ridi.com', ]
 
 MIDDLEWARE += [
     'lib.ridibooks.middlewares.AuthenticationMiddleware',
