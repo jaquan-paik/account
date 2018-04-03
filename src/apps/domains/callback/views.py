@@ -25,7 +25,7 @@ class AuthorizeView(OAuth2SessionMixin, TokenCookieMixin, View):
         redirect_uri = request.GET.get('redirect_uri', None)
 
         self.set_oauth2_data(client_id, redirect_uri, state)
-        request.session[ROOT_DOMAIN_SESSION_KEY] = CookieRootDomains.to_value(self.get_root_domain())
+        self.set_session(key=ROOT_DOMAIN_SESSION_KEY, value=CookieRootDomains.to_value(self.get_root_domain()))
 
         params = {
             'client_id': client_id,
@@ -51,7 +51,7 @@ class CallbackView(OAuth2SessionMixin, TokenCookieMixin, View):
             'state': state,
         })
 
-        root_domain = CookieRootDomains.to_string(request.session[ROOT_DOMAIN_SESSION_KEY])
+        root_domain = CookieRootDomains.to_string(self.get_session(key=ROOT_DOMAIN_SESSION_KEY))
         response = HttpResponseRedirect(redirect_uri)
         self.add_token_cookie(response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain)
 
