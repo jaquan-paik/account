@@ -17,3 +17,8 @@ CACHES = {
 }
 
 SITE = SiteType.TEST
+
+MIDDLEWARE += [
+    'lib.ridibooks.middlewares.AuthenticationMiddleware',
+]
+ROOT_URLCONF = 'sites.www.urls'
