@@ -19,6 +19,7 @@ env:
 before_script:
 - pip3 install -r docs/requirements/development.txt
 - make settings
+- make pre-test
 
 script:
 - make lint
