@@ -30,7 +30,7 @@ class Application(AbstractApplication):
     )
 
     is_in_house = models.BooleanField(default=False, verbose_name='내부 서비스 여부')
-    jwt_alg = models.CharField(max_length=6, choices=JwtAlg.get_choices(), default=JwtAlg.RS256, verbose_name='JWT 알고리즘')
+    jwt_alg = models.CharField(max_length=6, choices=JwtAlg.get_choices(), default=JwtAlg.HS256, verbose_name='JWT 알고리즘')
     jwt_hs_256_secret = models.CharField(max_length=32, default=jwt_hs_256_secret, verbose_name='JWT HS256 Secret')
 
     updated = None
