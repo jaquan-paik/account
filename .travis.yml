@@ -19,6 +19,7 @@ env:
 before_script:
 - pip3 install -r docs/requirements/development.txt
 - make settings
+- sudo service mysql stop
 - make pre-test
 
 script:
