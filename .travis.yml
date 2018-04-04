@@ -45,7 +45,3 @@ deploy:
 
 after_deploy:
 - bash docs/travis/after_deploy.sh
-
-after_failure:
-- mysql -u root -e "SELECT default_character_set_name FROM information_schema.SCHEMATA S WHERE schema_name = 'account';"
-- mysql -u root -e "SHOW CREATE DATABASE account;"
