@@ -1,17 +1,16 @@
 import requests_mock
 from django.core.exceptions import ObjectDoesNotExist
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django_dynamic_fixture import G
 
-from apps.domains.account.models import User
 from apps.domains.callback.constants import CookieRootDomains
 from apps.domains.callback.dtos import TokenData
 from apps.domains.callback.exceptions import NotAllowedRootDomainException
 from apps.domains.callback.helpers.client_helper import ClientHelper
 from apps.domains.callback.helpers.token_helper import TokenCodeHelper, TokenRefreshHelper
 from apps.domains.callback.helpers.url_helper import UrlHelper
-from apps.domains.oauth2.models import Application, RefreshToken
+from apps.domains.oauth2.models import Application
 from infra.configure.config import GeneralConfig
 
 
