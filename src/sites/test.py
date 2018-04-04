@@ -18,6 +18,8 @@ DATABASES = {
         },
         'TEST': {
             'NAME': 'account',
+            'CHARSET': 'utf8',
+            'COLLATION': 'utf8_general_ci',
         }
     },
 }
