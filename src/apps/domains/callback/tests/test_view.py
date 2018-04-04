@@ -26,7 +26,7 @@ class InHouseCallbackTestCase(TestCase):
 class TokenViewTestCase(TestCase):
     def setUp(self):
         self.user = G(User, idx=1, id='testuser')
-        self.client = G(Application, skip_authorization=True, user=None, is_in_house=True, jwt_alg=JwtAlg.HS256)
+        self.client = G(Application, skip_authorization=True, user=None, is_in_house=True)
         self.refresh_token = G(
             RefreshToken, user=self.user, application=self.client, token='refresh-token', expires=datetime(year=9999, month=12, day=31)
         )
