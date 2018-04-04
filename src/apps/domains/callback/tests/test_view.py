@@ -71,7 +71,7 @@ class TokenViewTestCase(TestCase):
         class req:
             user = self.user
             client = self.client
-            scopes = 'all'
+            scopes = ['all']
         at = JwtHandler.generate(req)
 
         response = Client().post(
