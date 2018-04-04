@@ -20,7 +20,8 @@ env:
 before_script:
 - pip3 install -r docs/requirements/development.txt
 - make settings
-- mysql -u root -e "CREATE USER 'admin'@'localhost' IDENTIFIED BY 'test';"
+- mysql -u root -e "CREATE DATABASE account;"
+- mysql -u root -e "CREATE USER 'admin'@'127.0.0.1' IDENTIFIED BY 'test';"
 - mysql -u root -e "GRANT ALL ON account.* TO 'admin'@'localhost';"
 - make test-migration
 
