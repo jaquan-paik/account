@@ -1,9 +1,12 @@
 from django.http import HttpResponse
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
+from django_dynamic_fixture import G
 
 from apps.domains.callback.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 from apps.domains.callback.dtos import TokenData
-from apps.domains.callback.mixins import TokenCookieMixin, OAuth2SessionMixin
+from apps.domains.callback.mixins import TokenCookieMixin, OAuth2SessionMixin, SESSION_CLIENT_ID_KEY, SESSION_REDIRECT_URI_KEY, \
+    SESSION_STATE_KEY
+from apps.domains.oauth2.models import Application
 
 
 class TokenCookieMixinTestCase(TestCase):
@@ -37,4 +40,31 @@ class TokenCookieMixinTestCase(TestCase):
 
 
 class OAuth2SessionMixinTestCase(TestCase):
-    pass
+    def setUp(self):
+        factory = RequestFactory()
+        self.mixin = OAuth2SessionMixin()
+        self.mixin.request = factory.get('/')
+        self.mixin.request.session = {}
+
+        self.client = G(Application, skip_authorization=True, user=None, is_in_house=True, redirect_uris='https://test.com')
+
+    def test_set_oauth2_data(self):
+        self.mixin.set_oauth2_data(client_id=self.client.client_id, redirect_uri='https://test.com', state='1234')
+
+        self.assertIn(SESSION_CLIENT_ID_KEY, self.mixin.request.session)
+        self.assertIn(SESSION_REDIRECT_URI_KEY, self.mixin.request.session)
+        self.assertIn(SESSION_STATE_KEY, self.mixin.request.session)
+
+        self.assertEqual(self.mixin.get_session(SESSION_CLIENT_ID_KEY), self.client.client_id)
+        self.assertEqual(self.mixin.get_session(SESSION_REDIRECT_URI_KEY), 'https://test.com')
+        self.assertEqual(self.mixin.get_session(SESSION_STATE_KEY), '1234')
+
+    def test_get_oauth2_data(self):
+        self.mixin.set_oauth2_data(client_id=self.client.client_id, redirect_uri='https://test.com', state='1234')
+
+        oauth2_data = self.mixin.get_oauth2_data(code='this-is-code', state='1234')
+
+        self.assertEqual(oauth2_data.code, 'this-is-code')
+        self.assertEqual(oauth2_data.client_id, self.client.client_id)
+        self.assertEqual(oauth2_data.redirect_uri, 'https://test.com')
+        self.assertEqual(oauth2_data.state, '1234')
