@@ -20,11 +20,9 @@ env:
 before_script:
 - pip3 install -r docs/requirements/development.txt
 - make settings
-#- mysql -u root -e "CREATE DATABASE account CHARACTER SET utf8 COLLATE utf8_general_ci;"
+- mysql -u root -e "CREATE DATABASE account CHARACTER SET utf8 COLLATE utf8_general_ci;"
 - mysql -u root -e "CREATE USER 'admin'@'127.0.0.1' IDENTIFIED BY 'test';"
 - mysql -u root -e "GRANT ALL ON account.* TO 'admin'@'localhost';"
-- mysql -u root -e "show variables like 'char%';"
-
 - make test-migration
 
 script:
@@ -47,3 +45,7 @@ deploy:
 
 after_deploy:
 - bash docs/travis/after_deploy.sh
+
+after_failure:
+- mysql -u root -e "SELECT default_character_set_name FROM information_schema.SCHEMATA S WHERE schema_name = 'account';"
+- mysql -u root -e "SHOW CREATE DATABASE account;"
