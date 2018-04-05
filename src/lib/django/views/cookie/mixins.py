@@ -1,4 +1,5 @@
 
+
 class CookieMixin:
     def get_cookie(self, request, key: str, default=None):
         return request.COOKIES.get(key, default)

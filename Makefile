@@ -50,12 +50,24 @@ scheduler:
 	@cd src && celery -A sites.celery.celery beat --loglevel=debug
 
 
+# pre-test
+pre-test:
+	make docker-test-db
+	sh docs/docker/wait_for_it.sh 'mysqladmin ping -h 127.0.0.1 -u root -proot' 'make test-migration'
+
+docker-test-db:
+	@docker-compose -f docs/docker/testdb/docker-compose-test-db.yml up -d
+
+test-migration:
+	@python3.6 src/manage.py test migrate
+
+
 # pre-processing
 lint:
 	@python3.6 $(shell which pylint) ./src/apps/ ./src/infra/ ./src/lib/ --rcfile=.pylintrc && flake8
 
 test:
-	@python3.6 src/manage.py test test src
+	@python3.6 src/manage.py test test --noinput src
 
 pm-test:
 	@npm run test
