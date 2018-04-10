@@ -21,7 +21,7 @@ class BaseConstant:
 
     @classmethod
     def to_value(cls, string: str) -> int:
-        for k, v in cls._STRING_MAP:
+        for k, v in cls._STRING_MAP.items():
             if v == string:
                 return k
 
