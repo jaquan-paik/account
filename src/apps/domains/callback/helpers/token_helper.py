@@ -27,12 +27,11 @@ class TokenHelper:
     @classmethod
     def _take_token(cls, client: Application, code: str, state: str) -> Tuple[TokenData, TokenData]:
         req = requests.post(
-            UrlHelper.get_token(), data=cls._get_request_data(client, code, state), verify=False
-        )  # TODO: 개발 완료되고 인증서 추가되면 verify 제거
+            UrlHelper.get_token(), data=cls._get_request_data(client, code, state),
+        )
 
         json = req.json()
         cls._validate_response(json, state)
-
         return cls._generate_token_from_json(json)
 
     @classmethod
