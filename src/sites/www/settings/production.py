@@ -1,4 +1,3 @@
-from apps.domains.callback.constants import CookieRootDomains
 from lib.log.setup import setup_logging
 
 # noinspection PyUnresolvedReferences
