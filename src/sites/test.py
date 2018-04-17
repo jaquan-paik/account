@@ -16,6 +16,10 @@ DATABASES = {
             'sql_mode': 'STRICT_TRANS_TABLES',
             'charset': 'utf8',
         },
+        'TEST': {
+            'CHARSET': 'utf8',
+            'COLLATION': 'utf8_general_ci',
+        }
     },
 }
 
