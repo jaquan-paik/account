@@ -17,8 +17,10 @@ env:
   matrix:
   - ENVIRONMENT=development ACCOUNT_ECR=$DEV_ACCOUNT_ECR AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
 
-before_script:
+install:
 - pip3 install -r docs/requirements/development.txt
+
+before_script:
 - make settings
 - mysql -u root -e "CREATE DATABASE account CHARACTER SET utf8 COLLATE utf8_general_ci;"
 - mysql -u root -e "CREATE USER 'admin'@'127.0.0.1' IDENTIFIED BY 'test';"
