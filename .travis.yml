@@ -23,7 +23,6 @@ install:
 before_script:
 - make settings
 - mysql -u root -e "use mysql; UPDATE user SET password=password('root') WHERE user='root'; flush privileges;"
-- make test-migration
 
 script:
 - make lint
