@@ -22,9 +22,7 @@ install:
 
 before_script:
 - make settings
-- mysql -u root -e "CREATE DATABASE account CHARACTER SET utf8 COLLATE utf8_general_ci;"
-- mysql -u root -e "CREATE USER 'admin'@'127.0.0.1' IDENTIFIED BY 'test';"
-- mysql -u root -e "GRANT ALL ON account.* TO 'admin'@'localhost';"
+- mysql -u root -e "use mysql; UPDATE user SET password=password('root') WHERE user='root'; flush privileges;"
 - make test-migration
 
 script:
