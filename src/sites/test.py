@@ -7,8 +7,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'account',
-        'USER': 'admin',
-        'PASSWORD': 'test',
+        'USER': 'root',
+        'PASSWORD': 'root',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'CONN_MAX_AGE': 0,
@@ -17,7 +17,6 @@ DATABASES = {
             'charset': 'utf8',
         },
         'TEST': {
-            'NAME': 'account',
             'CHARSET': 'utf8',
             'COLLATION': 'utf8_general_ci',
         }
