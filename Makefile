@@ -50,15 +50,25 @@ scheduler:
 	@cd src && celery -A sites.celery.celery beat --loglevel=debug
 
 
-# pre-test
-pre-test:
-	make docker-test-db
-	sh docs/docker/wait_for_it.sh 'mysqladmin ping -h 127.0.0.1 -u root -proot' 'make test-migration'
+# Prepare to test in local
+run-test-db:
+	make up-test-db
+	sh docs/docker/wait_for_it.sh 'mysqladmin ping -h 127.0.0.1 -u root -proot' 'make initialize'
 
-docker-test-db:
+stop-test-db:
+	@docker-compose -f docs/docker/testdb/docker-compose-test-db.yml down
+
+up-test-db:
 	@docker-compose -f docs/docker/testdb/docker-compose-test-db.yml up -d
 
-test-migration:
+initialize:
+	make create-database
+	make migration
+
+create-database:
+	@mysql -h 127.0.0.1 -u root -p < docs/docker/testdb/create_database.sql
+
+migration:
 	@python3.6 src/manage.py test migrate
 
 

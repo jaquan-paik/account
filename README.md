@@ -1,4 +1,6 @@
 # Account
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/ridi/account.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/ridi/account.svg?branch=master)](https://travis-ci.org/ridi/account)
 
 # 1. Initialization
