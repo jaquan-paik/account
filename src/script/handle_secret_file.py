@@ -7,7 +7,7 @@ sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../'))
 from lib.secret.secret import SecretFileGenerator, SecretFileConverter, ENV_PROD, ENV_DEV  # flake8: noqa: E402
 
 args_parser = argparse.ArgumentParser()
-args_parser.add_argument('action', help='generate_dev / generate_prod / encrypt')
+args_parser.add_argument('action', help='generate_development / generate_production / encrypt')
 args = args_parser.parse_args()
 
 if args.action == 'generate_production':
