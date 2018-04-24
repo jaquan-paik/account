@@ -1,3 +1,5 @@
+# pylint: disable=protected-access
+
 from unittest import TestCase
 
 import requests
@@ -39,11 +41,15 @@ class ApiTestCase(TestCase):
             self.assertEqual(data['message'], 'success')
 
     def test_get_test_domain_401(self):
-        with self.assertRaises(HTTPException):
+        with self.assertRaises(HTTPException) as context:
             with requests_mock.mock() as m:
-                m.get(self.dummy_api._make_url(self.dummy_api.TEST_API), json={'message': 'failure'}, status_code=401)
+                m.get(self.dummy_api._make_url(self.dummy_api.TEST_API), text='401 Unauthorized', status_code=401)
 
                 self.dummy_api.get_test_domain()
+
+        exception = context.exception
+        self.assertEqual(exception.status, 401)
+        self.assertEqual(exception.content, b'401 Unauthorized')
 
     def test_get_test_domain_server_error(self):
         with self.assertRaises(ServerException):
