@@ -1,6 +1,5 @@
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from apps.domains.account.services.account_info_service import AccountInfoService
