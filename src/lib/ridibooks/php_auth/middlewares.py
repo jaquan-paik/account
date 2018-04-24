@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.utils.deprecation import MiddlewareMixin
 
-from lib.ridibooks.api.api_helper import RidiApiHelper
-from lib.ridibooks.api.exceptions import RidibooksException
+from lib.ridibooks.common.exceptions import RidibooksException
+from lib.ridibooks.php_auth.api_helper import RidiApiHelper
 
 
 class AuthenticationMiddleware(MiddlewareMixin):
@@ -19,3 +19,4 @@ class AuthenticationMiddleware(MiddlewareMixin):
             user, _ = get_user_model().objects.get_or_create(idx=account_info['result']['idx'], id=account_info['result']['id'])
 
         request.user = user
+e

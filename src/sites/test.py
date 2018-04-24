@@ -34,6 +34,6 @@ SITE_DOMAIN = 'account.ridibooks.com'
 ALLOWED_HOSTS = [SITE_DOMAIN, 'dev.ridi.com', ]
 
 MIDDLEWARE += [
-    'lib.ridibooks.middlewares.AuthenticationMiddleware',
+    'lib.ridibooks.php_auth.middlewares.AuthenticationMiddleware',
 ]
 ROOT_URLCONF = 'sites.www.urls'

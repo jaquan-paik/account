@@ -2,8 +2,8 @@ import requests
 from requests import RequestException
 
 from infra.network.constants.http_status_code import HttpStatusCodes
-from lib.ridibooks.api.api_url import RidiStoreApiUrl
-from lib.ridibooks.api.exceptions import InvalidResponseException, NotEnoughArgumentsException, RequestFailException
+from lib.ridibooks.common.exceptions import InvalidResponseException, NotEnoughArgumentsException, RequestFailException
+from lib.ridibooks.php_auth.api_url import RidiStoreApiUrl
 
 
 class RidiApiHelper:

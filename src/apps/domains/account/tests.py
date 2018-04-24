@@ -1,10 +1,10 @@
 import requests_mock
 from django.http import SimpleCookie
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
 
 from infra.configure.config import GeneralConfig
-from lib.ridibooks.api.api_url import RidiStoreApiUrl
+from lib.ridibooks.php_auth.api_url import RidiStoreApiUrl
 
 
 class RidiLoginViewTestCase(TestCase):

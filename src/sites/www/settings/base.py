@@ -4,7 +4,7 @@ from infra.configure.constants import SiteType
 from sites.base import *  # flake8: noqa: F403  # pylint:disable=wildcard-import
 
 MIDDLEWARE += [
-    'lib.ridibooks.middlewares.AuthenticationMiddleware',
+    'lib.ridibooks.php_auth.middlewares.AuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'sites.www.urls'
