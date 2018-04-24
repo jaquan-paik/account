@@ -1,10 +1,10 @@
 from typing import Optional
 
-from apps.domains.callback.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
-from apps.domains.callback.dtos import TokenData, OAuth2Data
+from apps.domains.callback.dtos import OAuth2Data, TokenData
 from apps.domains.callback.helpers.url_helper import UrlHelper
 from lib.django.views.cookie.mixins import CookieMixin
 from lib.django.views.session.mixins import SessionMixin
+from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 
 SESSION_STATE_KEY = 'oauth2.state'
 SESSION_CLIENT_ID_KEY = 'oauth2.client_id'

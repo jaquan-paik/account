@@ -1,3 +1,4 @@
+
 class RidibooksException(Exception):
     pass
 

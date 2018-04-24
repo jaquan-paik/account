@@ -8,12 +8,11 @@ from django.urls import reverse
 from django_dynamic_fixture import G
 
 from apps.domains.account.models import User
-from apps.domains.callback.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 from apps.domains.callback.helpers.url_helper import UrlHelper
-from apps.domains.oauth2.constants import JwtAlg
 from apps.domains.oauth2.models import Application, RefreshToken
 from apps.domains.oauth2.token import JwtHandler
 from infra.configure.config import GeneralConfig
+from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 
 
 class InHouseCallbackTestCase(TestCase):
