@@ -4,11 +4,12 @@ from rest_framework.views import APIView
 
 from apps.domains.account.services.account_info_service import AccountInfoService
 from infra.configure.config import GeneralConfig
-from infra.network.constants.api_status_code import ApiStatusCodes
+from infra.network.constants.api_status_code import ApiStatusCodes, StatusCode
 from lib.base.exceptions import ErrorException
 from lib.django.views.api.mixins import ResponseMixin
 from lib.django.views.cookie.mixins import CookieMixin
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY
+from lib.ridibooks.common.exceptions import HTTPException, InvalidResponseException, ServerException
 from lib.utils.url import generate_query_url
 
 
@@ -44,8 +45,14 @@ class RidiAccountInfoView(CookieMixin, ResponseMixin, APIView):
         if access_token is None:
             code = self.make_response_code(ApiStatusCodes.C_401_UNAUTHORIZED)
             return self.fail_response(response_code=code)
-
-        data = AccountInfoService.get_account_info(access_token=access_token)
+        try:
+            data = AccountInfoService.get_account_info(access_token=access_token)
+        except (InvalidResponseException, ServerException):
+            code = self.make_response_code(ApiStatusCodes.C_504_GATEWAY_TIMEOUT)
+            return self.fail_response(response_code=code)
+        except HTTPException as e:
+            code = self.make_response_code(StatusCode(status=e.status))
+            return self.fail_response(code)
 
         code = self.make_response_code(status=ApiStatusCodes.C_200_OK)
         return self.success_response(data=data, response_code=code)
