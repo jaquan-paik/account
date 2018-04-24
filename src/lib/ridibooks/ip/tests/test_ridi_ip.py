@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from lib.ridibooks.ridi_ip import RidiIP
+from lib.ridibooks.ip.constants import RidiIP
 
 
 class RidiIpTestCase(TestCase):
