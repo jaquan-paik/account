@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.utils.deprecation import MiddlewareMixin
 
+from lib.ridibooks.api.store import StoreApi
 from lib.ridibooks.common.exceptions import RidibooksException
-from lib.ridibooks.php_auth.api_helper import RidiApiHelper
 
 
 class AuthenticationMiddleware(MiddlewareMixin):
@@ -12,7 +12,7 @@ class AuthenticationMiddleware(MiddlewareMixin):
 
         user = AnonymousUser()
         try:
-            account_info = RidiApiHelper(phpsession_id=ridibooks_session_id).get_account_info()
+            account_info = StoreApi(phpsession_id=ridibooks_session_id).get_account_info()
         except RidibooksException:
             pass
         else:

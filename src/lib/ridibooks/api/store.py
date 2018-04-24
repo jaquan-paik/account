@@ -1,6 +1,6 @@
 from typing import Dict
 
-from lib.ridibooks.api.base import BaseApi, ApiDomain
+from lib.ridibooks.api.base import ApiDomain, BaseApi
 from lib.ridibooks.common.constants import HttpMethod
 
 DEV_RIDI_STORE_DOMAIN = 'https://dev.ridi.io'

@@ -4,8 +4,8 @@ import jwt
 from Crypto.PublicKey import RSA
 from django.test import TestCase
 
-from lib.ridibooks.auth.helpers.config import ConfigHelper
-from lib.ridibooks.auth.helpers.jwt_auth import JwtAuthHelper
+from lib.ridibooks.internal_server_auth.helpers.config import ConfigHelper
+from lib.ridibooks.internal_server_auth.helpers.jwt_auth import JwtAuthHelper
 
 private = RSA.generate(bits=2048)
 public = private.publickey()
@@ -16,7 +16,7 @@ dummy_config = ConfigHelper.generate_auth_data([
 ])
 
 
-@patch('lib.ridibooks.auth.config.RIDI_INTERNAL_AUTH_DATA', dummy_config)
+@patch('lib.ridibooks.internal_server_auth.config.RIDI_INTERNAL_AUTH_DATA', dummy_config)
 class JwtAuthHelperTestCase(TestCase):
     def test_verify_with_invalid_rsa_token(self):
         invalid_rsa_token_by_invalid_iss = jwt.encode(

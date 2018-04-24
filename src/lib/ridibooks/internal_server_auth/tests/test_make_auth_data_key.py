@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from lib.ridibooks.auth.utils import make_auth_data_key
+from lib.ridibooks.internal_server_auth.utils import make_auth_data_key
 
 
 class MakeAuthDataKeyTestCase(TestCase):

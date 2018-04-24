@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from lib.ridibooks.auth.helpers.config import ConfigHelper
+from lib.ridibooks.internal_server_auth.helpers.config import ConfigHelper
 
 
 class ConfigHelperTestCase(TestCase):

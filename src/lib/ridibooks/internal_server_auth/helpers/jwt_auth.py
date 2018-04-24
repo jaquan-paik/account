@@ -1,14 +1,12 @@
-import base64
-import json
 from json import JSONDecodeError
-from typing import Dict, Tuple
+from typing import Tuple
 
 import jwt
 from jwt import DecodeError, InvalidTokenError
 from jwt.exceptions import InvalidKeyError
 
-from lib.ridibooks.auth import config
-from lib.ridibooks.auth.utils import make_auth_data_key
+from lib.ridibooks.internal_server_auth import config
+from lib.ridibooks.internal_server_auth.utils import make_auth_data_key
 
 
 class JwtAuthHelper:

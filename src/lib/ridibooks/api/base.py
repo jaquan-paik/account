@@ -13,8 +13,9 @@ from lib.ridibooks.common.exceptions import HTTPException, InvalidResponseExcept
 class BaseApi:
     domain = None  # type: ApiDomain
 
-    def __init__(self, access_token: str):
+    def __init__(self, access_token: Optional[str]=None, phpsession_id: Optional[str]=None):
         self.access_token = access_token
+        self.phpsession_id = phpsession_id
 
     def _request(self, method: int, path: str, data: Optional[Dict]=None) -> Dict:
         kwargs = {
@@ -49,5 +50,6 @@ class BaseApi:
 
     def _make_cookies(self) -> Dict:
         return {
-            ACCESS_TOKEN_COOKIE_KEY: self.access_token
+            ACCESS_TOKEN_COOKIE_KEY: self.access_token,
+            'PHPSESSID': self.phpsession_id
         }

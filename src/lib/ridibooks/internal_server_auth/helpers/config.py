@@ -1,6 +1,6 @@
 from typing import Dict, List, Tuple
 
-from lib.ridibooks.auth.utils import make_auth_data_key
+from lib.ridibooks.internal_server_auth.utils import make_auth_data_key
 
 
 ISSUER_KEY_NAME = 'iss'
