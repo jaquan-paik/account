@@ -19,4 +19,3 @@ class AuthenticationMiddleware(MiddlewareMixin):
             user, _ = get_user_model().objects.get_or_create(idx=account_info['result']['idx'], id=account_info['result']['id'])
 
         request.user = user
-e
