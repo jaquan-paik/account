@@ -2,12 +2,12 @@ from json import JSONDecodeError
 from typing import Dict, Optional
 
 import requests
-from requests import RequestException, Response
+from requests import Response
+from requests.exceptions import HTTPError, RequestException
 
-from infra.network.constants.http_status_code import HttpStatusCodes
 from lib.ridibooks.api.domain import ApiDomain
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, HttpMethod
-from lib.ridibooks.common.exceptions import InvalidResponseException, RequestFailException
+from lib.ridibooks.common.exceptions import HTTPException, InvalidResponseException, ServerException
 
 
 class BaseApi:
@@ -30,17 +30,17 @@ class BaseApi:
 
         try:
             response = requests.request(**kwargs)
-        except RequestException as e:
-            raise RequestFailException(e.response.status_code)
+        except RequestException:
+            raise ServerException()
 
         return self._process_response(response=response)
 
     def _process_response(self, response: Response) -> Dict:
-        if response.status_code != HttpStatusCodes.C_200_OK:
-            raise RequestFailException(response.status_code)
-
         try:
+            response.raise_for_status()
             return response.json()
+        except HTTPError as e:
+            raise HTTPException(origin_exception=e, content=e.response.content, status=e.response.status_code)
         except (JSONDecodeError, TypeError):
             raise InvalidResponseException(response.content)
 

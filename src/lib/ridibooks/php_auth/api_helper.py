@@ -2,7 +2,7 @@ import requests
 from requests import RequestException
 
 from infra.network.constants.http_status_code import HttpStatusCodes
-from lib.ridibooks.common.exceptions import InvalidResponseException, NotEnoughArgumentsException, RequestFailException
+from lib.ridibooks.common.exceptions import InvalidResponseException, NotEnoughArgumentsException, ServerException
 from lib.ridibooks.php_auth.api_url import RidiStoreApiUrl
 
 
@@ -19,10 +19,10 @@ class RidiApiHelper:
         try:
             response = requests.get(RidiStoreApiUrl.get_url(RidiStoreApiUrl.ACCOUNT_INFO), cookies=cookies)
         except RequestException:
-            raise RequestFailException
+            raise ServerException
 
         if response.status_code != HttpStatusCodes.C_200_OK:
-            raise RequestFailException(response.status_code)
+            raise ServerException(response.status_code)
 
         try:
             account_info = response.json()
