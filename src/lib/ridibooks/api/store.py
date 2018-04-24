@@ -1,3 +1,5 @@
+from typing import Dict
+
 from lib.ridibooks.api.base import BaseApi, ApiDomain
 from lib.ridibooks.common.constants import HttpMethod
 
@@ -10,5 +12,5 @@ class StoreApi(BaseApi):
 
     ACCOUNT_INFO = '/api/account/info'
 
-    def request_account_info(self):
+    def get_account_info(self) -> Dict:
         return self._request(method=HttpMethod.GET, path=self.ACCOUNT_INFO)
