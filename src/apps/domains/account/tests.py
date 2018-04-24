@@ -1,3 +1,4 @@
+# pylint: disable=protected-access
 import requests_mock
 from django.http import SimpleCookie
 from django.test import Client, TestCase
@@ -19,7 +20,7 @@ class RidiLoginViewTestCase(TestCase):
 
     def test_login_success(self):
         with requests_mock.mock() as m:
-            m.get(self.api._make_url(StoreApi.ACCOUNT_INFO), json={'result': {'idx': 1111, 'id': 'testuser'}})
+            m.get(self.api._make_url(StoreApi.ACCOUNT_INFO), json={'result': {'idx': 1, 'id': 'testuser'}})
 
             response = self.client.get(reverse('account:login'))
             self.assertEqual(response.status_code, 302)

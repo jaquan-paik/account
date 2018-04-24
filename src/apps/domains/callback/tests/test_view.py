@@ -1,3 +1,4 @@
+# pylint: disable=protected-access
 import json
 from datetime import datetime
 
@@ -12,6 +13,7 @@ from apps.domains.callback.helpers.url_helper import UrlHelper
 from apps.domains.oauth2.models import Application, RefreshToken
 from apps.domains.oauth2.token import JwtHandler
 from infra.configure.config import GeneralConfig
+from lib.ridibooks.api.store import StoreApi
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 
 
@@ -41,7 +43,9 @@ class TokenViewTestCase(TestCase):
         self.assertEqual(response.cookies[REFRESH_TOKEN_COOKIE_KEY]['max-age'], 0)
 
     def test_refresh_success(self):
+        api = StoreApi()
         with requests_mock.mock() as m:
+            m.get(api._make_url(StoreApi.ACCOUNT_INFO), json={'result': {'idx': 1, 'id': 'testuser'}})
             m.post(UrlHelper.get_token(), json={
                 'access_token': 'test-access-token1111',
                 'expires_in': 1111111,
