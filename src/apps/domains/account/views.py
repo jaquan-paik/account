@@ -1,8 +1,15 @@
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
+from apps.domains.account.services.account_info_service import AccountInfoService
 from infra.configure.config import GeneralConfig
+from infra.network.constants.api_status_code import ApiStatusCodes
 from lib.base.exceptions import ErrorException
+from lib.django.views.api.mixins import ResponseMixin
+from lib.django.views.cookie.mixins import CookieMixin
+from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY
 from lib.utils.url import generate_query_url
 
 
@@ -30,3 +37,16 @@ class RidiLoginView(LoginView):  # pylint: disable=too-many-ancestors
     def put(self, *args, **kwargs):
         # 로그인 기능이 없기 때문에 막아둔다.
         pass
+
+
+class RidiAccountInfoView(CookieMixin, ResponseMixin, APIView):
+    def get(self, request):
+        access_token = self.get_cookie(request=request, key=ACCESS_TOKEN_COOKIE_KEY)
+        if access_token is None:
+            code = self.make_response_code(ApiStatusCodes.C_401_UNAUTHORIZED)
+            return self.fail_response(response_code=code)
+
+        data = AccountInfoService.get_account_info(access_token=access_token)
+
+        code = self.make_response_code(status=ApiStatusCodes.C_200_OK)
+        return self.success_response(data=data, response_code=code)
