@@ -32,21 +32,10 @@ class JwtAuthHelper:
 
 
 def _get_iss_and_sub(token: str) -> Tuple[str, str]:
-    payload_str = token.split('.')[1]
-    payload = _load_payload(payload_str=payload_str)
+    payload = jwt.decode(jwt=token, verify=False)
     return payload['iss'], payload['sub']
 
 
 def _get_secret_and_alg(issuer: str, subject: str) -> Tuple[str, str]:
     key = make_auth_data_key(issuer=issuer, subject=subject)
     return config.RIDI_INTERNAL_AUTH_DATA[key]
-
-
-def _load_payload(payload_str: str) -> Dict:
-    payload = json.loads(base64.b64decode(_add_padding(payload_str)))
-    return payload
-
-
-def _add_padding(b64str: str) -> bytes:
-    pad_str = b64str + '=' * (-len(b64str) % 4)
-    return pad_str.encode('utf-8')
