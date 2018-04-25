@@ -1,4 +1,4 @@
-from lib.ridibooks.ridi_ip import RidiIP
+from lib.ridibooks.ip.constants import RidiIP
 from lib.utils.ip import get_client_ip_from_request, is_internal_ip
 
 

@@ -1,15 +1,17 @@
+# pylint: disable=protected-access
 import requests_mock
 from django.http import SimpleCookie
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
 
 from infra.configure.config import GeneralConfig
-from lib.ridibooks.api.api_url import RidiStoreApiUrl
+from lib.ridibooks.api.store import StoreApi
 
 
 class RidiLoginViewTestCase(TestCase):
     def setUp(self):
         self.client = Client(HTTP_COOKIE=SimpleCookie({'PHPSESSID': 1111}).output(header='', sep='; '))
+        self.api = StoreApi()
 
     def test_redirect(self):
         response = self.client.get(reverse('account:login'))
@@ -18,7 +20,7 @@ class RidiLoginViewTestCase(TestCase):
 
     def test_login_success(self):
         with requests_mock.mock() as m:
-            m.get(RidiStoreApiUrl.get_url(RidiStoreApiUrl.ACCOUNT_INFO), json={'result': {'idx': 1111, 'id': 'testuser'}})
+            m.get(self.api._make_url(StoreApi.ACCOUNT_INFO), json={'result': {'idx': 1, 'id': 'testuser'}})
 
             response = self.client.get(reverse('account:login'))
             self.assertEqual(response.status_code, 302)

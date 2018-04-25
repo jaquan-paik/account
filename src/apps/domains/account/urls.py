@@ -6,4 +6,5 @@ app_name = 'account_app'
 
 urlpatterns = [
     path('login/', views.RidiLoginView.as_view(), name='login'),
+    path('me/', views.RidiAccountInfoView.as_view(), name='account-info')
 ]

@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
-from apps.domains.callback.constants import ACCESS_TOKEN_COOKIE_KEY, CookieRootDomains, REFRESH_TOKEN_COOKIE_KEY, ROOT_DOMAIN_SESSION_KEY
+from apps.domains.callback.constants import CookieRootDomains, ROOT_DOMAIN_SESSION_KEY
 from apps.domains.callback.helpers.token_helper import TokenCodeHelper
 from apps.domains.callback.helpers.url_helper import UrlHelper
 from apps.domains.callback.mixins import OAuth2SessionMixin, TokenCookieMixin
@@ -15,6 +15,7 @@ from apps.domains.callback.services.token_refresh_service import TokenRefreshSer
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
 from lib.django.http.response import HttpResponseUnauthorized
+from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 from lib.utils.url import generate_query_url
 
 

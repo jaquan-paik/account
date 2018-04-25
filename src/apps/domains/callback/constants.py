@@ -2,9 +2,6 @@ import typing
 
 from lib.base.constants import BaseConstant
 
-ACCESS_TOKEN_COOKIE_KEY = 'ridi-at'
-REFRESH_TOKEN_COOKIE_KEY = 'ridi-rt'
-
 ROOT_DOMAIN_SESSION_KEY = 'root_domain'
 
 
