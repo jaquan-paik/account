@@ -6,7 +6,7 @@ from requests import Response
 from requests.exceptions import HTTPError, RequestException
 
 from lib.ridibooks.api.domain import ApiDomain
-from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, HttpMethod
+from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, HttpMethod, PHP_SESSION_COOKIE_KEY
 from lib.ridibooks.common.exceptions import HTTPException, InvalidResponseException, ServerException
 
 
@@ -49,7 +49,12 @@ class BaseApi:
         return f'{self.domain}{path}'
 
     def _make_cookies(self) -> Dict:
-        return {
-            ACCESS_TOKEN_COOKIE_KEY: self.access_token,
-            'PHPSESSID': self.phpsession_id
-        }
+        _cookies = {}
+
+        if self.access_token:
+            _cookies[ACCESS_TOKEN_COOKIE_KEY] = self.access_token
+
+        if self.phpsession_id:
+            _cookies[PHP_SESSION_COOKIE_KEY] = self.phpsession_id
+
+        return _cookies
