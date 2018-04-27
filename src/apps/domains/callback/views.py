@@ -11,6 +11,7 @@ from apps.domains.callback.constants import CookieRootDomains, ROOT_DOMAIN_SESSI
 from apps.domains.callback.helpers.token_helper import TokenCodeHelper
 from apps.domains.callback.helpers.url_helper import UrlHelper
 from apps.domains.callback.mixins import OAuth2SessionMixin, TokenCookieMixin
+from apps.domains.callback.response import InHouseHttpResponseRedirect
 from apps.domains.callback.services.token_refresh_service import TokenRefreshService
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
@@ -53,7 +54,7 @@ class CallbackView(OAuth2SessionMixin, TokenCookieMixin, View):
         })
 
         root_domain = CookieRootDomains.to_string(self.get_session(key=ROOT_DOMAIN_SESSION_KEY))
-        response = HttpResponseRedirect(redirect_uri)
+        response = InHouseHttpResponseRedirect(redirect_uri)
         self.add_token_cookie(response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain)
 
         return response
