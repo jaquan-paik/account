@@ -10,3 +10,5 @@ SITE_DOMAIN = 'account.ridibooks.com'
 
 # noinspection PyUnresolvedReferences
 ALLOWED_HOSTS = [SITE_DOMAIN, 'ridibooks.com']
+
+CORS_ORIGIN_REGEX_WHITELIST = (r'^(https?://)?(\w+\.)?ridibooks\.com$', )
