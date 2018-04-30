@@ -60,8 +60,8 @@ make run
 
 ## Run celery
 ```
-make woreker-low
-make woreker-high
+make worker-low
+make worker-high
 make scheduler
 ```
 
