@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from requests import HTTPError
 
 from apps.domains.callback.constants import CookieRootDomains, ROOT_DOMAIN_SESSION_KEY
 from apps.domains.callback.helpers.token_helper import TokenCodeHelper
@@ -47,7 +48,11 @@ class CallbackView(OAuth2SessionMixin, TokenCookieMixin, View):
         state = request.GET.get('state', None)
 
         oauth2_data = self.get_oauth2_data(code=code, state=state)
-        access_token, refresh_token = TokenCodeHelper.get_tokens(oauth2_data.client, oauth2_data.code, oauth2_data.state)
+
+        try:
+            access_token, refresh_token = TokenCodeHelper.get_tokens(oauth2_data.client, oauth2_data.code, oauth2_data.state)
+        except HTTPError as e:
+            return JsonResponse(data=e.response.json(), status=e.response.status_code)
 
         redirect_uri = generate_query_url(oauth2_data.redirect_uri, {
             'state': state,
@@ -77,6 +82,8 @@ class TokenView(TokenCookieMixin, View):
                 response = HttpResponseUnauthorized()
                 self.clear_token_cookie(response=response, root_domain=root_domain)
                 return response
+            except HTTPError as e:
+                return JsonResponse(data=e.response.json(), status=e.response.status_code)
 
             else:
                 data = {
