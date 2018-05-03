@@ -1,5 +1,4 @@
 class SiteType:
-    ADMIN = 'admin'
     WWW = 'www'
     CELERY = 'celery'
     TEST = 'test'
@@ -37,5 +36,3 @@ class SecretKeyName:
     CELERY_BROKER_URL = 'celery_broker_url'
 
     OAUTH2_ACCESS_JWT_SECRET = 'oauth2_access_jwt_secret'
-
-    RIDI_CMS_RPC_URL = "ridi_cms_rpc_url"
