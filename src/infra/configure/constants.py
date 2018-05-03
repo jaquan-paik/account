@@ -20,7 +20,7 @@ class SecretKeyName:
 
     SECRET_KEY = 'secret_key'
 
-    MEMCACHED_LOCATION = 'memcached_location'
+    CACHE_LOCATION = 'cache_location'
 
     WRITE_DB_HOST = 'write_db_host'
     WRITE_DB_ACCOUNT = 'write_db_account'

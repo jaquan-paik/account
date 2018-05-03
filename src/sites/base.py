@@ -142,7 +142,7 @@ DATABASE_APPS_MAPPING = {
 CACHES = {
     'default': {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": Secret().get(SecretKeyName.MEMCACHED_LOCATION),
+        "LOCATION": Secret().get(SecretKeyName.CACHE_LOCATION),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
