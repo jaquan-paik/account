@@ -6,7 +6,7 @@ import sys
 from infra.configure.constants import SecretKeyName
 from lib.secret.secret import Secret
 
-allow_site = ['admin', 'www', 'test', ]
+allow_site = ['www', 'test', ]
 
 
 def make_path(site_name: str, environment: str) -> str:
