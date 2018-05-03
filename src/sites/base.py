@@ -141,11 +141,13 @@ DATABASE_APPS_MAPPING = {
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': Secret().get(SecretKeyName.MEMCACHED_LOCATION),
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": Secret().get(SecretKeyName.MEMCACHED_LOCATION),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
