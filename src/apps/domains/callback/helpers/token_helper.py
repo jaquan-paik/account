@@ -29,6 +29,7 @@ class TokenHelper:
         req = requests.post(
             UrlHelper.get_token(), data=cls._get_request_data(client, code, state),
         )
+        req.raise_for_status()
 
         json = req.json()
         cls._validate_response(json, state)
