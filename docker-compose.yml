@@ -1,9 +1,9 @@
 version: '3.4'
 
 services:
-  mariadb:
+  account-mariadb:
     image: mariadb:10.1
-    container_name: mariadb
+    container_name: account-mariadb
     restart: always
     ports:
       - 3306:3306
@@ -15,7 +15,7 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: test
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
-  redis:
+  account-redis:
     image: redis:4.0.6
     container_name: account-redis
     restart: always
@@ -29,23 +29,14 @@ services:
       - .:/htdocs/www
     ports:
       - 7001:7001
-    command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h mariadb -u root -proot', 'make run-www']
+    command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h account-mariadb -u root -proot', 'make run-www']
     depends_on:
-      - memcached
-      - redis
-      - mariadb
+      - account-redis
+      - account-mariadb
     links:
-      - memcached
-      - redis
-      - mariadb
-  flower:
-    image: ridibooks/python:flower
-    container_name: account-flower
-    restart: always
-    depends_on:
-      - redis
-    links:
-      - redis
+      - account-redis
+      - account-mariadb
+
   nginx:
     image: nginx:stable
     container_name: account-nginx
@@ -58,7 +49,5 @@ services:
       - 443:443
     depends_on:
       - account-www
-      - flower
     links:
       - account-www
-      - flower
