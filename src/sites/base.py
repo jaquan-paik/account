@@ -32,9 +32,6 @@ INSTALLED_APPS = [
     # django api 문서화 라이브러리
     'drf_yasg',
 
-    # security
-    'lib.admin_access_log.apps.AdminAccessLogConfig',
-
     # custom
     'lib.django.apps.DjangoAppConfig',
 
