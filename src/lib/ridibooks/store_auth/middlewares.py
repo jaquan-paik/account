@@ -9,6 +9,8 @@ from lib.ridibooks.common.exceptions import RidibooksException
 class AuthenticationMiddleware(MiddlewareMixin):
     def process_request(self, request):
         ridibooks_session_id = request.COOKIES.get('PHPSESSID', None)
+        if ridibooks_session_id is None:
+            return
 
         user = AnonymousUser()
         try:
