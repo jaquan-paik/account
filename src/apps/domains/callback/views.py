@@ -18,6 +18,7 @@ from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
 from lib.django.http.response import HttpResponseUnauthorized
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
+from lib.utils.string import generate_random_str
 from lib.utils.url import generate_query_url
 
 
@@ -34,9 +35,8 @@ class AuthorizeView(OAuth2SessionMixin, TokenCookieMixin, View):
             'client_id': client_id,
             'redirect_uri': UrlHelper.get_redirect_uri(),
             'response_type': 'code',
+            'state': generate_random_str(10),
         }
-        if state:
-            params['state'] = state
 
         url = generate_query_url(reverse('oauth2_provider:authorize'), params)
         return HttpResponseRedirect(url)
@@ -54,12 +54,8 @@ class CallbackView(OAuth2SessionMixin, TokenCookieMixin, View):
         except HTTPError as e:
             return JsonResponse(data=e.response.json(), status=e.response.status_code)
 
-        redirect_uri = generate_query_url(oauth2_data.redirect_uri, {
-            'state': state,
-        })
-
         root_domain = CookieRootDomains.to_string(self.get_session(key=ROOT_DOMAIN_SESSION_KEY))
-        response = InHouseHttpResponseRedirect(redirect_uri)
+        response = InHouseHttpResponseRedirect(oauth2_data.redirect_uri)
         self.add_token_cookie(response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain)
 
         return response
