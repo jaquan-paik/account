@@ -29,7 +29,6 @@ brew install mysql
 ```
 127.0.0.1 mariadb 
 127.0.0.1 redis
-127.0.0.1 memcached
 
 127.0.0.1 account.dev.ridi.com
 127.0.0.1 admin.dev.ridi.com

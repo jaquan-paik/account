@@ -15,12 +15,6 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: test
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
-  memcached:
-    image: memcached:1.5.4
-    container_name: account-memcached
-    restart: always
-    ports:
-      - 11211:11211
   redis:
     image: redis:4.0.6
     container_name: account-redis
@@ -36,11 +30,9 @@ services:
       - 7000:7000
     command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h mariadb -u root -proot', 'make run-admin']
     depends_on:
-      - memcached
       - redis
       - mariadb
     links:
-      - memcached
       - redis
       - mariadb
   account-www:
@@ -52,11 +44,9 @@ services:
       - 7001:7001
     command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h mariadb -u root -proot', 'make run-www']
     depends_on:
-      - memcached
       - redis
       - mariadb
     links:
-      - memcached
       - redis
       - mariadb
   flower:
