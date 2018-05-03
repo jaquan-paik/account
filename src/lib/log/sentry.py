@@ -1,16 +1,10 @@
 import logging
 from typing import Dict
 
-from raven.contrib.celery import register_logger_signal, register_signal
 from raven.contrib.django.raven_compat.models import client
 
 from infra.configure.config import GeneralConfig
-# sentry for celery setting
 from .logger import logger
-
-register_logger_signal(client)
-register_signal(client)
-register_logger_signal(client, loglevel=logging.INFO)
 
 
 def message(msg: str, extra: Dict=None) -> None:

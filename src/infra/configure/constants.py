@@ -1,7 +1,6 @@
 class SiteType:
     ADMIN = 'admin'
     WWW = 'www'
-    CELERY = 'celery'
     TEST = 'test'
 
 
@@ -33,8 +32,6 @@ class SecretKeyName:
     REDIS_HOST = 'redis_host'
 
     SENTRY_DSN = 'sentry_dsn'
-
-    CELERY_BROKER_URL = 'celery_broker_url'
 
     OAUTH2_ACCESS_JWT_SECRET = 'oauth2_access_jwt_secret'
 

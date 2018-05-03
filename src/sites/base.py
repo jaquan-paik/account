@@ -187,14 +187,6 @@ LOGGING_CONFIG = None
 
 AUTH_USER_MODEL = 'account_app.User'
 
-
-# celery setting
-CELERY_BROKER_URL = Secret().get(SecretKeyName.CELERY_BROKER_URL)
-CELERY_TIMEZONE = 'Asia/Seoul'
-CELERY_ENABLE_UTC = True
-CELERY_IMPORTS = [
-]
-
 CORS_ORIGIN_ALLOW_ALL = True
 
 RIDIBOOKS_LOGIN_URL = 'https://ridibooks.com/account/login'

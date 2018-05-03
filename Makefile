@@ -40,16 +40,6 @@ run-server-admin:
 run-server-www:
 	@python3.6 src/manage.py www runserver 0.0.0.0:7001
 
-worker-low:
-	@cd src && celery -A sites.celery.celery worker -Q low_priority --loglevel=debug
-
-worker-high:
-	@cd src && celery -A sites.celery.celery worker -Q high_priority --loglevel=debug
-
-scheduler:
-	@cd src && celery -A sites.celery.celery beat --loglevel=debug
-
-
 # Prepare to test in local
 run-test-db:
 	make up-test-db

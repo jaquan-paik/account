@@ -57,13 +57,6 @@ make install
 make run
 ```
 
-## Run celery
-```
-make worker-low
-make worker-high
-make scheduler
-```
-
 ## Linting
 ```
 make lint
