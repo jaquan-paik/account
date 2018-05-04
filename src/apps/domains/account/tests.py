@@ -14,7 +14,7 @@ class RidiLoginViewTestCase(TestCase):
         self.api = StoreApi()
 
     def test_redirect(self):
-        response = self.client.get(reverse('account:login'))
+        response = self.client.get(reverse('account:login'), secure=True)
         self.assertEqual(response.status_code, 302)
         self.assertIn(GeneralConfig.get_ridibooks_login_url(), response.url)
 
@@ -22,6 +22,6 @@ class RidiLoginViewTestCase(TestCase):
         with requests_mock.mock() as m:
             m.get(self.api._make_url(StoreApi.ACCOUNT_INFO), json={'result': {'idx': 1, 'id': 'testuser'}})
 
-            response = self.client.get(reverse('account:login'))
+            response = self.client.get(reverse('account:login'), secure=True)
             self.assertEqual(response.status_code, 302)
             self.assertEqual(response.url, '/accounts/profile/')
