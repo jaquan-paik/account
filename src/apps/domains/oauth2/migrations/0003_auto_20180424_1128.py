@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('oauth2_app', '0002_auto_20180328_2023'),
     ]
@@ -13,6 +12,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='application',
             name='jwt_alg',
-            field=models.CharField(choices=[('HS256', 'HS256'), ('RS256', 'RS256')], default='HS256', max_length=6, verbose_name='JWT 알고리즘'),
+            field=models.CharField(choices=[('HS256', 'HS256'), ('RS256', 'RS256')], default='HS256', max_length=6,
+                                   verbose_name='JWT 알고리즘'),
         ),
     ]
