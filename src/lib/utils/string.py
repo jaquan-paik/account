@@ -1,6 +1,6 @@
+import random
 import re
 import string as string_lib
-import random
 
 _emoji_pattern = re.compile(
     '['

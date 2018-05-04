@@ -1,8 +1,8 @@
 from django.utils.deprecation import MiddlewareMixin
 
-from lib.ridibooks.internal_server_auth.helpers.jwt_auth import JwtAuthHelper
 from lib.ridibooks.common.constants import HTTP_AUTHORIZATION_HEADER
 from lib.ridibooks.common.response import HttpUnauthorized
+from lib.ridibooks.internal_server_auth.helpers.jwt_auth import JwtAuthHelper
 
 
 class RidiInternalAuthMiddleware(MiddlewareMixin):

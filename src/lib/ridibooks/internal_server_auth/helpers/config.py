@@ -2,7 +2,6 @@ from typing import Dict, List, Tuple
 
 from lib.ridibooks.internal_server_auth.utils import make_auth_data_key
 
-
 ISSUER_KEY_NAME = 'iss'
 SUBJECT_KEY_NAME = 'sub'
 SECRET_KEY_NAME = 'secret'

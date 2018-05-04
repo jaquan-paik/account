@@ -1,13 +1,13 @@
 import requests_mock
 from django.core.exceptions import PermissionDenied
 from django.test import TestCase
-from django_dynamic_fixture import G, N
+from django_dynamic_fixture import G
 
 from apps.domains.account.models import User
 from apps.domains.callback.dtos import TokenData
 from apps.domains.callback.helpers.url_helper import UrlHelper
 from apps.domains.callback.services.token_refresh_service import TokenRefreshService
-from apps.domains.oauth2.models import RefreshToken, Application
+from apps.domains.oauth2.models import Application, RefreshToken
 
 
 class TokenRefreshServiceTestCase(TestCase):

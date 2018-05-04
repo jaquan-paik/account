@@ -4,7 +4,7 @@ from django.test import TestCase
 from django_dynamic_fixture import G
 
 from apps.domains.account.models import User
-from apps.domains.oauth2.models import RefreshToken, Grant
+from apps.domains.oauth2.models import Grant, RefreshToken
 from apps.domains.oauth2.services.revoke_token_service import RevokeTokenService
 
 

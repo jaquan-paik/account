@@ -1,8 +1,8 @@
 from django.http import HttpResponseForbidden
 from django.test import RequestFactory, TestCase
-from lib.ridibooks.ip.middlewares import RidiIPFilterMiddleware
 
 from lib.ridibooks.ip.constants import RidiIP
+from lib.ridibooks.ip.middlewares import RidiIPFilterMiddleware
 
 
 class RidiMiddlewareTestCase(TestCase):

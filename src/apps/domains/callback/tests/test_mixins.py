@@ -1,10 +1,10 @@
 from django.http import HttpResponse
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory, TestCase
 from django_dynamic_fixture import G
 
 from apps.domains.callback.dtos import TokenData
-from apps.domains.callback.mixins import TokenCookieMixin, OAuth2SessionMixin, SESSION_CLIENT_ID_KEY, SESSION_REDIRECT_URI_KEY, \
-    SESSION_STATE_KEY
+from apps.domains.callback.mixins import OAuth2SessionMixin, SESSION_CLIENT_ID_KEY, SESSION_REDIRECT_URI_KEY, SESSION_STATE_KEY, \
+    TokenCookieMixin
 from apps.domains.oauth2.models import Application
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 
