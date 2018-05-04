@@ -13,7 +13,6 @@ RUN mkdir -pv \
         /var/local/nginx \
         /var/local/nginx/sockets
 
-ADD ./docs/docker/account/$ENVIRONMENT/uwsgi/admin.ini /etc/uwsgi/admin.ini
 ADD ./docs/docker/account/$ENVIRONMENT/uwsgi/www.ini /etc/uwsgi/www.ini
 
 CMD ["/usr/local/bin/uwsgi", "--ini", "/etc/uwsgi/www.ini"]
