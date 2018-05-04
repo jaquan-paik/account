@@ -24,9 +24,9 @@ from lib.utils.url import generate_query_url
 
 class AuthorizeView(OAuth2SessionMixin, TokenCookieMixin, View):
     def get(self, request):
-        state = request.GET.get('state', generate_random_str(10))
         client_id = request.GET.get('client_id', None)
         redirect_uri = request.GET.get('redirect_uri', None)
+        state = generate_random_str(10)
 
         self.set_oauth2_data(client_id, redirect_uri, state)
         self.set_session(key=ROOT_DOMAIN_SESSION_KEY, value=CookieRootDomains.to_value(self.get_root_domain()))
