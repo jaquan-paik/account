@@ -4,7 +4,7 @@ import jwt
 from oauth2_provider.oauth2_validators import AccessToken
 from oauth2_provider.settings import oauth2_settings
 
-from apps.domains.oauth2.constants import JwtAlg, JWT_VERIFY_MARGIN
+from apps.domains.oauth2.constants import JWT_VERIFY_MARGIN, JwtAlg
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.models import Application
 

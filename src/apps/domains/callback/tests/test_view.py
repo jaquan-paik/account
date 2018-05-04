@@ -4,7 +4,7 @@ from datetime import datetime
 
 import requests_mock
 from django.http import SimpleCookie
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
 from django_dynamic_fixture import G
 

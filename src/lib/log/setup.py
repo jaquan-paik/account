@@ -1,5 +1,4 @@
 import logging.config
-
 import sys
 
 from infra.configure.constants import LogLevel

@@ -3,9 +3,6 @@ from datetime import datetime
 from django.db import connection
 from django.db.models import Manager
 
-from infra.storage.database.constants import Database
-from lib.django.db.caching.managers import BaseCachingManager
-
 
 class ApplicationManager(Manager):
     pass

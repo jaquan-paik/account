@@ -1,10 +1,9 @@
-from caching.base import CachingMixin
 from django.db import models
 from oauth2_provider.models import AbstractAccessToken, AbstractApplication, AbstractGrant, AbstractRefreshToken
 
 from apps.domains.account.models import OAuth2User, User
 from apps.domains.oauth2.constants import JwtAlg
-from apps.domains.oauth2.managers import GrantManager, RefreshTokenManager, ApplicationManager
+from apps.domains.oauth2.managers import ApplicationManager, GrantManager, RefreshTokenManager
 from lib.utils.string import generate_random_str
 
 JWT_HS_256_SECRET_LEN = 32
