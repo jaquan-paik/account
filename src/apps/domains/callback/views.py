@@ -103,7 +103,7 @@ class TokenView(TokenCookieMixin, View):
 class LogoutView(TokenCookieMixin, View):
     def get(self, request):
         root_domain = self.get_root_domain()
-        return_url = request.GET.get('return_url', request.get_host())
+        return_url = request.GET.get('return_url', f'https://{root_domain}')
 
         response = HttpResponseRedirect(return_url)
         self.clear_token_cookie(response=response, root_domain=root_domain)
