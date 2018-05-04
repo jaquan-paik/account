@@ -10,10 +10,10 @@ def setup_logging(debug: bool=False) -> None:
         'version': 1,
         'disable_existing_loggers': False,
         'formatters': {
-            'verbose': {
+            'json': {
                 'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
                 'datefmt': '%d/%b/%Y %H:%M:%S',
-                'class': 'lib.log.formatters.single_line.SingleLineFormatter',
+                'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
             }
         },
         'filters': {
@@ -26,7 +26,7 @@ def setup_logging(debug: bool=False) -> None:
                 'level': log_level,
                 'class': 'logging.StreamHandler',
                 'stream': sys.stderr,
-                'formatter': 'verbose'
+                'formatter': 'json'
             }
         },
         'loggers': {
