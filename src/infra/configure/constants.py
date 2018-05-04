@@ -1,5 +1,4 @@
 class SiteType:
-    ADMIN = 'admin'
     WWW = 'www'
     TEST = 'test'
 
@@ -34,5 +33,3 @@ class SecretKeyName:
     SENTRY_DSN = 'sentry_dsn'
 
     OAUTH2_ACCESS_JWT_SECRET = 'oauth2_access_jwt_secret'
-
-    RIDI_CMS_RPC_URL = "ridi_cms_rpc_url"

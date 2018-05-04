@@ -27,11 +27,10 @@ brew install mysql
 
 ## Add to /etc/hosts
 ```
-127.0.0.1 mariadb 
-127.0.0.1 redis
+127.0.0.1 account-redis
+127.0.0.1 account-mariadb
 
 127.0.0.1 account.dev.ridi.com
-127.0.0.1 admin.dev.ridi.com
 ```
 
 # 2. Docker run

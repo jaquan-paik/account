@@ -3,12 +3,13 @@ from django.contrib.auth.models import AnonymousUser
 from django.utils.deprecation import MiddlewareMixin
 
 from lib.ridibooks.api.store import StoreApi
+from lib.ridibooks.common.constants import PHP_SESSION_COOKIE_KEY
 from lib.ridibooks.common.exceptions import RidibooksException
 
 
 class AuthenticationMiddleware(MiddlewareMixin):
     def process_request(self, request):
-        ridibooks_session_id = request.COOKIES.get('PHPSESSID', None)
+        ridibooks_session_id = request.COOKIES.get(PHP_SESSION_COOKIE_KEY, None)
 
         user = AnonymousUser()
 

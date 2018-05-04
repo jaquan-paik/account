@@ -18,22 +18,17 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'lib.email.apps.EmailConfig',
     'rest_framework',
     'oauth2_provider',
     'corsheaders',
 
     # django api 문서화 라이브러리
     'drf_yasg',
-
-    # security
-    'lib.admin_access_log.apps.AdminAccessLogConfig',
 
     # custom
     'lib.django.apps.DjangoAppConfig',

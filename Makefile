@@ -9,8 +9,6 @@ install: set-githook python-package-install settings
 
 run: lint test run-www
 
-run-admin: python-package-install settings run-server-admin
-
 run-www: python-package-install settings run-server-www
 
 
@@ -34,11 +32,9 @@ set-githook:
 
 
 # run
-run-server-admin:
-	@python3.6 src/manage.py admin runserver 0.0.0.0:7000
-
 run-server-www:
 	@python3.6 src/manage.py www runserver 0.0.0.0:7001
+
 
 # Prepare to test in local
 run-test-db:
