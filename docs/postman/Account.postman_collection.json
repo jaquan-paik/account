@@ -161,11 +161,12 @@
 									]
 								},
 								"url": {
-									"raw": "https://ridibooks.com/account/action/login",
+									"raw": "https://dev.ridi.io/account/action/login",
 									"protocol": "https",
 									"host": [
-										"ridibooks",
-										"com"
+										"dev",
+										"ridi",
+										"io"
 									],
 									"path": [
 										"account",
@@ -1463,7 +1464,7 @@
 											"h.printResponseBody();",
 											"h.testStatus(302);",
 											"",
-											"tests[\"Redirect to redirect_uri\"] = postman.getResponseHeader(\"Location\").has(\"https://fake.com/receive\");",
+											"tests[\"Redirect to redirect_uri\"] = postman.getResponseHeader(\"Location\").has(\"https://account.dev.ridi.io/ridi/callback/\");",
 											"tests[\"Set access token to cookie\"] = postman.getResponseCookie(\"ridi-at\");",
 											"tests[\"Set refresh token to cookie\"] = postman.getResponseCookie(\"ridi-rt\");"
 										]
