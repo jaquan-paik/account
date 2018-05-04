@@ -141,11 +141,13 @@ DATABASE_APPS_MAPPING = {
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': Secret().get(SecretKeyName.MEMCACHED_LOCATION),
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": Secret().get(SecretKeyName.CACHE_LOCATION),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -184,14 +186,6 @@ LOGGING_CONFIG = None
 
 
 AUTH_USER_MODEL = 'account_app.User'
-
-
-# celery setting
-CELERY_BROKER_URL = Secret().get(SecretKeyName.CELERY_BROKER_URL)
-CELERY_TIMEZONE = 'Asia/Seoul'
-CELERY_ENABLE_UTC = True
-CELERY_IMPORTS = [
-]
 
 CORS_ORIGIN_ALLOW_ALL = True
 

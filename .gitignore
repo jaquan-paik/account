@@ -9,7 +9,5 @@ pip.log
 tmp
 .tmp
 /share
-celerybeat-schedule
-celerybeat.pid
 node_modules
 /logs
