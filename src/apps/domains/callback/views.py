@@ -24,7 +24,7 @@ from lib.utils.url import generate_query_url
 
 class AuthorizeView(OAuth2SessionMixin, TokenCookieMixin, View):
     def get(self, request):
-        state = request.GET.get('state', None)
+        state = request.GET.get('state', generate_random_str(10))
         client_id = request.GET.get('client_id', None)
         redirect_uri = request.GET.get('redirect_uri', None)
 
@@ -35,7 +35,7 @@ class AuthorizeView(OAuth2SessionMixin, TokenCookieMixin, View):
             'client_id': client_id,
             'redirect_uri': UrlHelper.get_redirect_uri(),
             'response_type': 'code',
-            'state': generate_random_str(10),
+            'state': state,
         }
 
         url = generate_query_url(reverse('oauth2_provider:authorize'), params)
