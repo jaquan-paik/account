@@ -6,7 +6,7 @@ from lib.django.db.models.base_model import BaseModel, BaseUserModel
 
 class User(BaseUserModel):
     idx = models.AutoField(primary_key=True, editable=False, verbose_name='u_idx')
-    id = models.CharField(max_length=16, unique=True, editable=False, verbose_name='u_id', )
+    id = models.CharField(max_length=32, unique=True, editable=False, verbose_name='u_id', )
 
     USERNAME_FIELD = 'id'
 
