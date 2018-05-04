@@ -67,3 +67,5 @@ class DefaultApiHttpCodes:
 
 class ApiStatusCodes(DefaultApiHttpCodes):
     X_400_DUPLICATE_API = StatusCode(HttpStatusCodes.C_400_BAD_REQUEST, 'DUPLICATE_API_CALL')  # API Lock 에서 400내려갈떄
+    X_400_RIDIBOOKS_NOT_CONNECTION = StatusCode(HttpStatusCodes.C_400_BAD_REQUEST, 'RIDIBOOKS_NOT_CONNECTION')
+    X_400_RIDIBOOKS_BAD_RESPONSE = StatusCode(HttpStatusCodes.C_400_BAD_REQUEST, 'RIDIBOOKS_BAD_RESPONSE')

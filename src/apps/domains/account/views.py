@@ -48,11 +48,9 @@ class RidiAccountInfoView(CookieMixin, ResponseMixin, APIView):
         try:
             data = AccountInfoService.get_account_info(access_token=access_token)
         except (InvalidResponseException, ServerException):
-            code = self.make_response_code(ApiStatusCodes.C_504_GATEWAY_TIMEOUT)
-            return self.fail_response(response_code=code)
-        except HTTPException as e:
-            code = self.make_response_code(StatusCode(status=e.status))
-            return self.fail_response(code)
+            return self.fail_response(response_code=ApiStatusCodes.X_400_RIDIBOOKS_NOT_CONNECTION)
+        except HTTPException:
+            return self.fail_response(response_code=ApiStatusCodes.X_400_RIDIBOOKS_BAD_RESPONSE)
 
         code = self.make_response_code(status=ApiStatusCodes.C_200_OK)
         return self.success_response(data=data, response_code=code)
