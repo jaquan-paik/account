@@ -33,7 +33,7 @@ class TokenViewTestCase(TestCase):
         )
 
     def test_no_cookie(self):
-        response = Client().post(reverse('ridi:token'), HTTP_HOST=GeneralConfig.get_site_domain())
+        response = Client().post(reverse('ridi:token'), HTTP_HOST=GeneralConfig.get_site_domain(), secure=True)
 
         self.assertEqual(response.status_code, 401)
 
@@ -56,7 +56,8 @@ class TokenViewTestCase(TestCase):
             response = Client().post(
                 reverse('ridi:token'),
                 HTTP_HOST=GeneralConfig.get_site_domain(),
-                HTTP_COOKIE=SimpleCookie({'ridi-rt': self.refresh_token.token}).output(header='', sep='; ')
+                HTTP_COOKIE=SimpleCookie({'ridi-rt': self.refresh_token.token}).output(header='', sep='; '),
+                secure=True
             )
 
         self.assertEqual(response.status_code, 200)
@@ -79,7 +80,8 @@ class TokenViewTestCase(TestCase):
 
         response = Client().post(
             reverse('ridi:token'),
-            HTTP_HOST=GeneralConfig.get_site_domain(), HTTP_COOKIE=SimpleCookie({'ridi-at': at}).output(header='', sep='; ')
+            HTTP_HOST=GeneralConfig.get_site_domain(), HTTP_COOKIE=SimpleCookie({'ridi-at': at}).output(header='', sep='; '),
+            secure=True
         )
 
         self.assertEqual(response.status_code, 200)
@@ -94,7 +96,9 @@ class LogoutViewTestCase(TestCase):
         self.client = Client()
 
     def test_logout(self):
-        response = self.client.get(reverse('ridi:logout') + '?return_url=https://test.com', HTTP_HOST=GeneralConfig.get_site_domain())
+        response = self.client.get(
+            reverse('ridi:logout') + '?return_url=https://test.com', HTTP_HOST=GeneralConfig.get_site_domain(), secure=True
+        )
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, 'https://test.com')
