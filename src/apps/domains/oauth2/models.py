@@ -1,10 +1,9 @@
-from caching.base import CachingMixin
 from django.db import models
 from oauth2_provider.models import AbstractAccessToken, AbstractApplication, AbstractGrant, AbstractRefreshToken
 
 from apps.domains.account.models import OAuth2User, User
 from apps.domains.oauth2.constants import JwtAlg
-from apps.domains.oauth2.managers import GrantManager, RefreshTokenManager, ApplicationManager
+from apps.domains.oauth2.managers import ApplicationManager, GrantManager, RefreshTokenManager
 from lib.utils.string import generate_random_str
 
 JWT_HS_256_SECRET_LEN = 32
@@ -18,7 +17,9 @@ class Application(AbstractApplication):
     GRANT_TYPES = ((AbstractApplication.GRANT_AUTHORIZATION_CODE, 'Authorization code'), )
     CLIENT_TYPES = ((AbstractApplication.CLIENT_CONFIDENTIAL, 'Confidential'),)
 
-    user = models.ForeignKey(OAuth2User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        OAuth2User, db_column='oauth2_user_id', related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE
+    )
 
     client_type = models.CharField(
         max_length=32, choices=CLIENT_TYPES, default=AbstractApplication.CLIENT_CONFIDENTIAL, verbose_name='Client 종류',
