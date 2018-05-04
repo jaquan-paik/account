@@ -1,16 +1,17 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.static import serve
 
+from apps.domains.callback.helpers.url_helper import UrlHelper
 
 script_serve = cache_page(timeout=1200, key_prefix='script-serve')(never_cache(serve))
 
 
 class Index(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'www/index.html')
+        return redirect(UrlHelper.get_root_uri())
 
 
 # HTTP Error 400
@@ -33,9 +34,7 @@ def permission_denied(request, exception):
 
 # HTTP Error 404
 def page_not_found(request, exception):
-    response = render(request, 'www/error/404.html')
-    response.status_code = 404
-    return response
+    return redirect(UrlHelper.get_root_uri())
 
 
 # HTTP Error 500

@@ -3,20 +3,6 @@ from django.contrib.auth.base_user import BaseUserManager
 from lib.base.exceptions import ErrorException
 
 
-class StaffManager(BaseUserManager):
-    def create_user(self, admin_id: str, **kwargs):
-        user = self.model(admin_id=admin_id, **kwargs)
-        user.set_unusable_password()
-        user.save()
-        return user
-
-    def create_superuser(self, admin_id: str, **kwargs):
-        user = self.model(admin_id=admin_id, **kwargs)
-        user.set_unusable_password()
-        user.save()
-        return user
-
-
 class UserManager(BaseUserManager):
     def create_user(self, idx: int, id: str, **kwargs):  # pylint: disable=redefined-builtin
         user = self.model(idx=idx, id=id, **kwargs)

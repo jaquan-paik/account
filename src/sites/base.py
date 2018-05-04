@@ -18,22 +18,17 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'lib.email.apps.EmailConfig',
     'rest_framework',
     'oauth2_provider',
     'corsheaders',
 
     # django api 문서화 라이브러리
     'drf_yasg',
-
-    # security
-    'lib.admin_access_log.apps.AdminAccessLogConfig',
 
     # custom
     'lib.django.apps.DjangoAppConfig',
@@ -141,11 +136,13 @@ DATABASE_APPS_MAPPING = {
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': Secret().get(SecretKeyName.MEMCACHED_LOCATION),
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": Secret().get(SecretKeyName.CACHE_LOCATION),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -185,14 +182,6 @@ LOGGING_CONFIG = None
 
 AUTH_USER_MODEL = 'account_app.User'
 
-
-# celery setting
-CELERY_BROKER_URL = Secret().get(SecretKeyName.CELERY_BROKER_URL)
-CELERY_TIMEZONE = 'Asia/Seoul'
-CELERY_ENABLE_UTC = True
-CELERY_IMPORTS = [
-]
-
 CORS_ORIGIN_ALLOW_ALL = True
 
 RIDIBOOKS_LOGIN_URL = 'https://ridibooks.com/account/login'
@@ -231,6 +220,8 @@ X_FRAME_OPTIONS = 'DENY'
 
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
+
+SECURE_SSL_REDIRECT = True
 
 # Sentry
 RAVEN_CONFIG = {

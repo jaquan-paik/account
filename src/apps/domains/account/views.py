@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 
 from apps.domains.account.services.account_info_service import AccountInfoService
 from infra.configure.config import GeneralConfig
-from infra.network.constants.api_status_code import ApiStatusCodes, StatusCode
+from infra.network.constants.api_status_code import ApiStatusCodes
 from lib.base.exceptions import ErrorException
 from lib.django.views.api.mixins import ResponseMixin
 from lib.django.views.cookie.mixins import CookieMixin
@@ -43,15 +43,15 @@ class RidiAccountInfoView(CookieMixin, ResponseMixin, APIView):
     def get(self, request):
         access_token = self.get_cookie(request=request, key=ACCESS_TOKEN_COOKIE_KEY)
         if access_token is None:
-            code = self.make_response_code(ApiStatusCodes.C_401_UNAUTHORIZED)
-            return self.fail_response(response_code=code)
+            code = self.make_response_code(ApiStatusCodes.C_401_UNAUTHORIZED, 'Not exist access_token')
+            return self.fail_response(code)
         try:
             data = AccountInfoService.get_account_info(access_token=access_token)
-        except (InvalidResponseException, ServerException):
-            code = self.make_response_code(ApiStatusCodes.C_504_GATEWAY_TIMEOUT)
-            return self.fail_response(response_code=code)
-        except HTTPException as e:
-            code = self.make_response_code(StatusCode(status=e.status))
+        except ServerException:
+            code = self.make_response_code(ApiStatusCodes.X_400_RIDIBOOKS_NOT_CONNECTION, 'Ridibooks server is not connected')
+            return self.fail_response(code)
+        except (HTTPException, InvalidResponseException):
+            code = self.make_response_code(ApiStatusCodes.X_400_RIDIBOOKS_BAD_RESPONSE, 'Ridibooks server respond bad response')
             return self.fail_response(code)
 
         code = self.make_response_code(status=ApiStatusCodes.C_200_OK)
