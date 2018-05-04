@@ -1,6 +1,5 @@
 class SiteType:
     WWW = 'www'
-    CELERY = 'celery'
     TEST = 'test'
 
 
@@ -19,7 +18,7 @@ class SecretKeyName:
 
     SECRET_KEY = 'secret_key'
 
-    MEMCACHED_LOCATION = 'memcached_location'
+    CACHE_LOCATION = 'cache_location'
 
     WRITE_DB_HOST = 'write_db_host'
     WRITE_DB_ACCOUNT = 'write_db_account'
@@ -32,7 +31,5 @@ class SecretKeyName:
     REDIS_HOST = 'redis_host'
 
     SENTRY_DSN = 'sentry_dsn'
-
-    CELERY_BROKER_URL = 'celery_broker_url'
 
     OAUTH2_ACCESS_JWT_SECRET = 'oauth2_access_jwt_secret'
