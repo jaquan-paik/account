@@ -38,7 +38,7 @@ def page_not_found(request, exception):
 
 
 # HTTP Error 500
-def server_error(request, exception):
+def server_error(request):
     response = render(request, 'www/error/500.html')
     response.status_code = 500
     return response
