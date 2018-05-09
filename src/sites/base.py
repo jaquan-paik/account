@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'lib.django.middlewares.smart_append_slash_middleware.SmartAppendSlashMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -179,6 +180,7 @@ ENFORCE_TWO_FACTOR_AUTH = False
 IGNORE_404_FILTER_URLS = []
 LOGGING_CONFIG = None
 
+APPEND_SLASH = False
 
 AUTH_USER_MODEL = 'account_app.User'
 
