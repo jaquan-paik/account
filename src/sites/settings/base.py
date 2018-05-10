@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'lib.ridibooks.store_auth.middlewares.AuthenticationMiddleware',
 ]
 
 TEMPLATES = [
@@ -184,8 +185,6 @@ APPEND_SLASH = False
 
 AUTH_USER_MODEL = 'account_app.User'
 
-CORS_ORIGIN_ALLOW_ALL = True
-
 RIDIBOOKS_LOGIN_URL = 'https://ridibooks.com/account/login'
 
 OAUTH2_PROVIDER = {
@@ -234,3 +233,12 @@ RAVEN_CONFIG = {
         'lib.base.exceptions.MsgException',
     ],
 }
+
+ROOT_URLCONF = 'sites.urls'
+WSGI_APPLICATION = 'sites.wsgi.application'
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True

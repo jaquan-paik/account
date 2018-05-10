@@ -1,12 +1,15 @@
 version: '3.4'
 
 services:
-  mariadb:
+  test-mariadb:
     image: mariadb:10.1
-    container_name: mariadb
+    container_name: test-mariadb
     restart: always
     ports:
-      - 3306:3306
+      - 3307:3306
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test_account
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: test
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci

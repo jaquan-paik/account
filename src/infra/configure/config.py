@@ -15,10 +15,6 @@ class GeneralConfig:
         return settings.VERSION
 
     @staticmethod
-    def get_site() -> str:
-        return settings.SITE
-
-    @staticmethod
     def get_site_domain() -> str:
         return settings.SITE_DOMAIN
 
