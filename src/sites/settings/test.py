@@ -9,7 +9,7 @@ DATABASES = {
         'USER': 'admin',
         'PASSWORD': 'test',
         'HOST': '127.0.0.1',
-        'PORT': '3307',
+        'PORT': '3306',
         'CONN_MAX_AGE': 0,
         'OPTIONS': {
             'sql_mode': 'STRICT_TRANS_TABLES',

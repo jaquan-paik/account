@@ -39,7 +39,7 @@ run-server-www:
 # test
 test:
 	make up-test-db
-	sh docs/docker/wait_for_it.sh 'mysqladmin ping -h 127.0.0.1 --port=3307 -u root -proot' 'make django-test'
+	sh docs/docker/wait_for_it.sh 'mysqladmin ping -h 127.0.0.1 --port=3306 -u root -proot' 'make django-test'
 	make stop-test-db
 
 stop-test-db:
