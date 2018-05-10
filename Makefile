@@ -38,8 +38,11 @@ run-server-www:
 
 # test
 test:
+	@python3.6 src/manage.py test src --noinput --settings=sites.settings.test
+
+test-with-db:
 	make up-test-db
-	sh docs/docker/wait_for_it.sh 'mysqladmin ping -h 127.0.0.1 --port=3307 -u root -proot' 'make django-test'
+	sh docs/docker/wait_for_it.sh 'mysqladmin ping -h 127.0.0.1 --port=3306 -u root -proot' 'make test'
 	make stop-test-db
 
 stop-test-db:
@@ -48,8 +51,6 @@ stop-test-db:
 up-test-db:
 	@docker-compose -f docs/docker/testdb/docker-compose-test-db.yml up -d
 
-django-test:
-	@python3.6 src/manage.py test src --noinput --settings=sites.settings.test
 
 pm-test:
 	@npm run test

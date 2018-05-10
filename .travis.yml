@@ -31,7 +31,7 @@ before_script:
 
 script:
 - make lint
-- make django-test
+- make test
 - make check-deprecated
 
 before_deploy:
