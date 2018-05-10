@@ -40,17 +40,6 @@ run-server-www:
 test:
 	@python3.6 src/manage.py test src --noinput --settings=sites.settings.test
 
-test-with-db:
-	make up-test-db
-	sh docs/docker/wait_for_it.sh 'mysqladmin ping -h 127.0.0.1 --port=3306 -u root -proot' 'make test'
-	make stop-test-db
-
-stop-test-db:
-	@docker-compose -f docs/docker/testdb/docker-compose-test-db.yml down
-
-up-test-db:
-	@docker-compose -f docs/docker/testdb/docker-compose-test-db.yml up -d
-
 
 pm-test:
 	@npm run test
