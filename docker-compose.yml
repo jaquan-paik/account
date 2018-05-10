@@ -38,7 +38,7 @@ services:
       - account-redis
       - account-mariadb
 
-  nginx:
+  account-nginx:
     image: nginx:stable
     container_name: account-nginx
     restart: always

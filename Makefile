@@ -33,7 +33,7 @@ set-githook:
 
 # run
 run-server-www:
-	@python3.6 src/manage.py www runserver 0.0.0.0:7001
+	@python3.6 src/manage.py runserver 0.0.0.0:7001
 
 
 # test
