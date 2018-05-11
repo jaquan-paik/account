@@ -33,6 +33,7 @@ script:
 - make lint
 - make test
 - make check-deprecated
+- bash docs/travis/test.sh
 
 before_deploy:
 - pip3 install awscli
