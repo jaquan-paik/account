@@ -5,8 +5,7 @@ from infra.storage.redis.constants import RedisDatabase
 from lib.secret.secret import Secret
 
 # PATH
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # src dir
-ROOT_DIR = os.path.dirname(BASE_DIR)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # src dir
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = Secret().get(SecretKeyName.SECRET_KEY)
