@@ -13,9 +13,6 @@ SECRET_KEY = Secret().get(SecretKeyName.SECRET_KEY)
 
 ENVIRONMENT = Secret().get(SecretKeyName.ENVIRONMENT)
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.auth',
@@ -54,6 +51,9 @@ MIDDLEWARE = [
     'lib.ridibooks.store_auth.middlewares.AuthenticationMiddleware',
 ]
 
+ROOT_URLCONF = 'sites.urls'
+WSGI_APPLICATION = 'sites.wsgi.application'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -74,19 +74,6 @@ TEMPLATES = [
 ]
 
 # Database
-# session
-SESSION_ENGINE = 'redis_sessions.session'
-SESSION_REDIS_SOCKET_TIMEOUT = 1
-
-SESSION_REDIS = {
-    'host': Secret().get(SecretKeyName.REDIS_HOST),
-    'port': 6379,
-    'db': RedisDatabase.SESSION,
-    'prefix': 'session',
-    'socket_timeout': 1
-}
-
-
 DATABASE_ROUTERS = ['infra.storage.database.routers.DbRouter']
 
 DATABASES = {
@@ -175,7 +162,6 @@ USE_TZ = False
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
-ENFORCE_TWO_FACTOR_AUTH = False
 
 # Logging
 IGNORE_404_FILTER_URLS = []
@@ -185,8 +171,31 @@ APPEND_SLASH = False
 
 AUTH_USER_MODEL = 'account_app.User'
 
+
+# Login
 RIDIBOOKS_LOGIN_URL = 'https://ridibooks.com/account/login'
 
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+
+
+# Session
+SESSION_COOKIE_AGE = 60 * 60
+SESSION_COOKIE_SECURE = True
+
+SESSION_ENGINE = 'redis_sessions.session'
+SESSION_REDIS_SOCKET_TIMEOUT = 1
+
+SESSION_REDIS = {
+    'host': Secret().get(SecretKeyName.REDIS_HOST),
+    'port': 6379,
+    'db': RedisDatabase.SESSION,
+    'prefix': 'session',
+    'socket_timeout': 1
+}
+
+
+# OAuth2
 OAUTH2_PROVIDER = {
     'SCOPES': {
         'all': 'All(for internal service)',
@@ -211,10 +220,6 @@ OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'oauth2_app.RefreshToken'
 # https://github.com/evonove/django-oauth-toolkit/commit/65af7372a0fb208a19899fa75982163bdff713f9
 OAUTH2_PROVIDER_REFRESH_MODEL = 'oauth2_app.RefreshToken'
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
 
 # Security
 X_FRAME_OPTIONS = 'DENY'
@@ -223,6 +228,15 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
 SECURE_SSL_REDIRECT = True
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_COOKIE_SECURE = True
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True
+
+ALLOWED_HOSTS = []
+
 
 # Sentry
 RAVEN_CONFIG = {
@@ -233,12 +247,3 @@ RAVEN_CONFIG = {
         'lib.base.exceptions.MsgException',
     ],
 }
-
-ROOT_URLCONF = 'sites.urls'
-WSGI_APPLICATION = 'sites.wsgi.application'
-
-LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
-
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ALLOW_CREDENTIALS = True
