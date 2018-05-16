@@ -4,6 +4,7 @@ from oauth2_provider.models import AbstractAccessToken, AbstractApplication, Abs
 from apps.domains.account.models import OAuth2User, User
 from apps.domains.oauth2.constants import JwtAlg
 from apps.domains.oauth2.managers import ApplicationManager, GrantManager, RefreshTokenManager
+from lib.django.db.mysql import TinyBooleanField
 from lib.utils.string import generate_random_str
 
 JWT_HS_256_SECRET_LEN = 32
@@ -30,7 +31,7 @@ class Application(AbstractApplication):
         help_text='Authorization code 만 지원한다.'
     )
 
-    is_in_house = models.BooleanField(default=False, verbose_name='내부 서비스 여부')
+    is_in_house = TinyBooleanField(default=False, verbose_name='내부 서비스 여부')
     jwt_alg = models.CharField(max_length=6, choices=JwtAlg.get_choices(), default=JwtAlg.HS256, verbose_name='JWT 알고리즘')
     jwt_hs_256_secret = models.CharField(max_length=32, default=jwt_hs_256_secret, verbose_name='JWT HS256 Secret')
 

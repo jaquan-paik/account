@@ -18,6 +18,13 @@ class TinyIntegerField(models.SmallIntegerField):
         return super(TinyIntegerField, self).db_type(connection)
 
 
+class TinyBooleanField(models.BooleanField):
+    def db_type(self, connection):
+        if connection.settings_dict['ENGINE'] == MYSQL_ENGINE:
+            return "tinyint"
+        return super(TinyBooleanField, self).db_type(connection)
+
+
 class PositiveTinyIntegerField(models.PositiveSmallIntegerField):
     def db_type(self, connection):
         if connection.settings_dict['ENGINE'] == MYSQL_ENGINE:
