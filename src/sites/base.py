@@ -206,10 +206,6 @@ OAUTH2_PROVIDER_GRANT_MODEL = 'oauth2_app.Grant'
 OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = 'oauth2_app.AccessToken'
 OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'oauth2_app.RefreshToken'
 
-# TODO: 버그로 인해 해당 셋팅 추가. 버젼이 1.0.0 <  이 되면 제거
-# https://github.com/evonove/django-oauth-toolkit/commit/65af7372a0fb208a19899fa75982163bdff713f9
-OAUTH2_PROVIDER_REFRESH_MODEL = 'oauth2_app.RefreshToken'
-
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
