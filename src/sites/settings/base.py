@@ -5,16 +5,12 @@ from infra.storage.redis.constants import RedisDatabase
 from lib.secret.secret import Secret
 
 # PATH
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # src dir
-ROOT_DIR = os.path.dirname(BASE_DIR)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # src dir
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = Secret().get(SecretKeyName.SECRET_KEY)
 
 ENVIRONMENT = Secret().get(SecretKeyName.ENVIRONMENT)
-
-ALLOWED_HOSTS = []
-
 
 # Application definition
 INSTALLED_APPS = [
@@ -43,6 +39,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'lib.django.middlewares.smart_append_slash_middleware.SmartAppendSlashMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,7 +47,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'lib.ridibooks.store_auth.middlewares.AuthenticationMiddleware',
 ]
+
+ROOT_URLCONF = 'sites.urls'
+WSGI_APPLICATION = 'sites.wsgi.application'
 
 TEMPLATES = [
     {
@@ -72,19 +73,6 @@ TEMPLATES = [
 ]
 
 # Database
-# session
-SESSION_ENGINE = 'redis_sessions.session'
-SESSION_REDIS_SOCKET_TIMEOUT = 1
-
-SESSION_REDIS = {
-    'host': Secret().get(SecretKeyName.REDIS_HOST),
-    'port': 6379,
-    'db': RedisDatabase.SESSION,
-    'prefix': 'session',
-    'socket_timeout': 1
-}
-
-
 DATABASE_ROUTERS = ['infra.storage.database.routers.DbRouter']
 
 DATABASES = {
@@ -173,19 +161,40 @@ USE_TZ = False
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
-ENFORCE_TWO_FACTOR_AUTH = False
 
 # Logging
 IGNORE_404_FILTER_URLS = []
 LOGGING_CONFIG = None
 
+APPEND_SLASH = False
 
 AUTH_USER_MODEL = 'account_app.User'
 
-CORS_ORIGIN_ALLOW_ALL = True
 
+# Login
 RIDIBOOKS_LOGIN_URL = 'https://ridibooks.com/account/login'
 
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+
+
+# Session
+SESSION_COOKIE_AGE = 60 * 60
+SESSION_COOKIE_SECURE = True
+
+SESSION_ENGINE = 'redis_sessions.session'
+SESSION_REDIS_SOCKET_TIMEOUT = 1
+
+SESSION_REDIS = {
+    'host': Secret().get(SecretKeyName.REDIS_HOST),
+    'port': 6379,
+    'db': RedisDatabase.SESSION,
+    'prefix': 'session',
+    'socket_timeout': 1
+}
+
+
+# OAuth2
 OAUTH2_PROVIDER = {
     'SCOPES': {
         'all': 'All(for internal service)',
@@ -206,10 +215,6 @@ OAUTH2_PROVIDER_GRANT_MODEL = 'oauth2_app.Grant'
 OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = 'oauth2_app.AccessToken'
 OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'oauth2_app.RefreshToken'
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
 
 # Security
 X_FRAME_OPTIONS = 'DENY'
@@ -218,6 +223,15 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
 SECURE_SSL_REDIRECT = True
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_COOKIE_SECURE = True
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True
+
+ALLOWED_HOSTS = []
+
 
 # Sentry
 RAVEN_CONFIG = {

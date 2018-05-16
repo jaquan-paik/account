@@ -33,40 +33,21 @@ set-githook:
 
 # run
 run-server-www:
-	@python3.6 src/manage.py www runserver 0.0.0.0:7001
+	@python3.6 src/manage.py runserver 0.0.0.0:7001
 
 
-# Prepare to test in local
-run-test-db:
-	make up-test-db
-	sh docs/docker/wait_for_it.sh 'mysqladmin ping -h 127.0.0.1 -u root -proot' 'make initialize'
+# test
+test:
+	@python3.6 src/manage.py test src --noinput --settings=sites.settings.test
 
-stop-test-db:
-	@docker-compose -f docs/docker/testdb/docker-compose-test-db.yml down
 
-up-test-db:
-	@docker-compose -f docs/docker/testdb/docker-compose-test-db.yml up -d
-
-initialize:
-	make create-database
-	make migration
-
-create-database:
-	@mysql -h 127.0.0.1 -u root -p < docs/docker/testdb/create_database.sql
-
-migration:
-	@python3.6 src/manage.py test migrate
+pm-test:
+	@npm run test
 
 
 # pre-processing
 lint:
 	@python3.6 $(shell which pylint) ./src/apps/ ./src/infra/ ./src/lib/ --rcfile=.pylintrc && flake8
-
-test:
-	@python3.6 src/manage.py test test --noinput src
-
-pm-test:
-	@npm run test
 
 check-deprecated:
 	@python3.6 src/script/check_deprecated_code.py

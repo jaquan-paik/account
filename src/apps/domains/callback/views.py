@@ -58,6 +58,7 @@ class CallbackView(OAuth2SessionMixin, TokenCookieMixin, View):
         response = InHouseHttpResponseRedirect(oauth2_data.redirect_uri)
         self.add_token_cookie(response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain)
 
+        request.session.flush()
         return response
 
 

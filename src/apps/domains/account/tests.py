@@ -24,4 +24,4 @@ class RidiLoginViewTestCase(TestCase):
 
             response = self.client.get(reverse('account:login'), secure=True)
             self.assertEqual(response.status_code, 302)
-            self.assertEqual(response.url, '/accounts/profile/')
+            self.assertEqual(response.url, '/')

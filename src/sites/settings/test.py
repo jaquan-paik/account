@@ -1,8 +1,7 @@
-from infra.configure.constants import SiteType
 # noinspection PyUnresolvedReferences
-from sites.base import *  # flake8: noqa: F403  # pylint:disable=wildcard-import
+from sites.settings.base import *  # flake8: noqa: F403  # pylint:disable=wildcard-import
 
-DATABASE_ROUTER = []
+DATABASE_ROUTERS = []
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -29,11 +28,5 @@ CACHES = {
     }
 }
 
-SITE = SiteType.TEST
 SITE_DOMAIN = 'account.ridibooks.com'
 ALLOWED_HOSTS = [SITE_DOMAIN, 'dev.ridi.com', ]
-
-MIDDLEWARE += [
-    'lib.ridibooks.store_auth.middlewares.AuthenticationMiddleware',
-]
-ROOT_URLCONF = 'sites.www.urls'
