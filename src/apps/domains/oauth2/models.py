@@ -4,6 +4,7 @@ from oauth2_provider.models import AbstractAccessToken, AbstractApplication, Abs
 from apps.domains.account.models import OAuth2User, User
 from apps.domains.oauth2.constants import JwtAlg
 from apps.domains.oauth2.managers import ApplicationManager, GrantManager, RefreshTokenManager
+from lib.django.db.mysql import TinyBooleanField
 from lib.utils.string import generate_random_str
 
 JWT_HS_256_SECRET_LEN = 32
@@ -14,7 +15,7 @@ def jwt_hs_256_secret():
 
 
 class Application(AbstractApplication):
-    GRANT_TYPES = ((AbstractApplication.GRANT_AUTHORIZATION_CODE, 'Authorization code'), )
+    GRANT_TYPES = ((AbstractApplication.GRANT_AUTHORIZATION_CODE, 'Authorization code'),)
     CLIENT_TYPES = ((AbstractApplication.CLIENT_CONFIDENTIAL, 'Confidential'),)
 
     user = models.ForeignKey(
@@ -30,7 +31,7 @@ class Application(AbstractApplication):
         help_text='Authorization code 만 지원한다.'
     )
 
-    is_in_house = models.BooleanField(default=False, verbose_name='내부 서비스 여부')
+    is_in_house = TinyBooleanField(default=False, verbose_name='내부 서비스 여부')
     jwt_alg = models.CharField(max_length=6, choices=JwtAlg.get_choices(), default=JwtAlg.HS256, verbose_name='JWT 알고리즘')
     jwt_hs_256_secret = models.CharField(max_length=32, default=jwt_hs_256_secret, verbose_name='JWT HS256 Secret')
 
@@ -63,7 +64,7 @@ class AccessToken(AbstractAccessToken):
     user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
 
     token = models.TextField(verbose_name='JWT 토큰', )
-
+    source_refresh_token = None
     updated = None
     created = None
     last_modified = None
@@ -73,7 +74,7 @@ class AccessToken(AbstractAccessToken):
         db_table = 'oauth2_accesstoken'
 
     @classmethod
-    def from_payload(cls, token: str, payload: dict, client: Application=None) -> 'AccessToken':
+    def from_payload(cls, token: str, payload: dict, client: Application = None) -> 'AccessToken':
         _client = client
         if _client is None:
             _client = Application.objects.get(client_id=payload['client_id'])
@@ -94,14 +95,12 @@ class AccessToken(AbstractAccessToken):
 
 class RefreshToken(AbstractRefreshToken):
     user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
-
-    access_token = None
-
     scope = models.TextField(blank=True, editable=False, verbose_name='Scope')
-
     expires = models.DateTimeField(editable=False, verbose_name='만료일')
 
+    access_token = None
     updated = None
+
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
     last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
 
@@ -110,6 +109,8 @@ class RefreshToken(AbstractRefreshToken):
     class Meta(AbstractRefreshToken.Meta):
         swappable = 'OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL'
         db_table = 'oauth2_refreshtoken'
+        unique_together = ()
+        index_together = ['token', 'revoked', ]
 
     def revoke(self):
         self.delete()
