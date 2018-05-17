@@ -54,5 +54,4 @@ class RidiAccountInfoView(CookieMixin, ResponseMixin, APIView):
             code = self.make_response_code(ApiStatusCodes.X_400_RIDIBOOKS_BAD_RESPONSE, 'Ridibooks server respond bad response')
             return self.fail_response(code)
 
-        code = self.make_response_code(status=ApiStatusCodes.C_200_OK)
-        return self.success_response(data=data, response_code=code)
+        return self.success_response(data={'result': data['result']})
