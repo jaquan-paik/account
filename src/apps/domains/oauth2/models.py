@@ -15,7 +15,7 @@ def jwt_hs_256_secret():
 
 
 class Application(AbstractApplication):
-    GRANT_TYPES = ((AbstractApplication.GRANT_AUTHORIZATION_CODE, 'Authorization code'),)
+    GRANT_TYPES = ((AbstractApplication.GRANT_AUTHORIZATION_CODE, 'Authorization code'), )
     CLIENT_TYPES = ((AbstractApplication.CLIENT_CONFIDENTIAL, 'Confidential'),)
 
     user = models.ForeignKey(
@@ -64,7 +64,7 @@ class AccessToken(AbstractAccessToken):
     user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
 
     token = models.TextField(verbose_name='JWT 토큰', )
-    source_refresh_token = None
+
     updated = None
     created = None
     last_modified = None
@@ -74,7 +74,7 @@ class AccessToken(AbstractAccessToken):
         db_table = 'oauth2_accesstoken'
 
     @classmethod
-    def from_payload(cls, token: str, payload: dict, client: Application = None) -> 'AccessToken':
+    def from_payload(cls, token: str, payload: dict, client: Application=None) -> 'AccessToken':
         _client = client
         if _client is None:
             _client = Application.objects.get(client_id=payload['client_id'])
@@ -95,12 +95,14 @@ class AccessToken(AbstractAccessToken):
 
 class RefreshToken(AbstractRefreshToken):
     user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
-    scope = models.TextField(blank=True, editable=False, verbose_name='Scope')
-    expires = models.DateTimeField(editable=False, verbose_name='만료일')
 
     access_token = None
-    updated = None
 
+    scope = models.TextField(blank=True, editable=False, verbose_name='Scope')
+
+    expires = models.DateTimeField(editable=False, verbose_name='만료일')
+
+    updated = None
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
     last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
 
@@ -109,8 +111,6 @@ class RefreshToken(AbstractRefreshToken):
     class Meta(AbstractRefreshToken.Meta):
         swappable = 'OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL'
         db_table = 'oauth2_refreshtoken'
-        unique_together = ()
-        index_together = ['token', 'revoked', ]
 
     def revoke(self):
         self.delete()
