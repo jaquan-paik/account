@@ -23,7 +23,7 @@ settings:
 	@cp docs/dev/settings/secrets.json ./secrets.json && python3.6 src/script/handle_secret_file.py encrypt
 
 migrate:
-	@python3.6 src/manage.py admin migrate
+	@python3.6 src/manage.py migrate
 
 
 # git
