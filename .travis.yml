@@ -50,6 +50,3 @@ deploy:
     script: bash docs/travis/deploy.sh production
     on:
       tags: true
-
-after_deploy:
-- bash docs/travis/after_deploy.sh
