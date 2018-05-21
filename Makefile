@@ -58,7 +58,7 @@ docker-up:
 	@docker-compose up --build
 
 docker-logs:
-	@docker ps -a -q -f name=$(container) | awk '{print $1}' | xargs docker logs -f
+	@docker ps -a -q -f name=account-www | awk '{print $1}' | xargs docker logs -f
 
 
 # CI
