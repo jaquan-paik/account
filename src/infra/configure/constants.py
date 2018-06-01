@@ -31,5 +31,3 @@ class SecretKeyName:
     REDIS_HOST = 'redis_host'
 
     SENTRY_DSN = 'sentry_dsn'
-
-    OAUTH2_ACCESS_JWT_SECRET = 'oauth2_access_jwt_secret'
