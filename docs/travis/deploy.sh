@@ -32,16 +32,17 @@ docker pull nginx:stable
 
 # Build image
 make ci-build-account env=$ENVIRONMENT
-
+make nginx-build-image env=$ENVIRONMENT
 
 # Tag image
 make ci-tag-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest
 make ci-tag-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=$IMAGE_TAG
-
+make nginx-tag-image env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest
 
 # Push image
 make ci-push-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest
 make ci-push-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=$IMAGE_TAG
+make nginx-push-image env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest
 
 
 # Deploy
