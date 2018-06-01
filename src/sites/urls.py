@@ -7,6 +7,7 @@ from apps.domains.oauth2 import urls as oauth2_urls
 from apps.domains.callback import urls as callback_urls
 from .views import Index, script_serve
 
+
 handler400 = 'sites.views.bad_request'
 handler403 = 'sites.views.permission_denied'
 handler404 = 'sites.views.page_not_found'
@@ -22,8 +23,21 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
+    from drf_yasg import openapi
+    from drf_yasg.views import get_schema_view
+    schema_view = get_schema_view(
+        info=openapi.Info(
+            title="Ridibooks Account API",
+            default_version='v1',
+        ),
+        url='',
+    )
+
     import debug_toolbar
     urlpatterns = [
+        path('docs/swagger/', schema_view.with_ui('swagger', cache_timeout=None), name='schemas-swagger-ui'),
+        path('docs/redoc/', schema_view.with_ui('redoc', cache_timeout=None), name='schemas-redoc'),
+
         path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
 

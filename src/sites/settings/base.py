@@ -39,6 +39,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'lib.health_check.middlewares.HealthCheckerMiddleware',
     'lib.django.middlewares.smart_append_slash_middleware.SmartAppendSlashMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
