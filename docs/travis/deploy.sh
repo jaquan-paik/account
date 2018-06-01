@@ -26,23 +26,29 @@ make ci-settings ns=$ENVIRONMENT
 
 $(aws ecr get-login --no-include-email --region=$AWS_DEFAULT_REGION)
 
-docker pull ridibooks/python:bootstrap-django-2017.02.01
-docker pull nginx:stable
+docker pull ridibooks/python:bootstrap-django-2017.02.01 & \
+docker pull nginx:stable & \
+wait
 
 
 # Build image
-make ci-build-account env=$ENVIRONMENT
-make nginx-build-image env=$ENVIRONMENT
+make ci-build-account env=$ENVIRONMENT & \
+make nginx-build-image env=$ENVIRONMENT & \
+wait
 
 # Tag image
-make ci-tag-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest
-make ci-tag-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=$IMAGE_TAG
-make nginx-tag-image env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest
+make ci-tag-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest & \
+make ci-tag-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=$IMAGE_TAG & \
+make nginx-tag-image env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest & \
+make nginx-tag-image env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=$IMAGE_TAG & \
+wait
 
 # Push image
-make ci-push-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest
-make ci-push-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=$IMAGE_TAG
-make nginx-push-image env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest
+make ci-push-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest & \
+make ci-push-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=$IMAGE_TAG & \
+make nginx-push-image env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest & \
+make nginx-push-image env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=$IMAGE_TAG & \
+wait
 
 
 # Deploy
