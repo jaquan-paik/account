@@ -9,3 +9,7 @@ ecs-cli compose --project-name account-www --file docker-compose-www.yml service
 --container-name account-nginx \
 --container-port 80 \
 --role ecsServiceRole
+
+ecs-cli compose --project-name account-www --file docker-compose-cron.yml service up \
+--deployment-min-healthy-percent 0 \
+--deployment-max-percent 100
