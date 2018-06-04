@@ -17,6 +17,8 @@ ridi-cms-sdk==2.1.0
 
 python-json-logger==0.1.8
 
+uwsgidecorators==1.1.0
+
 # library
 certifi==2017.11.5
 chardet==3.0.4
