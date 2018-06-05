@@ -53,6 +53,7 @@ wait
 
 # Deploy
 ecs deploy --timeout=1200 --region=$AWS_DEFAULT_REGION --access-key-id=$AWS_ACCESS_KEY_ID --secret-access-key=$AWS_SECRET_ACCESS_KEY account-cluster account-www & \
+ecs deploy --timeout=1200 --region=$AWS_DEFAULT_REGION --access-key-id=$AWS_ACCESS_KEY_ID --secret-access-key=$AWS_SECRET_ACCESS_KEY account-cluster account-cron & \
 wait
 
 curl -X POST --data-urlencode "payload={\"text\": \"[$ENVIRONMENT - $IMAGE_TAG] 계정서버 배포가 완료되었습니다.\nRepo: https://github.com/ridi/account\"}" $SLACK_DEPLOY_HOOK
