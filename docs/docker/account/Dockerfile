@@ -1,4 +1,4 @@
-FROM ridibooks/python:bootstrap-django-2017.02.01
+FROM ridibooks/python:bootstrap-django-2018.06.05
 
 # Add source
 ADD . /htdocs/www/

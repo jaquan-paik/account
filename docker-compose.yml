@@ -24,7 +24,7 @@ services:
       - 6379:6379
 
   account-www:
-    image: ridibooks/python:bootstrap-django-2017.02.01
+    image: ridibooks/python:bootstrap-django-2018.06.05
     container_name: account-www
     volumes:
       - .:/htdocs/www

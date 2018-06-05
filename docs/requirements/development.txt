@@ -2,7 +2,9 @@
 
 django-debug-toolbar==1.9.1
 
-requests-mock==1.4.0
 pylint==1.8.1
 flake8==3.5.0
+
+django-fake-model==0.1.4
+requests-mock==1.4.0
 django-dynamic-fixture==2.0.0
