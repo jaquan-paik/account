@@ -4,7 +4,7 @@ services:
   account:
     mem_limit: 512m
     mem_reservation: 128m
-    image: 689221834431.dkr.ecr.ap-northeast-2.amazonaws.com/development/account/www
+    image: 588135293606.dkr.ecr.ap-northeast-2.amazonaws.com/production/account/www
     container_name: account-www
     command: /usr/local/bin/uwsgi --ini /etc/uwsgi/www.ini --import infra.crontab
     logging:
