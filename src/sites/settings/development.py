@@ -11,7 +11,7 @@ setup_logging()
 SITE_DOMAIN = 'account.dev.ridi.io'
 ALLOWED_HOSTS = [SITE_DOMAIN, 'account.dev.ridi.com', 'dev.ridi.com', 'dev.ridi.io']
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ORIGIN_REGEX_WHITELIST = (r'^(https?://)?(\w+\.)?dev\.ridi\.com$', r'^(https?://)?(\w+\.)?dev\.ridi\.io$')
 # CORS_URLS_REGEX = r'^/ridi/.*$'
 
