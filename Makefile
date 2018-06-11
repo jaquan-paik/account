@@ -11,6 +11,8 @@ run: lint test run-www
 
 run-www: python-package-install settings run-server-www
 
+run-uwsgi: python-package-install settings run-uwsgi-www
+
 
 # install
 npm-install:
@@ -35,6 +37,8 @@ set-githook:
 run-server-www:
 	@python3.6 src/manage.py runserver 0.0.0.0:7001
 
+run-uwsgi-www:
+	@/usr/local/bin/uwsgi --ini docs/docker/account/development/uwsgi/www.ini
 
 # test
 test:
