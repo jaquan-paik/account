@@ -12,4 +12,3 @@ SITE_DOMAIN = 'account.ridibooks.com'
 ALLOWED_HOSTS = [SITE_DOMAIN, 'ridibooks.com', ]
 
 CORS_ORIGIN_REGEX_WHITELIST = (r'^(https?://)?(\w+\.)?ridibooks\.com$', )
-CORS_URLS_REGEX = r'^/(ridi|oauth2)/.*$'

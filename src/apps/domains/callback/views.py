@@ -16,6 +16,7 @@ from apps.domains.callback.response import InHouseHttpResponseRedirect
 from apps.domains.callback.services.token_refresh_service import TokenRefreshService
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
+from infra.network.constants.http_status_code import HttpStatusCodes
 from lib.django.http.response import HttpResponseUnauthorized
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 from lib.utils.string import generate_random_str
@@ -60,6 +61,11 @@ class CallbackView(OAuth2SessionMixin, TokenCookieMixin, View):
 
         request.session.flush()
         return response
+
+
+class CompleteView(View):
+    def get(self, request):
+        return JsonResponse(data={}, status=HttpStatusCodes.C_200_OK)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
