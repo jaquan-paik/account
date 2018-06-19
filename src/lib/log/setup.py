@@ -4,7 +4,7 @@ import sys
 from infra.configure.constants import LogLevel
 
 
-def setup_logging(debug: bool=False) -> None:
+def setup_logging(dsn: str, debug: bool = False) -> None:
     log_level = LogLevel.DEBUG if debug else LogLevel.INFO
     logging.config.dictConfig({
         'version': 1,
@@ -14,7 +14,7 @@ def setup_logging(debug: bool=False) -> None:
                 'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
                 'datefmt': '%d/%b/%Y %H:%M:%S',
                 'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
-            }
+            },
         },
         'filters': {
             '404_filter': {
@@ -27,15 +27,20 @@ def setup_logging(debug: bool=False) -> None:
                 'class': 'logging.StreamHandler',
                 'stream': sys.stderr,
                 'formatter': 'json'
-            }
+            },
+            'sentry': {
+                'level': 'ERROR',
+                'class': 'raven.handlers.logging.SentryHandler',
+                'dsn': dsn,
+            },
         },
         'loggers': {
             'common': {
-                'handlers': ['stream'],
+                'handlers': ['stream', 'sentry', ],
                 'level': log_level,
             },
             'django': {
-                'handlers': ['stream'],
+                'handlers': ['stream', 'sentry', ],
                 'level': log_level,
             },
             'django.request': {
@@ -48,6 +53,6 @@ def setup_logging(debug: bool=False) -> None:
                 'handlers': ['stream'],
                 'level': log_level,
                 'propagate': False,
-            }
+            },
         },
     })
