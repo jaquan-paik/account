@@ -249,3 +249,5 @@ RAVEN_CONFIG = {
         'lib.base.exceptions.MsgException',
     ],
 }
+
+DEV_RIDI_COM_LOGIN_URL = 'http://login.dev.ridi.com/account/login'
