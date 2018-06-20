@@ -5,19 +5,18 @@ import requests
 from requests import Response
 from requests.exceptions import HTTPError, RequestException
 
-from lib.ridibooks.api.domain import ApiDomain
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, HttpMethod, PHP_SESSION_COOKIE_KEY
 from lib.ridibooks.common.exceptions import HTTPException, InvalidResponseException, ServerException
 
 
 class BaseApi:
-    domain = None  # type: ApiDomain
+    domain = None
 
-    def __init__(self, access_token: Optional[str]=None, phpsession_id: Optional[str]=None):
+    def __init__(self, access_token: Optional[str] = None, phpsession_id: Optional[str] = None):
         self.access_token = access_token
         self.phpsession_id = phpsession_id
 
-    def _request(self, method: int, path: str, data: Optional[Dict]=None) -> Dict:
+    def _request(self, method: int, path: str, data: Optional[Dict] = None) -> Dict:
         kwargs = {
             'method': HttpMethod.to_string(method),
             'url': self._make_url(path=path),

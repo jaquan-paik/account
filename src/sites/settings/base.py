@@ -173,8 +173,6 @@ AUTH_USER_MODEL = 'account_app.User'
 
 
 # Login
-RIDIBOOKS_LOGIN_URL = 'https://ridibooks.com/account/login'
-
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 

@@ -12,6 +12,7 @@ ENC_SECRET_FILE_NAME = 'enc_secrets.json'
 SECRET_FILE_NAME = 'secrets.json'
 VERSION_FILE_NAME = 'version'
 ENV_DEV = 'account_dev'
+ENV_DEV_LOCAL = 'account_dev_local'
 ENV_PROD = 'account'
 
 

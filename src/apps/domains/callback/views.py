@@ -8,7 +8,6 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from requests import HTTPError
 
-from apps.domains.account.services.account_info_service import AccountInfoService
 from apps.domains.callback.constants import CookieRootDomains, ROOT_DOMAIN_SESSION_KEY
 from apps.domains.callback.helpers.token_helper import TokenCodeHelper
 from apps.domains.callback.helpers.url_helper import UrlHelper
@@ -40,14 +39,7 @@ class AuthorizeView(OAuth2SessionMixin, TokenCookieMixin, View):
             'state': state,
         }
 
-        if AccountInfoService.is_dev_ridi_com(request.get_host()):
-            params['redirect_uri'] = UrlHelper.get_dev_ridi_com_redirect_uri()  # TODO: need refac.
-
         url = generate_query_url(reverse('oauth2_provider:authorize'), params)
-
-        if AccountInfoService.is_dev_ridi_com(request.get_host()):
-            url = f'https://account.dev.ridi.com{url}'  # TODO: need refac.
-
         return HttpResponseRedirect(url)
 
 

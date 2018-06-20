@@ -8,4 +8,7 @@ setup_logging(Secret().get(SecretKeyName.SENTRY_DSN))
 SITE_DOMAIN = 'account.ridibooks.com'
 ALLOWED_HOSTS = [SITE_DOMAIN, 'ridibooks.com', ]
 
-CORS_ORIGIN_REGEX_WHITELIST = (r'^(https?://)?(\w+\.)?ridibooks\.com$', )
+STORE_URL = 'https://ridibooks.com'
+RIDIBOOKS_LOGIN_URL = 'https://ridibooks.com/account/login'
+
+CORS_ORIGIN_REGEX_WHITELIST = (r'^(https?://)?(\w+\.)?ridibooks\.com$',)
