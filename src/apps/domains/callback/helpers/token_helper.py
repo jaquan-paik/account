@@ -27,7 +27,7 @@ class TokenHelper:
 
     @classmethod
     def _take_token(cls, client: Application, code: str, state: str) -> Tuple[TokenData, TokenData]:
-        verify = GeneralConfig.is_local_dev()
+        verify = not GeneralConfig.is_local_dev()
         req = requests.post(
             UrlHelper.get_token(), data=cls._get_request_data(client, code, state), verify=verify,
         )
