@@ -15,13 +15,14 @@ class UrlHelper:
     @staticmethod
     @memorize
     def get_token():
+        if GeneralConfig.get_site_domain() == 'account.dev.ridi.com':
+            return f'http://{GeneralConfig.get_site_domain()}{reverse("oauth2_provider:token")}'
         return f'https://{GeneralConfig.get_site_domain()}{reverse("oauth2_provider:token")}'
 
     @staticmethod
     @memorize
     def get_root_uri():
-        url = CookieRootDomains.DEV_RIDI_IO if GeneralConfig.is_dev() else CookieRootDomains.PROD_RIDI_COM
-        return f'https://{CookieRootDomains.to_string(url)}'
+        return f'https://{GeneralConfig.get_store_url()}'
 
     @staticmethod
     def get_root_domain(request) -> str:
