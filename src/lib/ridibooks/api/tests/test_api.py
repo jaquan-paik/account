@@ -6,13 +6,12 @@ import requests
 import requests_mock
 
 from lib.ridibooks.api.base import BaseApi
-from lib.ridibooks.api.domain import ApiDomain
 from lib.ridibooks.common.constants import HttpMethod
 from lib.ridibooks.common.exceptions import HTTPException, ServerException
 
 
 class DummyApi(BaseApi):
-    domain = ApiDomain(dev='https://dev.dummy.com', prod='https://dummy.com')
+    domain = 'https://dummy.com'
 
     TEST_API = '/test/api/'
 

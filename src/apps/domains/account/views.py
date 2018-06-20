@@ -3,13 +3,11 @@ from django.http import HttpResponseRedirect
 from rest_framework.views import APIView
 
 from apps.domains.account.services.account_info_service import AccountInfoService
-from apps.domains.callback.constants import CookieRootDomains
 from infra.configure.config import GeneralConfig
 from infra.network.constants.api_status_code import ApiStatusCodes
 from lib.base.exceptions import ErrorException
 from lib.django.views.api.mixins import ResponseMixin
 from lib.django.views.cookie.mixins import CookieMixin
-from lib.ridibooks.api.store import DEV_RIDI_COM_STORE_DOMAIN
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY
 from lib.ridibooks.common.exceptions import HTTPException, InvalidResponseException, ServerException
 from lib.utils.url import generate_query_url
@@ -29,8 +27,6 @@ class RidiLoginView(LoginView):  # pylint: disable=too-many-ancestors
             }
 
             url = GeneralConfig.get_ridibooks_login_url()
-            if AccountInfoService.is_dev_ridi_com(request.get_host()):
-                url = GeneralConfig.get_dev_ridi_com_login_url()
 
             redirect_to = generate_query_url(url, params)
 
@@ -53,7 +49,7 @@ class RidiAccountInfoView(CookieMixin, ResponseMixin, APIView):
             return self.fail_response(code)
 
         try:
-            data = AccountInfoService.get_account_info(request.get_host(), access_token)
+            data = AccountInfoService.get_account_info(access_token)
         except ServerException:
             code = self.make_response_code(ApiStatusCodes.X_400_RIDIBOOKS_NOT_CONNECTION, 'Ridibooks server is not connected')
             return self.fail_response(code)

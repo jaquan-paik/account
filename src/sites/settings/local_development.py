@@ -8,13 +8,13 @@ DEBUG = True
 
 setup_logging(Secret().get(SecretKeyName.SENTRY_DSN))
 
-SITE_DOMAIN = 'account.dev.ridi.io'
-ALLOWED_HOSTS = [SITE_DOMAIN, 'dev.ridi.io', ]
+SITE_DOMAIN = 'account.dev.ridi.com'
+ALLOWED_HOSTS = [SITE_DOMAIN, 'dev.ridi.com', ]
 
-CORS_ORIGIN_REGEX_WHITELIST = (r'^(https?://)?(\w+\.)?dev\.ridi\.io$',)
+CORS_ORIGIN_REGEX_WHITELIST = (r'^(https?://)?(\w+\.)?dev\.ridi\.com$',)
 
-STORE_URL = 'https://dev.ridi.io'
-RIDIBOOKS_LOGIN_URL = 'https://dev.ridi.io/account/login'
+STORE_URL = 'http://login.dev.ridi.com'
+RIDIBOOKS_LOGIN_URL = 'http://login.dev.ridi.com/account/login'
 
 # django-debug-toolbar
 DEBUG_TOOLBAR_CONFIG = {
@@ -26,5 +26,5 @@ INSTALLED_APPS = INSTALLED_APPS + [
 ]
 
 MIDDLEWARE = [
-     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ] + MIDDLEWARE

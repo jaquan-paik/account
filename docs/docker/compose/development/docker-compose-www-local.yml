@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  account:
+    mem_limit: 512m
+    mem_reservation: 128m
+    image: 689221834431.dkr.ecr.ap-northeast-2.amazonaws.com/local-development/account/www
+    container_name: account-www
+    command: /usr/local/bin/uwsgi --ini /etc/uwsgi/www.ini
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: account-ecs-logs
+        awslogs-region: ap-northeast-2
+        awslogs-stream-prefix: www
+  account-nginx:
+    mem_limit: 128m
+    mem_reservation: 64m
+    image: 689221834431.dkr.ecr.ap-northeast-2.amazonaws.com/local-development/account/nginx
+    container_name: account-nginx
+    restart: always
+    ports:
+      - 80
+    depends_on:
+      - account
+    links:
+      - account
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: account-ecs-logs
+        awslogs-region: ap-northeast-2
+        awslogs-stream-prefix: www-nginx

@@ -14,11 +14,6 @@ class UrlHelper:
 
     @staticmethod
     @memorize
-    def get_dev_ridi_com_redirect_uri():
-        return f'https://account.dev.ridi.com{reverse("ridi:callback")}'  # TODO: need refac.
-
-    @staticmethod
-    @memorize
     def get_token():
         return f'https://{GeneralConfig.get_site_domain()}{reverse("oauth2_provider:token")}'
 

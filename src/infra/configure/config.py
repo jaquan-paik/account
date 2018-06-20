@@ -19,12 +19,12 @@ class GeneralConfig:
         return settings.SITE_DOMAIN
 
     @staticmethod
-    def get_ridibooks_login_url() -> str:
-        return settings.RIDIBOOKS_LOGIN_URL
+    def get_store_url() -> str:
+        return settings.STORE_URL
 
     @staticmethod
-    def get_dev_ridi_com_login_url() -> str:
-        return settings.DEV_RIDI_COM_LOGIN_URL
+    def get_ridibooks_login_url() -> str:
+        return settings.RIDIBOOKS_LOGIN_URL
 
 
 class FilterConfig:
