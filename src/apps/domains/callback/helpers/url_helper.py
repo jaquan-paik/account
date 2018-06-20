@@ -20,7 +20,7 @@ class UrlHelper:
     @staticmethod
     @memorize
     def get_root_uri():
-        return f'https://{GeneralConfig.get_store_url()}'
+        return GeneralConfig.get_store_url()
 
     @staticmethod
     def get_root_domain(request) -> str:
