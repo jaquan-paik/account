@@ -4,7 +4,7 @@ services:
   account:
     mem_limit: 512m
     mem_reservation: 128m
-    image: 689221834431.dkr.ecr.ap-northeast-2.amazonaws.com/local-development/account/www
+    image: 689221834431.dkr.ecr.ap-northeast-2.amazonaws.com/local_development/account/www
     container_name: account-www
     command: /usr/local/bin/uwsgi --ini /etc/uwsgi/www.ini
     logging:
@@ -16,7 +16,7 @@ services:
   account-nginx:
     mem_limit: 128m
     mem_reservation: 64m
-    image: 689221834431.dkr.ecr.ap-northeast-2.amazonaws.com/local-development/account/nginx
+    image: 689221834431.dkr.ecr.ap-northeast-2.amazonaws.com/local_development/account/nginx
     container_name: account-nginx
     restart: always
     ports:
