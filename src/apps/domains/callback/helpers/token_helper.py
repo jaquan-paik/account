@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 from apps.domains.callback.dtos import TokenData
 from apps.domains.callback.helpers.url_helper import UrlHelper
 from apps.domains.oauth2.models import Application
+from infra.configure.config import GeneralConfig
 
 
 class TokenHelper:
@@ -26,8 +27,9 @@ class TokenHelper:
 
     @classmethod
     def _take_token(cls, client: Application, code: str, state: str) -> Tuple[TokenData, TokenData]:
+        verify = GeneralConfig.is_local_dev()
         req = requests.post(
-            UrlHelper.get_token(), data=cls._get_request_data(client, code, state),
+            UrlHelper.get_token(), data=cls._get_request_data(client, code, state), verify=verify,
         )
         req.raise_for_status()
 

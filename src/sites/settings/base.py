@@ -248,4 +248,4 @@ RAVEN_CONFIG = {
     ],
 }
 
-DEV_RIDI_COM_LOGIN_URL = 'http://login.dev.ridi.com/account/login'
+IS_LOCAL_DEVELOPMENT = False

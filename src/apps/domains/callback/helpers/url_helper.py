@@ -15,8 +15,6 @@ class UrlHelper:
     @staticmethod
     @memorize
     def get_token():
-        if GeneralConfig.get_site_domain() == 'account.dev.ridi.com':
-            return f'http://{GeneralConfig.get_site_domain()}{reverse("oauth2_provider:token")}'
         return f'https://{GeneralConfig.get_site_domain()}{reverse("oauth2_provider:token")}'
 
     @staticmethod
