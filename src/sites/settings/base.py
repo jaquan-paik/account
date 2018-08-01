@@ -247,5 +247,3 @@ RAVEN_CONFIG = {
         'lib.base.exceptions.MsgException',
     ],
 }
-
-IS_LOCAL_DEVELOPMENT = False

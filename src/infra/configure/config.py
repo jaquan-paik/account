@@ -7,10 +7,6 @@ class GeneralConfig:
         return settings.DEBUG
 
     @staticmethod
-    def is_local_dev() -> bool:
-        return settings.DEBUG and settings.IS_LOCAL_DEVELOPMENT
-
-    @staticmethod
     def get_environment() -> str:
         return settings.ENVIRONMENT
 

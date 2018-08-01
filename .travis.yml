@@ -47,12 +47,6 @@ deploy:
     on:
       branch: master
 
-  # Deploy local development
-  - provider: script
-    script: bash docs/travis/deploy.sh local_development
-    on:
-      branch: master
-
   # Deploy production
   - provider: script
     script: bash docs/travis/deploy.sh production
