@@ -9,7 +9,7 @@
   "dependencies": {},
   "devDependencies": {
     "hoek": "^5.0.3",
-    "newman": "^3.9.3"
+    "newman": "^4.0.0"
   },
   "scripts": {
     "test": "newman run docs/postman/Account.postman_collection.json -e docs/postman/Local.postman_environment.json --ignore-redirects --insecure",
