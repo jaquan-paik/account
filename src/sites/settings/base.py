@@ -245,5 +245,6 @@ RAVEN_CONFIG = {
     'ignore_exceptions': [
         'django.exceptions.http.Http404',
         'lib.base.exceptions.MsgException',
+        'OSError',
     ],
 }
