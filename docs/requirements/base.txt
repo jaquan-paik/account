@@ -1,5 +1,5 @@
 # framework
-django==2.0.6
+django==2.1.0
 djangorestframework==3.7.7
 drf-yasg==1.9.0
 
