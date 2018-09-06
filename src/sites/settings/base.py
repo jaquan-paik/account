@@ -2,6 +2,7 @@ import os
 
 from infra.configure.constants import SecretKeyName
 from infra.storage.redis.constants import RedisDatabase
+from lib.ridibooks.internal_server_auth.helpers.config_helper import AuthList, ConfigHelper as InternalServerAuthConfigHelper
 from lib.secret.secret import Secret
 
 # PATH
@@ -218,6 +219,12 @@ OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'oauth2_app.RefreshToken'
 # https://github.com/evonove/django-oauth-toolkit/commit/65af7372a0fb208a19899fa75982163bdff713f9
 OAUTH2_PROVIDER_REFRESH_MODEL = 'oauth2_app.RefreshToken'
 
+# RIDI Internal Server Auth
+RIDI_INTERNAL_AUTH_DATA = InternalServerAuthConfigHelper.generate_auth_data({
+    AuthList.ACCOUNT_TO_STORE: Secret().get(SecretKeyName.RIDI_INTERNAL_AUTH_ACCOUNT_TO_STORE),
+})
+
+RIDI_INTERNAL_AUTH_REQUIRE_EXP = False
 
 # Security
 X_FRAME_OPTIONS = 'DENY'

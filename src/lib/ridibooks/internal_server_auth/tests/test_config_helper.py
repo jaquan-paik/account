@@ -1,32 +1,24 @@
 from django.test import TestCase
 
-from lib.ridibooks.internal_server_auth.helpers.config import ConfigHelper
+from lib.ridibooks.internal_server_auth.constants import AuthList, DEFAULT_ALG
+from lib.ridibooks.internal_server_auth.helpers.config_helper import ConfigHelper
 
 
 class ConfigHelperTestCase(TestCase):
-    def test_generate_with_empty_array(self):
-        empty_array = []
-        config = ConfigHelper.generate_auth_data(empty_array)
-
-        self.assertDictEqual(config, {})
-
-    def test_generate_with_invalid_variable_type(self):
-        with self.assertRaises(TypeError):
-            ConfigHelper.generate_auth_data({})
-
-        with self.assertRaises(TypeError):
-            ConfigHelper.generate_auth_data("123123")
-
-        with self.assertRaises(TypeError):
-            ConfigHelper.generate_auth_data(1234)
-
     def test_generate_success(self):
-        data_list = [
-            {'iss': 'account', 'sub': 'library', 'secret': 'secret-one'},
-            {'iss': 'account', 'sub': 'auth', 'secret': 'secret-two', 'alg': 'HS256'}
-        ]
+        data_list = {
+            AuthList.USER_BOOK_TO_LIBRARY: 'secret-one',
+            AuthList.LIBRARY_TO_BOOK: 'secret-two',
+        }
 
         config = ConfigHelper.generate_auth_data(data_list)
 
-        self.assertEqual(config['account-library'], ('secret-one', 'RS256'))
-        self.assertEqual(config['account-auth'], ('secret-two', 'HS256'))
+        self.assertEqual(config[AuthList.USER_BOOK_TO_LIBRARY].audience, 'library')
+        self.assertEqual(config[AuthList.USER_BOOK_TO_LIBRARY].issuer, 'user-book')
+        self.assertEqual(config[AuthList.USER_BOOK_TO_LIBRARY].secret, 'secret-one')
+        self.assertEqual(config[AuthList.USER_BOOK_TO_LIBRARY].alg, DEFAULT_ALG)
+
+        self.assertEqual(config[AuthList.LIBRARY_TO_BOOK].audience, 'book')
+        self.assertEqual(config[AuthList.LIBRARY_TO_BOOK].issuer, 'library')
+        self.assertEqual(config[AuthList.LIBRARY_TO_BOOK].secret, 'secret-two')
+        self.assertEqual(config[AuthList.LIBRARY_TO_BOOK].alg, DEFAULT_ALG)

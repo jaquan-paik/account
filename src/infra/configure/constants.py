@@ -31,3 +31,5 @@ class SecretKeyName:
     REDIS_HOST = 'redis_host'
 
     SENTRY_DSN = 'sentry_dsn'
+
+    RIDI_INTERNAL_AUTH_ACCOUNT_TO_STORE = 'ridi_internal_auth_account_to_store'
