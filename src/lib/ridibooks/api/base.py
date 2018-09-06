@@ -16,7 +16,7 @@ class BaseApi:
         self.access_token = access_token
         self.phpsession_id = phpsession_id
 
-    def _request(self, method: int, path: str, data: Optional[Dict] = None) -> Dict:
+    def _request(self, method: int, path: str, data: Optional[Dict] = None, is_json_data: bool = False) -> Dict:
         kwargs = {
             'method': HttpMethod.to_string(method),
             'url': self._make_url(path=path),
@@ -25,8 +25,12 @@ class BaseApi:
 
         if method == HttpMethod.GET:
             kwargs['params'] = data
+
         else:
-            kwargs['data'] = data
+            if is_json_data:
+                kwargs['data'] = data
+            else:
+                kwargs['json'] = data
 
         try:
             response = requests.request(**kwargs)

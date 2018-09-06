@@ -9,6 +9,10 @@ class StoreApi(BaseApi):
     domain = GeneralConfig.get_store_url()
 
     ACCOUNT_INFO = '/api/account/info'
+    IS_LOGINABLE = '/api/account/is-loginable'
 
     def get_account_info(self) -> Dict:
         return self._request(method=HttpMethod.GET, path=self.ACCOUNT_INFO)
+
+    def is_loginable(self, username: str, password: str) -> Dict:
+        return self._request(method=HttpMethod.POST, path=self.IS_LOGINABLE, data={'u_id': username, 'password': password})

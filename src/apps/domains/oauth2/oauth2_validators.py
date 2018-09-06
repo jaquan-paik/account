@@ -1,17 +1,27 @@
 from datetime import datetime, timedelta
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from oauth2_provider.exceptions import FatalClientError
+from oauth2_provider.models import get_application_model
 from oauth2_provider.oauth2_validators import OAuth2Validator, RefreshToken
 from oauth2_provider.settings import oauth2_settings
 
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
 from lib.log.logger import logger
+from lib.ridibooks.api.store import StoreApi
+
+Application = get_application_model()
 
 
 class RidiOAuth2Validator(OAuth2Validator):
+    def validate_user(self, username, password, client, request, *args, **kwargs):
+        account_info = StoreApi().is_loginable(username, password)
+        request.user = get_user_model().objects.get_or_create(idx=account_info['u_idx'], id=username)
+        return True
+
     def get_id_token(self, token, token_handler, request):
         raise NotImplementedError()
 
