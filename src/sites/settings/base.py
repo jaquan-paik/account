@@ -220,7 +220,7 @@ OAUTH2_PROVIDER_REFRESH_MODEL = 'oauth2_app.RefreshToken'
 
 
 # Security
-X_FRAME_OPTIONS = 'DENY'
+X_FRAME_OPTIONS = 'ALLOW-FROM https://ez1.s-bluevery.com/'
 
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
