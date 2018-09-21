@@ -32,26 +32,26 @@ class StoreApi(BaseApi):
             content = json.loads(e.content.decode('utf-8'))
             if e.status == 400:
                 logger.error(f'[STORE API][IS_LOGINABLE] Error: {content}')
-                raise InvalidRequestException()
+                raise InvalidRequestException
 
             elif e.status == 401:
                 if content['code'] == 'UNAUTHORIZED':
-                    raise InvalidUserUnauthorizedException()
+                    raise InvalidUserUnauthorizedException
                 elif content['code'] == 'UNVERIFIED_ACCOUNT':
-                    raise InvalidUserUnverifiedException()
+                    raise InvalidUserUnverifiedException
                 elif content['code'] == 'SECEDED_ACCOUNT':
-                    raise InvalidUserSecededException()
+                    raise InvalidUserSecededException
                 elif content['code'] == 'DORMANTED_ACCOUNT':
-                    raise InvalidUserDormantedException()
+                    raise InvalidUserDormantedException
                 elif content['code'] == 'UNMATCHED_PASSWORD':
-                    raise InvalidUserUnmatchedPasswordException()
+                    raise InvalidUserUnmatchedPasswordException
 
             elif e.status == 404:
                 if content['code'] == 'ACCOUNT_NOT_FOUND':
-                    raise InvalidUserNotFoundException()
+                    raise InvalidUserNotFoundException
 
             elif e.status == 500:
-                raise StoreInternalServerErrorException()
+                raise StoreInternalServerErrorException
 
             logger.error(f'[STORE API][IS_LOGINABLE] Error: {e.status} - {content}')
             raise NotImplementedError()
