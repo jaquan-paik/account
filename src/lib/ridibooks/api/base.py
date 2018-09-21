@@ -7,6 +7,8 @@ from requests.exceptions import HTTPError, RequestException
 
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, HttpMethod, PHP_SESSION_COOKIE_KEY
 from lib.ridibooks.common.exceptions import HTTPException, InvalidResponseException, ServerException
+from lib.ridibooks.internal_server_auth.helpers.internal_server_auth_helper import InternalServerAuthHelper
+from lib.ridibooks.internal_server_auth.utils import TokenHandler
 
 
 class BaseApi:
@@ -16,17 +18,25 @@ class BaseApi:
         self.access_token = access_token
         self.phpsession_id = phpsession_id
 
-    def _request(self, method: int, path: str, data: Optional[Dict] = None) -> Dict:
+    def _request(
+            self, method: int, path: str, headers: Optional[Dict] = None, data: Optional[Dict] = None, is_json_data: bool = False
+    ) -> Dict:
         kwargs = {
             'method': HttpMethod.to_string(method),
             'url': self._make_url(path=path),
-            'cookies': self._make_cookies()
+            'headers': headers,
+            'cookies': self._make_cookies(),
+            'timeout': 60,
         }
 
         if method == HttpMethod.GET:
             kwargs['params'] = data
+
         else:
-            kwargs['data'] = data
+            if is_json_data:
+                kwargs['json'] = data
+            else:
+                kwargs['data'] = data
 
         try:
             response = requests.request(**kwargs)
@@ -34,6 +44,15 @@ class BaseApi:
             raise ServerException()
 
         return self._process_response(response=response)
+
+    def _request_with_internal_server_auth(
+            self, token_key: str, method: int, path: str, data: Optional[Dict] = None, is_json_data: bool = False
+    ):
+        headers = {
+            'Authorization': TokenHandler.make(InternalServerAuthHelper.generate(token_key)),
+        }
+
+        return self._request(method, path, headers, data, is_json_data)
 
     def _process_response(self, response: Response) -> Dict:
         try:

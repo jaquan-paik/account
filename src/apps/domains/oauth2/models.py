@@ -15,7 +15,10 @@ def jwt_hs_256_secret():
 
 
 class Application(AbstractApplication):
-    GRANT_TYPES = ((AbstractApplication.GRANT_AUTHORIZATION_CODE, 'Authorization code'), )
+    GRANT_TYPES = (
+        (AbstractApplication.GRANT_AUTHORIZATION_CODE, 'Authorization code'),
+        (AbstractApplication.GRANT_PASSWORD, 'Resource owner password-based'),
+    )
     CLIENT_TYPES = ((AbstractApplication.CLIENT_CONFIDENTIAL, 'Confidential'),)
 
     user = models.ForeignKey(
@@ -28,7 +31,7 @@ class Application(AbstractApplication):
     )
     authorization_grant_type = models.CharField(
         max_length=32, choices=GRANT_TYPES, default=AbstractApplication.GRANT_AUTHORIZATION_CODE, verbose_name='Grant 종류',
-        help_text='Authorization code 만 지원한다.'
+        help_text='Authorization code와 Password 만 지원한다.'
     )
 
     is_in_house = TinyBooleanField(default=False, verbose_name='내부 서비스 여부')
@@ -74,7 +77,7 @@ class AccessToken(AbstractAccessToken):
         db_table = 'oauth2_accesstoken'
 
     @classmethod
-    def from_payload(cls, token: str, payload: dict, client: Application=None) -> 'AccessToken':
+    def from_payload(cls, token: str, payload: dict, client: Application = None) -> 'AccessToken':
         _client = client
         if _client is None:
             _client = Application.objects.get(client_id=payload['client_id'])

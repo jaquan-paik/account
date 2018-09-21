@@ -1,17 +1,52 @@
 from datetime import datetime, timedelta
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from oauth2_provider.exceptions import FatalClientError
+from oauth2_provider.models import get_application_model
 from oauth2_provider.oauth2_validators import OAuth2Validator, RefreshToken
 from oauth2_provider.settings import oauth2_settings
+from oauthlib.oauth2 import ServerError
 
-from apps.domains.oauth2.exceptions import JwtTokenErrorException
+from apps.domains.oauth2.exceptions import InvalidUserDormantedError, InvalidUserSecededError, InvalidUserUnverifiedError, \
+    JwtTokenErrorException, LoginFailError
 from apps.domains.oauth2.token import JwtHandler
 from lib.log.logger import logger
+from lib.ridibooks.api.exceptions import InvalidRequestException, InvalidUserDormantedException, InvalidUserNotFoundException, \
+    InvalidUserSecededException, InvalidUserUnauthorizedException, InvalidUserUnmatchedPasswordException, InvalidUserUnverifiedException, \
+    StoreInternalServerErrorException
+from lib.ridibooks.api.store import StoreApi
+
+Application = get_application_model()
 
 
 class RidiOAuth2Validator(OAuth2Validator):
+    def validate_user(self, username, password, client, request, *args, **kwargs):
+        try:
+            account_info = StoreApi().is_loginable(username, password)
+
+        except (
+                InvalidRequestException, InvalidUserUnmatchedPasswordException,
+                InvalidUserUnauthorizedException, InvalidUserNotFoundException
+        ):
+            raise LoginFailError
+
+        except InvalidUserUnverifiedException:
+            raise InvalidUserUnverifiedError
+
+        except InvalidUserSecededException:
+            raise InvalidUserSecededError
+
+        except InvalidUserDormantedException:
+            raise InvalidUserDormantedError
+
+        except StoreInternalServerErrorException:
+            raise ServerError
+
+        request.user, _ = get_user_model().objects.get_or_create(idx=account_info['u_idx'], id=username)
+        return True
+
     def get_id_token(self, token, token_handler, request):
         raise NotImplementedError()
 
