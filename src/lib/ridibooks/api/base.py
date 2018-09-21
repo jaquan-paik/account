@@ -5,7 +5,6 @@ import requests
 from requests import Response
 from requests.exceptions import HTTPError, RequestException
 
-from lib.log.logger import logger
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, HttpMethod, PHP_SESSION_COOKIE_KEY
 from lib.ridibooks.common.exceptions import HTTPException, InvalidResponseException, ServerException
 from lib.ridibooks.internal_server_auth.helpers.internal_server_auth_helper import InternalServerAuthHelper
@@ -40,7 +39,6 @@ class BaseApi:
                 kwargs['data'] = data
 
         try:
-            logger.info(kwargs)
             response = requests.request(**kwargs)
         except RequestException:
             raise ServerException()
