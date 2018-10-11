@@ -239,8 +239,7 @@ CSRF_COOKIE_SECURE = True
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
-CORS_URLS_REGEX = r'^/(ridi|oauth2|health)/.*$'
-
+CORS_URLS_REGEX = r'^/(ridi|oauth2|health|accounts)/.*$'
 
 ALLOWED_HOSTS = []
 
