@@ -47,6 +47,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'csp.middleware.CSPMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'lib.ridibooks.store_auth.middlewares.AuthenticationMiddleware',
@@ -227,7 +228,11 @@ RIDI_INTERNAL_AUTH_DATA = InternalServerAuthConfigHelper.generate_auth_data({
 RIDI_INTERNAL_AUTH_REQUIRE_EXP = False
 
 # Security
-X_FRAME_OPTIONS = 'ALLOW-FROM https://ez1.s-bluevery.com/'
+X_FRAME_OPTIONS = 'ALLOW-FROM https://ez1.s-bluevery.com/ https://test.ezwel.com/'
+CSP_FRAME_ANCESTORS = [
+    'https://ez1.s-bluevery.com',
+    'https://test.ezwel.com',
+]
 
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
