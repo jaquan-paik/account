@@ -11,7 +11,8 @@ from lib.django.views.cookie.mixins import CookieMixin
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY
 from lib.ridibooks.common.exceptions import HTTPException, InvalidResponseException, ServerException
 from lib.utils.url import generate_query_url
-
+from apps.domains.account.schemas import RidiAccountInfoGetSchema
+from drf_yasg.utils import swagger_auto_schema
 
 class RidiLoginView(LoginView):  # pylint: disable=too-many-ancestors
     def get(self, request, *args, **kwargs):
@@ -42,6 +43,7 @@ class RidiLoginView(LoginView):  # pylint: disable=too-many-ancestors
 
 
 class RidiAccountInfoView(CookieMixin, ResponseMixin, APIView):
+    @swagger_auto_schema(**RidiAccountInfoGetSchema.to_swagger_schema())
     def get(self, request):
         access_token = self.get_cookie(request=request, key=ACCESS_TOKEN_COOKIE_KEY)
         if access_token is None:
