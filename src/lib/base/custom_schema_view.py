@@ -8,7 +8,7 @@ from ruamel import yaml
 
 SchemaView = get_schema_view(
     info=openapi.Info(
-        title="Ridibooks Library API",
+        title="Ridibooks Account API",
         default_version='v1',
     ),
     url='',

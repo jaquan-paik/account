@@ -22,23 +22,14 @@ urlpatterns = [
     re_path(r'^script/(?P<path>.*)$', script_serve, kwargs={'document_root': settings.STATIC_ROOT + '/script'}),
 ]
 
+
 if settings.DEBUG:
-    from drf_yasg import openapi
-    from drf_yasg.views import get_schema_view
-    schema_view = get_schema_view(
-        info=openapi.Info(
-            title="Ridibooks Account API",
-            default_version='v1',
-        ),
-        url='',
-    )
-
+    from lib.base.custom_schema_view import CustomSchemaView
     import debug_toolbar
-    urlpatterns = [
-        path('docs/swagger/', schema_view.with_ui('swagger', cache_timeout=None), name='schemas-swagger-ui'),
-        path('docs/redoc/', schema_view.with_ui('redoc', cache_timeout=None), name='schemas-redoc'),
-
+    debug_urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
-
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+        path('docs/swagger/', CustomSchemaView.with_ui('swagger', cache_timeout=10), name='schemas-swagger-ui'),
+        path('docs/swagger.yaml', CustomSchemaView.without_ui(cache_timeout=10), name='schemas-swagger-without-ui'),
+        path('docs/redoc/', CustomSchemaView.with_ui('redoc', cache_timeout=10), name='schemas-redoc'),
+    ]
+    urlpatterns = debug_urlpatterns + urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
