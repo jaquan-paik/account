@@ -53,15 +53,17 @@ class CallbackView(OAuth2SessionMixin, TokenCookieMixin, View):
         oauth2_data = self.get_oauth2_data(code=code, state=state)
 
         try:
-            access_token, refresh_token = TokenCodeHelper.get_tokens(oauth2_data.client, oauth2_data.code,
-                                                                     oauth2_data.state)
+            access_token, refresh_token = TokenCodeHelper.get_tokens(
+                oauth2_data.client, oauth2_data.code, oauth2_data.state
+            )
         except HTTPError as e:
             return JsonResponse(data=e.response.json(), status=e.response.status_code)
 
         root_domain = CookieRootDomains.to_string(self.get_session(key=ROOT_DOMAIN_SESSION_KEY))
         response = InHouseHttpResponseRedirect(oauth2_data.redirect_uri)
-        self.add_token_cookie(response=response, access_token=access_token, refresh_token=refresh_token,
-                              root_domain=root_domain)
+        self.add_token_cookie(
+            response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
+        )
 
         request.session.flush()
         return response

@@ -53,12 +53,14 @@ class RidiAccountInfoView(CookieMixin, ResponseMixin, APIView):
         try:
             data = AccountInfoService.get_account_info(access_token)
         except ServerException:
-            code = self.make_response_code(ApiStatusCodes.X_400_RIDIBOOKS_NOT_CONNECTION,
-                                           'Ridibooks server is not connected')
+            code = self.make_response_code(
+                ApiStatusCodes.X_400_RIDIBOOKS_NOT_CONNECTION, 'Ridibooks server is not connected'
+            )
             return self.fail_response(code)
         except (HTTPException, InvalidResponseException):
-            code = self.make_response_code(ApiStatusCodes.X_400_RIDIBOOKS_BAD_RESPONSE,
-                                           'Ridibooks server respond bad response')
+            code = self.make_response_code(
+                ApiStatusCodes.X_400_RIDIBOOKS_BAD_RESPONSE, 'Ridibooks server respond bad response'
+            )
             return self.fail_response(code)
 
         return self.success_response(data={'result': data['result']})
