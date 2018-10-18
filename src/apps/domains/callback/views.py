@@ -2,11 +2,12 @@ from datetime import datetime
 
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
-from django.urls import reverse
-from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
+
+from rest_framework.views import APIView
 from requests import HTTPError
+from drf_yasg.utils import swagger_auto_schema
 
 from apps.domains.callback.constants import CookieRootDomains, ROOT_DOMAIN_SESSION_KEY
 from apps.domains.callback.helpers.token_helper import TokenCodeHelper
@@ -14,6 +15,7 @@ from apps.domains.callback.helpers.url_helper import UrlHelper
 from apps.domains.callback.mixins import OAuth2SessionMixin, TokenCookieMixin
 from apps.domains.callback.response import InHouseHttpResponseRedirect
 from apps.domains.callback.services.token_refresh_service import TokenRefreshService
+from apps.domains.callback.schemas import TokenGetSchema
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
 from infra.network.constants.http_status_code import HttpStatusCodes
@@ -51,13 +53,17 @@ class CallbackView(OAuth2SessionMixin, TokenCookieMixin, View):
         oauth2_data = self.get_oauth2_data(code=code, state=state)
 
         try:
-            access_token, refresh_token = TokenCodeHelper.get_tokens(oauth2_data.client, oauth2_data.code, oauth2_data.state)
+            access_token, refresh_token = TokenCodeHelper.get_tokens(
+                oauth2_data.client, oauth2_data.code, oauth2_data.state
+            )
         except HTTPError as e:
             return JsonResponse(data=e.response.json(), status=e.response.status_code)
 
         root_domain = CookieRootDomains.to_string(self.get_session(key=ROOT_DOMAIN_SESSION_KEY))
         response = InHouseHttpResponseRedirect(oauth2_data.redirect_uri)
-        self.add_token_cookie(response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain)
+        self.add_token_cookie(
+            response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
+        )
 
         request.session.flush()
         return response
@@ -68,8 +74,8 @@ class CompleteView(View):
         return JsonResponse(data={}, status=HttpStatusCodes.C_200_OK)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class TokenView(TokenCookieMixin, View):
+class TokenView(TokenCookieMixin, APIView):
+    @swagger_auto_schema(**TokenGetSchema.to_swagger_schema())
     def post(self, request):
         root_domain = self.get_root_domain()
         cookie_access_token = self.get_cookie(request, ACCESS_TOKEN_COOKIE_KEY)
@@ -95,7 +101,8 @@ class TokenView(TokenCookieMixin, View):
                 }
                 response = JsonResponse(data)
                 self.add_token_cookie(
-                    response=response, access_token=new_access_token, refresh_token=new_refresh_token, root_domain=root_domain
+                    response=response, access_token=new_access_token, refresh_token=new_refresh_token,
+                    root_domain=root_domain
                 )
                 return response
 

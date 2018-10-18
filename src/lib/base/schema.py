@@ -1,12 +1,34 @@
 from typing import Dict, List, Optional, Union
 
+from drf_yasg import openapi
 from drf_yasg.openapi import Parameter, Response, Schema, SchemaRef
+from inflection import camelize
 from rest_framework.serializers import Serializer
 
 REQUEST_BODY = Union[Schema, SchemaRef, Serializer]
 QUERY_SERIALIZER = Optional[Serializer]
 MANUAL_PARAMETERS = List[Parameter]
 RESPONSES = Dict[str, Union[Schema, SchemaRef, Response, str, Serializer]]
+
+_internal_authorization = openapi.Parameter(
+    in_='header',
+    name='Authorization',
+    type='JWT',
+    description='JWT 인증을 위한 Authorization Header',
+    example="Bearer {JWT}"
+)
+
+_public_authorization = openapi.Parameter(
+    in_='cookie',
+    name='ridi_at',
+    type='oauth2',
+    description='Access Token',
+)
+
+
+class SecurityScope:
+    PUBLIC = 0
+    INTERNAL = 1
 
 
 class BaseSchema:
@@ -35,16 +57,21 @@ class BaseSchema:
     :type query_serializer: QUERY_SERIALIZER
     :type manual_parameters: MANUAL_PARAMETERS
     :type responses: RESPONSES
+    :type str operation_id: the operation ID must be unique accross the whole API
     """
     request_body = None
     query_serializer = None
     manual_parameters = None
     responses = None
+    operation_id = None
+    operation_description = None
+    security_scope = None
 
     @classmethod
     def to_swagger_schema(cls) -> Dict:
-        _schema = {}
-
+        _schema = {'manual_parameters': []}
+        if cls.operation_id:
+            _schema['operation_id'] = camelize(cls.operation_id, uppercase_first_letter=False)
         if cls.request_body:
             _schema['request_body'] = cls.request_body
         if cls.query_serializer:
@@ -53,5 +80,10 @@ class BaseSchema:
             _schema['manual_parameters'] = cls.manual_parameters
         if cls.responses:
             _schema['responses'] = cls.responses
-
+        if cls.operation_description:
+            _schema['operation_description'] = cls.operation_description
+        if cls.security_scope == SecurityScope.INTERNAL:
+            _schema['manual_parameters'].append(_internal_authorization)
+        if cls.security_scope == SecurityScope.PUBLIC:
+            _schema['manual_parameters'].append(_public_authorization)
         return _schema

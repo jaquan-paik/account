@@ -1,8 +1,9 @@
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from rest_framework.views import APIView
-
+from drf_yasg.utils import swagger_auto_schema
 from apps.domains.account.services.account_info_service import AccountInfoService
+from apps.domains.account.schemas import RidiAccountInfoGetSchema
 from infra.configure.config import GeneralConfig
 from infra.network.constants.api_status_code import ApiStatusCodes
 from lib.base.exceptions import ErrorException
@@ -42,6 +43,7 @@ class RidiLoginView(LoginView):  # pylint: disable=too-many-ancestors
 
 
 class RidiAccountInfoView(CookieMixin, ResponseMixin, APIView):
+    @swagger_auto_schema(**RidiAccountInfoGetSchema.to_swagger_schema())
     def get(self, request):
         access_token = self.get_cookie(request=request, key=ACCESS_TOKEN_COOKIE_KEY)
         if access_token is None:
@@ -51,10 +53,14 @@ class RidiAccountInfoView(CookieMixin, ResponseMixin, APIView):
         try:
             data = AccountInfoService.get_account_info(access_token)
         except ServerException:
-            code = self.make_response_code(ApiStatusCodes.X_400_RIDIBOOKS_NOT_CONNECTION, 'Ridibooks server is not connected')
+            code = self.make_response_code(
+                ApiStatusCodes.X_400_RIDIBOOKS_NOT_CONNECTION, 'Ridibooks server is not connected'
+            )
             return self.fail_response(code)
         except (HTTPException, InvalidResponseException):
-            code = self.make_response_code(ApiStatusCodes.X_400_RIDIBOOKS_BAD_RESPONSE, 'Ridibooks server respond bad response')
+            code = self.make_response_code(
+                ApiStatusCodes.X_400_RIDIBOOKS_BAD_RESPONSE, 'Ridibooks server respond bad response'
+            )
             return self.fail_response(code)
 
         return self.success_response(data={'result': data['result']})
