@@ -10,7 +10,7 @@ class TokenGetSchema(BaseSchema):
         in_='cookie',
         name='ridi_rt',
         type='oauth2',
-        description='refresh token'
+        description='Refresh Token'
     )]
     responses = {
         '200': openapi.Response(

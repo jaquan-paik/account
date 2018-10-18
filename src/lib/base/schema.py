@@ -4,7 +4,6 @@ from drf_yasg import openapi
 from drf_yasg.openapi import Parameter, Response, Schema, SchemaRef
 from inflection import camelize
 from rest_framework.serializers import Serializer
-import json
 
 REQUEST_BODY = Union[Schema, SchemaRef, Serializer]
 QUERY_SERIALIZER = Optional[Serializer]
@@ -19,19 +18,11 @@ _internal_authorization = openapi.Parameter(
     example="Bearer {JWT}"
 )
 
-_public_description = {
-    'authorizationUrl': 'https://account.ridibooks.com/oauth2/authorize',
-    'tokenUrl ': 'https://account.ridibooks.com/oauth2/token',
-    'refreshUrl ': 'https://account.ridibooks.com/oauth2/token',
-    'flow ': 'accessCode',
-    'scopes': {'ALL': 'full authority'},
-}
-
 _public_authorization = openapi.Parameter(
     in_='cookie',
     name='ridi_at',
     type='oauth2',
-    description=json.dumps(_public_description)
+    description='Access Token',
 )
 
 
