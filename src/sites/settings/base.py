@@ -229,10 +229,6 @@ RIDI_INTERNAL_AUTH_REQUIRE_EXP = False
 
 # Security
 X_FRAME_OPTIONS = 'ALLOW-FROM https://ez1.s-bluevery.com/'
-CSP_FRAME_ANCESTORS = [
-    'https://ez1.s-bluevery.com',
-    'https://test.ezwel.com',
-]
 
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -245,8 +241,6 @@ CSRF_COOKIE_SECURE = True
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_URLS_REGEX = r'^/(ridi|oauth2|health|accounts)/.*$'
-
-CSRF_TRUSTED_ORIGINS = ['https://local.ridi.io']
 
 ALLOWED_HOSTS = []
 

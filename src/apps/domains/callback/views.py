@@ -2,20 +2,21 @@ from datetime import datetime
 
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
-from django.views import View
 from django.urls import reverse
-
-from rest_framework.views import APIView
-from requests import HTTPError
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from drf_yasg.utils import swagger_auto_schema
+from requests import HTTPError
+from rest_framework.views import APIView
 
 from apps.domains.callback.constants import CookieRootDomains, ROOT_DOMAIN_SESSION_KEY
 from apps.domains.callback.helpers.token_helper import TokenCodeHelper
 from apps.domains.callback.helpers.url_helper import UrlHelper
 from apps.domains.callback.mixins import OAuth2SessionMixin, TokenCookieMixin
 from apps.domains.callback.response import InHouseHttpResponseRedirect
-from apps.domains.callback.services.token_refresh_service import TokenRefreshService
 from apps.domains.callback.schemas import TokenGetSchema
+from apps.domains.callback.services.token_refresh_service import TokenRefreshService
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
 from infra.network.constants.http_status_code import HttpStatusCodes
@@ -74,6 +75,7 @@ class CompleteView(View):
         return JsonResponse(data={}, status=HttpStatusCodes.C_200_OK)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class TokenView(TokenCookieMixin, APIView):
     @swagger_auto_schema(**TokenGetSchema.to_swagger_schema())
     def post(self, request):
