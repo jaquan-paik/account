@@ -246,6 +246,8 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_URLS_REGEX = r'^/(ridi|oauth2|health|accounts)/.*$'
 
+CSRF_TRUSTED_ORIGINS = ['https://local.ridi.io']
+
 ALLOWED_HOSTS = []
 
 
