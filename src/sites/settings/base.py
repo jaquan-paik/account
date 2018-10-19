@@ -254,3 +254,8 @@ RAVEN_CONFIG = {
         'OSError',
     ],
 }
+
+# DRF
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (),
+}
