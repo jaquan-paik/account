@@ -82,7 +82,6 @@ class TokenView(TokenCookieMixin, APIView):
         cookie_access_token = self.get_cookie(request, ACCESS_TOKEN_COOKIE_KEY)
         cookie_refresh_token = self.get_cookie(request, REFRESH_TOKEN_COOKIE_KEY)
 
-
         try:
             access_token = JwtHandler.get_access_token(cookie_access_token)
         except JwtTokenErrorException:
