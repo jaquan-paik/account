@@ -85,7 +85,7 @@ DATABASES = {
         'PASSWORD': Secret().get(SecretKeyName.WRITE_DB_PASSWORD),
         'HOST': Secret().get(SecretKeyName.WRITE_DB_HOST),
         'PORT': '3306',
-        'CONN_MAX_AGE': 300,
+        'CONN_MAX_AGE': 0,
         'OPTIONS': {
             'sql_mode': 'STRICT_TRANS_TABLES',
             'charset': 'utf8',
@@ -98,7 +98,7 @@ DATABASES = {
         'PASSWORD': Secret().get(SecretKeyName.WRITE_DB_PASSWORD),
         'HOST': Secret().get(SecretKeyName.WRITE_DB_HOST),
         'PORT': '3306',
-        'CONN_MAX_AGE': 300,
+        'CONN_MAX_AGE': 0,
         'OPTIONS': {
             'sql_mode': 'STRICT_TRANS_TABLES',
             'charset': 'utf8',
@@ -111,7 +111,7 @@ DATABASES = {
         'PASSWORD': Secret().get(SecretKeyName.READ_DB_PASSWORD),
         'HOST': Secret().get(SecretKeyName.READ_DB_HOST),
         'PORT': '3306',
-        'CONN_MAX_AGE': 300,
+        'CONN_MAX_AGE': 0,
         'OPTIONS': {
             'sql_mode': 'STRICT_TRANS_TABLES',
             'charset': 'utf8',
