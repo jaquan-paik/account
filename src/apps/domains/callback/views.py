@@ -8,6 +8,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from drf_yasg.utils import swagger_auto_schema
 from requests import HTTPError
+from rest_framework.views import APIView
 
 from apps.domains.callback.constants import CookieRootDomains, ROOT_DOMAIN_SESSION_KEY
 from apps.domains.callback.helpers.token_helper import TokenCodeHelper
@@ -74,8 +75,7 @@ class CompleteView(View):
         return JsonResponse(data={}, status=HttpStatusCodes.C_200_OK)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class TokenView(TokenCookieMixin, View):
+class TokenView(TokenCookieMixin, APIView):
     @swagger_auto_schema(**TokenGetSchema.to_swagger_schema())
     def post(self, request):
         root_domain = self.get_root_domain()
