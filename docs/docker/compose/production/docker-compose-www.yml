@@ -2,8 +2,8 @@ version: '2'
 
 services:
   account:
-    mem_limit: 2048m
-    mem_reservation: 1024m
+    mem_limit: 1024m
+    mem_reservation: 512m
     image: 588135293606.dkr.ecr.ap-northeast-2.amazonaws.com/production/account/www
     container_name: account-www
     command: /usr/local/bin/uwsgi --ini /etc/uwsgi/www.ini
