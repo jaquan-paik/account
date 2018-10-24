@@ -3,9 +3,7 @@ from datetime import datetime
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
-from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
 from drf_yasg.utils import swagger_auto_schema
 from requests import HTTPError
 from rest_framework.views import APIView
@@ -66,7 +64,6 @@ class CallbackView(OAuth2SessionMixin, TokenCookieMixin, View):
             response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
         )
 
-        request.session.flush()
         return response
 
 
