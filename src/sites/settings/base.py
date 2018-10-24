@@ -85,33 +85,7 @@ DATABASES = {
         'PASSWORD': Secret().get(SecretKeyName.WRITE_DB_PASSWORD),
         'HOST': Secret().get(SecretKeyName.WRITE_DB_HOST),
         'PORT': '3306',
-        'CONN_MAX_AGE': 0,
-        'OPTIONS': {
-            'sql_mode': 'STRICT_TRANS_TABLES',
-            'charset': 'utf8',
-        }
-    },
-    'write': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'account',
-        'USER': Secret().get(SecretKeyName.WRITE_DB_ACCOUNT),
-        'PASSWORD': Secret().get(SecretKeyName.WRITE_DB_PASSWORD),
-        'HOST': Secret().get(SecretKeyName.WRITE_DB_HOST),
-        'PORT': '3306',
-        'CONN_MAX_AGE': 0,
-        'OPTIONS': {
-            'sql_mode': 'STRICT_TRANS_TABLES',
-            'charset': 'utf8',
-        }
-    },
-    'read': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'account',
-        'USER': Secret().get(SecretKeyName.READ_DB_ACCOUNT),
-        'PASSWORD': Secret().get(SecretKeyName.READ_DB_PASSWORD),
-        'HOST': Secret().get(SecretKeyName.READ_DB_HOST),
-        'PORT': '3306',
-        'CONN_MAX_AGE': 0,
+        'CONN_MAX_AGE': 300,
         'OPTIONS': {
             'sql_mode': 'STRICT_TRANS_TABLES',
             'charset': 'utf8',
@@ -179,7 +153,7 @@ LOGIN_REDIRECT_URL = '/'
 
 
 # Session
-SESSION_COOKIE_AGE = 60 * 60
+SESSION_COOKIE_AGE = 60 * 12
 SESSION_COOKIE_SECURE = True
 
 SESSION_ENGINE = 'redis_sessions.session'
