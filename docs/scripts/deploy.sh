@@ -2,8 +2,7 @@
 set -e
 
 # Set environment
-if [ "$1" = development ]
-then
+if [ "$1" = development ]; then
 
 export ENVIRONMENT=development
 export ACCOUNT_ECR=$DEV_ACCOUNT_ECR
@@ -11,7 +10,7 @@ export AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
 export IMAGE_TAG=${TRAVIS_COMMIT::8}
 
-else if [ "$1" = staging ]
+elif [ "$1" = staging ]; then
 
 export ENVIRONMENT=staging
 export ACCOUNT_ECR=$STAGING_ACCOUNT_ECR
