@@ -5,8 +5,6 @@ services:
     image: mariadb:10.1
     container_name: account-mariadb
     restart: always
-    ports:
-      - 3306:3306
     volumes:
       - ./.tmp/mysql:/var/lib/mysql
     environment:
@@ -20,17 +18,13 @@ services:
     image: redis:4.0.6
     container_name: account-redis
     restart: always
-    ports:
-      - 6379:6379
 
   account-www:
     image: ridibooks/python:bootstrap-django-2018.06.06
     container_name: account-www
     volumes:
       - .:/htdocs/www
-    ports:
-      - 7001:7001
-    command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h account-mariadb -u root -proot', 'make run-www']
+    command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h account-mariadb -u root -proot', 'make docker-all']
     depends_on:
       - account-redis
       - account-mariadb

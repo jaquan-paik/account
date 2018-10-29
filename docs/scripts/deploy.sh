@@ -11,6 +11,14 @@ export AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
 export IMAGE_TAG=${TRAVIS_COMMIT::8}
 
+else if [ "$1" = staging ]
+
+export ENVIRONMENT=staging
+export ACCOUNT_ECR=$STAGING_ACCOUNT_ECR
+export AWS_ACCESS_KEY_ID=$PROD_AWS_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY
+export IMAGE_TAG=${TRAVIS_COMMIT::8}
+
 else
 
 export ENVIRONMENT=production
@@ -32,22 +40,22 @@ wait
 
 
 # Build image
-make ci-build-account env=$ENVIRONMENT & \
-make nginx-build-image env=$ENVIRONMENT & \
+docker build -t $ENVIRONMENT/account/www:latest -f ./docs/docker/account/Dockerfile . --build-arg ENVIRONMENT="$ENVIRONMENT" & \
+docker build -t $ENVIRONMENT/account/nginx:latest -f ./docs/docker/nginx/Dockerfile . --build-arg ENVIRONMENT="$ENVIRONMENT" & \
 wait
 
 # Tag image
-make ci-tag-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest & \
-make ci-tag-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=$IMAGE_TAG & \
-make nginx-tag-image env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest & \
-make nginx-tag-image env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=$IMAGE_TAG & \
+docker tag $ENVIRONMENT/account/www:latest $ACCOUNT_ECR/$ENVIRONMENT/account/www:latest & \
+docker tag $ENVIRONMENT/account/www:latest $ACCOUNT_ECR/$ENVIRONMENT/account/www:$IMAGE_TAG & \
+docker tag $ENVIRONMENT/account/www:latest $ACCOUNT_ECR/$ENVIRONMENT/account/nginx:latest & \
+docker tag $ENVIRONMENT/account/www:latest $ACCOUNT_ECR/$ENVIRONMENT/account/nginx:$IMAGE_TAG & \
 wait
 
 # Push image
-make ci-push-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest & \
-make ci-push-account env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=$IMAGE_TAG & \
-make nginx-push-image env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=latest & \
-make nginx-push-image env=$ENVIRONMENT ecr_path=$ACCOUNT_ECR tag=$IMAGE_TAG & \
+docker push $ACCOUNT_ECR/$ENVIRONMENT/account/www:latest & \
+docker push $ACCOUNT_ECR/$ENVIRONMENT/account/www:$IMAGE_TAG & \
+docker push $ACCOUNT_ECR/$ENVIRONMENT/account/nginx:latest & \
+docker push $ACCOUNT_ECR/$ENVIRONMENT/account/nginx:$IMAGE_TAG & \
 wait
 
 

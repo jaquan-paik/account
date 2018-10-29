@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  account:
+    mem_limit: 512m
+    mem_reservation: 128m
+    image: 588135293606.dkr.ecr.ap-northeast-2.amazonaws.com/production/account/www
+    container_name: account-www
+    command: /usr/local/bin/uwsgi --ini /etc/uwsgi/www.ini --import infra.crontab
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: account-ecs-logs
+        awslogs-region: ap-northeast-2
+        awslogs-stream-prefix: www

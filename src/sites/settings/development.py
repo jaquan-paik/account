@@ -11,7 +11,7 @@ setup_logging(Secret().get(SecretKeyName.SENTRY_DSN))
 SITE_DOMAIN = 'account.dev.ridi.io'
 ALLOWED_HOSTS = [
     SITE_DOMAIN,
-    'account.test.ridi.io'
+    'account.local.ridi.io'
 ]
 
 CORS_ORIGIN_REGEX_WHITELIST = (
