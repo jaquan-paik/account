@@ -24,7 +24,7 @@ services:
     ports:
     - 80
     links:
-    - library
+    - account
     logging:
       driver: awslogs
       options:
