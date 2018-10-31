@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 
 from apps.domains.callback.helpers.client_helper import ClientHelper
 from apps.domains.oauth2.models import Application
+from lib.log import sentry
 from lib.utils.date import generate_cookie_expire_time
 
 
@@ -27,8 +28,18 @@ class OAuth2Data:
                 raise PermissionDenied()
         return self._client
 
+    @property
+    def extra(self):
+        return {
+            'client_id': self.client_id,
+            'redirect_uri': self.redirect_uri,
+            'code': self.code,
+            'state': self.state,
+        }
+
     def validate_params(self):
         if self.redirect_uri is None:
+            sentry.error_message(f'[PermissionDenied][validate_params]', extra=self.extra)
             raise PermissionDenied()
 
         if self.client_id is None:
@@ -36,18 +47,22 @@ class OAuth2Data:
 
     def validate_state(self, state: str):
         if state != self.state:
+            sentry.error_message(f'[PermissionDenied][validate_state]', extra=self.extra)
             raise PermissionDenied()
 
     def validate_client(self):
         #  내부 서비스가 아니면 해당 방법을 사용할 수 없다.
         if not self.client.is_in_house:
+            sentry.error_message(f'[PermissionDenied][validate_client]', extra=self.extra)
             raise PermissionDenied()
 
     def validate_redirect_uri(self):
         if not self.client.is_in_house:
+            sentry.error_message(f'[PermissionDenied][validate_redirect_uri][client][is_in_house]', extra=self.extra)
             raise PermissionDenied()
 
         if not self._is_allowed_uri(self.redirect_uri):
+            sentry.error_message(f'[PermissionDenied][validate_redirect_uri][_is_allowed_uri]', extra=self.extra)
             raise PermissionDenied()
 
     def _is_allowed_uri(self, uri: str) -> bool:
