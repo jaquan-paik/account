@@ -63,7 +63,7 @@ docker-compose -f ./docs/docker/compose/build.yml build
 
 # Push image
 run_and_check_exit_code "ecs-cli push $ENVIRONMENT/account/uwsgi:$TAG"
-run_and_check_exit_code "ecs-cli push $ENVIRONMENT/library_api/nginx:$TAG"
+run_and_check_exit_code "ecs-cli push $ENVIRONMENT/account/nginx:$TAG"
 
 if [ $? -ne 0 ]; then
     echo "push fails"
