@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  www:
+    build:
+      context: ../../../
+      dockerfile: ./docs/docker/uwsgi/Dockerfile
+      args:
+        ENVIRONMENT: ${ENVIRONMENT}
+    image: ${ENVIRONMENT}/account/uwsgi:${TAG}
+  nginx:
+    build:
+      context: ../../../
+      dockerfile: ./docs/docker/nginx/Dockerfile
+      args:
+        ENVIRONMENT: ${ENVIRONMENT}
+    image: ${ENVIRONMENT}/account/nginx:${TAG}

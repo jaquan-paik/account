@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  uwsgi:
+    image: ${ECR_REPO_URL}/${ENVIRONMENT}/account/uwsgi:${TAG}
+    command: ["/usr/local/bin/uwsgi", "--ini", "/etc/uwsgi/account.ini"]
+
+  nginx:
+    image: ${ECR_REPO_URL}/${ENVIRONMENT}/account/nginx:${TAG}
+
+  cron:
+    image: ${ECR_REPO_URL}/${ENVIRONMENT}/account/uwsgi:${TAG}
+    command: ["/usr/local/bin/uwsgi", "--ini", "/etc/uwsgi/account.ini", "--import", "infra.crontab"]

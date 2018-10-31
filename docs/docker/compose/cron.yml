@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  account-cron:
+    extends:
+      file: common.yml
+      service: cron
+    mem_limit: 512m
+    mem_reservation: 128m
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: /account/ecs/cron
+        awslogs-region: ap-northeast-2
+        awslogs-stream-prefix: cron

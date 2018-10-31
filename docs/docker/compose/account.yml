@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  account:
+    extends:
+      file: common.yml
+      service: uwsgi
+    mem_limit: 1024m
+    mem_reservation: 512m
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: /account/ecs/www/uwsgi
+        awslogs-region: ap-northeast-2
+        awslogs-stream-prefix: uwsgi
+
+  account-nginx:
+    extends:
+      file: common.yml
+      service: nginx
+    mem_limit: 512m
+    mem_reservation: 64m
+    restart: always
+    ports:
+    - 80
+    links:
+    - library
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: /account/ecs/www/nginx
+        awslogs-region: ap-northeast-2
+        awslogs-stream-prefix: nginx
