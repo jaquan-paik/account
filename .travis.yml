@@ -51,8 +51,8 @@ deploy:
   # Deploy development
   - provider: script
     script: bash docs/scripts/deploy.sh development
-    on:
-      branch: master
+#    on:
+#      branch: master
 
 # Deploy staging
 # - provider: script
