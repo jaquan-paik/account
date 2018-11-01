@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 from django.test import TestCase
 
 from infra.storage.ssm.connectors import ParameterStoreConnector
-from lib.secret.secret import ENV_DEV, ENV_PROD
+from lib.secret.constants import SecretEnvironment
 
 
 class ParameterStoreConnectorTestCase(TestCase):
@@ -12,7 +12,7 @@ class ParameterStoreConnectorTestCase(TestCase):
         ParameterStoreConnector.__init__ = MagicMock(return_value=None)
         connector = ParameterStoreConnector()
 
-        for env in [ENV_DEV, ENV_PROD]:
+        for env in map(SecretEnvironment.to_string, SecretEnvironment.get_list()):
             key_num = 4
             connector.load_parameters_by_path = MagicMock(return_value=self._dummy_parameter_response(env, key_num))
             params = connector.load_parameters(env)
