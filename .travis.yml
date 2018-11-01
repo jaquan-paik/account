@@ -57,7 +57,7 @@ deploy:
   - provider: script
     script: bash docs/scripts/deploy.sh staging
     on:
-      branch: refac/use-pipenv
+      branch: master
 
 # Deploy production
 #  - provider: script
