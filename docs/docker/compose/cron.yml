@@ -10,6 +10,6 @@ services:
     logging:
       driver: awslogs
       options:
-        awslogs-group: /account/ecs/cron
+        awslogs-group: /account/${ENVIRONMENT}/ecs/cron
         awslogs-region: ap-northeast-2
         awslogs-stream-prefix: cron

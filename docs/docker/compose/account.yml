@@ -10,7 +10,7 @@ services:
     logging:
       driver: awslogs
       options:
-        awslogs-group: /account/ecs/www/uwsgi
+        awslogs-group: /account/${ENVIRONMENT}/ecs/www/uwsgi
         awslogs-region: ap-northeast-2
         awslogs-stream-prefix: uwsgi
 
@@ -28,6 +28,6 @@ services:
     logging:
       driver: awslogs
       options:
-        awslogs-group: /account/ecs/www/nginx
+        awslogs-group: /account/${ENVIRONMENT}/ecs/www/nginx
         awslogs-region: ap-northeast-2
         awslogs-stream-prefix: nginx
