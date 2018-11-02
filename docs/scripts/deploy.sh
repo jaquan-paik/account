@@ -73,7 +73,7 @@ fi
 
 # Deploy
 if [ "$1" = staging ]; then
-run_and_check_exit_code "ecs-cli compose --cluster account-staging-cluster --project-name account-www -f docs/docker/compose/account.yml service up --timeout 1200"
+run_and_check_exit_code "ecs-cli compose --cluster account-staging-cluster --project-name account-staging-www -f docs/docker/compose/account.yml service up --timeout 1200"
 else
 run_and_check_exit_code "ecs-cli compose --cluster account-cluster --project-name account-www -f docs/docker/compose/account.yml service up --timeout 1200" \
                         "ecs-cli compose --cluster account-cluster --project-name account-cron -f docs/docker/compose/cron.yml service up --timeout 1200"
