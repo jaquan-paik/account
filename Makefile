@@ -3,88 +3,63 @@
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-all: install run
+all: set-githook run-www
 
-install: set-githook python-package-install settings
-
-run: lint test run-www
-
-run-www: python-package-install settings run-server-www
-
-run-uwsgi: python-package-install settings run-uwsgi-www
+docker-all: global-python-package-install-development run-www
 
 
-# install
-npm-install:
-	@npm install
-
-python-package-install:
-	@pip3 install -r docs/requirements/development.txt
-
-settings:
-	@cp docs/dev/settings/secrets.json ./secrets.json && python3.6 src/script/handle_secret_file.py encrypt
-
-migrate:
-	@python3.6 src/manage.py migrate
+run-www: settings run-server-www
 
 
 # git
 set-githook:
 	@cd docs/git/ && ./install_git_hooks.sh
 
+# install
+npm-install:
+	@npm install
+
+settings:
+	@cp docs/dev/settings/secrets.json ./secrets.json && python3.6 src/script/handle_secret_file.py -a encrypt
+
+ci-settings:
+	@python3.6 src/script/handle_secret_file.py -a generate -e $(ns)
+
+global-python-package-install-development:
+	@pip3.6 install -U pip==18.0 pipenv && pipenv install --system --deploy --dev
+
+global-python-package-install-staging:
+	@pip3.6 install -U pip==18.0 pipenv && pipenv install --system --deploy
+
+global-python-package-install-production:
+	@pip3.6 install -U pip==18.0 pipenv && pipenv install --system --deploy
+
 
 # run
 run-server-www:
 	@python3.6 src/manage.py runserver 0.0.0.0:7001
 
-run-uwsgi-www:
-	@/usr/local/bin/uwsgi --ini docs/docker/account/development/uwsgi/www.ini
-
-# test
-test:
-	@python3.6 src/manage.py test src --noinput --settings=sites.settings.test
-
-
-pm-test:
-	@npm run test
-
 
 # pre-processing
 lint:
-	@python3.6 $(shell which pylint) ./src/apps/ ./src/infra/ ./src/lib/ --rcfile=.pylintrc && flake8
+	pylint ./src/apps/ ./src/infra/ ./src/lib/ --rcfile=.pylintrc
+	flake8
 
 check-deprecated:
 	@python3.6 src/script/check_deprecated_code.py
 
 
+# test
+test:
+	@python3.6 src/manage.py test src --noinput --settings=sites.settings.test
+
+pm-test:
+	@npm run test
+
+
 # docker
 docker-up:
-	@docker-compose up --build
+	@docker-compose up
 
 docker-logs:
 	@docker ps -a -q -f name=account-www | awk '{print $1}' | xargs docker logs -f
-
-
-# CI
-ci-settings:
-	@python3.6 src/script/handle_secret_file.py generate_$(ns)
-
-ci-build-account:
-	@docker build -t $(env)/account/www:latest -f ./docs/docker/account/Dockerfile . --build-arg ENVIRONMENT="$(env)"
-
-ci-tag-account:
-	@docker tag $(env)/account/www:latest $(ecr_path)/$(env)/account/www:$(tag)
-
-ci-push-account:
-	@docker push $(ecr_path)/$(env)/account/www:$(tag)
-
-
-# -- Nginx -- #
-nginx-build-image:
-	@docker build -t $(env)/account/nginx:latest -f ./docs/docker/nginx/Dockerfile . --build-arg ENVIRONMENT="$(env)"
-
-nginx-tag-image:
-	@docker tag $(env)/account/nginx:latest $(ecr_path)/$(env)/account/nginx:$(tag)
-
-nginx-push-image:
-	@docker push $(ecr_path)/$(env)/account/nginx:$(tag)

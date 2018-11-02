@@ -7,30 +7,50 @@
 
 ## Install Python3.6
 ```
-brew install python3
-python3 --version
+brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/f2a764ef944b1080be64bd88dca9a1d80130c558/Formula/python.rb
 ```
+
+## Install Pipenv
+```
+pip3 install pipenv
+```
+
+## Install mysql-connector
+```
+brew install mysql-connector-c
+```
+
+### Fix bug
+```
+vi $(which mysql_config)
+```
+
+Change 
+```
+# Create options
+libs="-L$pkglibdir"
+libs="$libs -l "
+```
+to 
+```
+# Create options
+libs="-L$pkglibdir"
+libs="$libs -lmysqlclient"
+```
+- https://github.com/PyMySQL/mysqlclient-python#note-about-bug-of-mysql-connectorc-on-macos
+
 
 ## Create virtual environment
 ```
-python3.6 -m venv venv
+pipenv install --dev
 ```
 
-## Activate virtual environment
-```
-source venv/bin/activate
-```
-## Install Mysql
-```
-brew install mysql
-```
 
 ## Add to /etc/hosts
 ```
-127.0.0.1 account-redis
-127.0.0.1 account-mariadb
-
-127.0.0.1 account.dev.ridi.com
+127.0.0.1 library-redis
+127.0.0.1 library-mariadb
+127.0.0.1 library-api.local.ridi.io
 ```
 
 # 2. Docker run
@@ -39,29 +59,25 @@ make docker-up
 ```
 
 
-# 3. Run
+# 3. Usage
 
 ## Install packages and Run
 ```
-make all
-```
-
-## Install packages
-```
-make install
+pipenv run make all
 ```
 
 ## Run server
 ```
-make run
+pipenv run make run-www
 ```
+
 
 ## Linting
 ```
-make lint
+pipenv run make lint
 ```
 
 ## Test
 ```
-make test
+pipenv run make test
 ``` 
