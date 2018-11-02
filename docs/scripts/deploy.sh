@@ -20,13 +20,13 @@ run_and_check_exit_code() {
 
 
 # Set environment
-if [ "$1" = development ]; then
+if [ "$1" = production ]; then
 
-export ENVIRONMENT=development
-export ECR_REPO_URL=$DEV_ACCOUNT_ECR
-export AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID
-export AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
-export TAG=${TRAVIS_COMMIT::8}
+export ENVIRONMENT=production
+export ECR_REPO_URL=$PROD_ACCOUNT_ECR
+export AWS_ACCESS_KEY_ID=$PROD_AWS_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY
+export TAG=$TRAVIS_TAG
 
 elif [ "$1" = staging ]; then
 
@@ -38,11 +38,11 @@ export TAG=${TRAVIS_COMMIT::8}
 
 else
 
-export ENVIRONMENT=production
-export ECR_REPO_URL=$PROD_ACCOUNT_ECR
-export AWS_ACCESS_KEY_ID=$PROD_AWS_ACCESS_KEY_ID
-export AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY
-export TAG=$TRAVIS_TAG
+export ENVIRONMENT=development
+export ECR_REPO_URL=$DEV_ACCOUNT_ECR
+export AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY
+export TAG=${TRAVIS_COMMIT::8}
 
 fi
 
