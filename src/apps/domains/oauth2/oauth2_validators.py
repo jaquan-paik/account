@@ -52,8 +52,7 @@ class RidiOAuth2Validator(OAuth2Validator):
 
     def invalidate_authorization_code(self, client_id, code, request, *args, **kwargs):
         # cron will delete it.
-        # authorization_code를 다회 사용하기 때문에(사용후 Revoke 하지 않기 때문에) 부정행위 확인을 위해 로깅한다.
-        logger.info('Authorization_code: %s', code)
+        pass
 
     def validate_silent_authorization(self, request):
         raise NotImplementedError()
@@ -112,9 +111,6 @@ class RidiOAuth2Validator(OAuth2Validator):
 
         token['refresh_token_expires_in'] = oauth2_settings.REFRESH_TOKEN_EXPIRE_SECONDS
 
-        # Refresh 토큰을 다회 사용하기 때문에(사용후 Revoke 하지 않기 때문에) 부정행위 확인을 위해 로깅한다.
-        if request.grant_type == 'refresh_token':
-            logger.info('Refresh token: %s -> %s', request.refresh_token, refresh_token_code)
 
     def revoke_token(self, token, token_type_hint, request, *args, **kwargs):
         # Refresh 토큰만 Revoke 가능하다.
