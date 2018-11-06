@@ -111,7 +111,6 @@ class RidiOAuth2Validator(OAuth2Validator):
 
         token['refresh_token_expires_in'] = oauth2_settings.REFRESH_TOKEN_EXPIRE_SECONDS
 
-
     def revoke_token(self, token, token_type_hint, request, *args, **kwargs):
         # Refresh 토큰만 Revoke 가능하다.
         if token_type_hint not in ['refresh_token']:
