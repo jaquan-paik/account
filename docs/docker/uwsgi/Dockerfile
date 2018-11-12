@@ -1,4 +1,4 @@
-FROM ridibooks/python:bootstrap-django-2018.06.06
+FROM ridibooks/python:bootstrap-django-2018.11.12.2
 
 RUN apt-get update
 RUN apt-get install -y ca-certificates

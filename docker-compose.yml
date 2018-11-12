@@ -20,7 +20,7 @@ services:
     restart: always
 
   account-www:
-    image: ridibooks/python:bootstrap-django-2018.06.06
+    image: ridibooks/python:bootstrap-django-2018.11.12.2
     container_name: account-www
     volumes:
       - .:/htdocs/www
