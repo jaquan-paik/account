@@ -201,10 +201,9 @@ RIDI_INTERNAL_AUTH_DATA = InternalServerAuthConfigHelper.generate_auth_data({
 RIDI_INTERNAL_AUTH_REQUIRE_EXP = False
 
 # Security
-X_FRAME_OPTIONS = 'ALLOW-FROM https://ez1.s-bluevery.com/'
-
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
+# X_FRAME_OPTIONS = 'ALLOW-FROM https://ez1.s-bluevery.com/'
+# SECURE_BROWSER_XSS_FILTER = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
 
 SECURE_SSL_REDIRECT = True
 
