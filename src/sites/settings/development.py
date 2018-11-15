@@ -33,3 +33,5 @@ INSTALLED_APPS = INSTALLED_APPS + [
 MIDDLEWARE = [
      'debug_toolbar.middleware.DebugToolbarMiddleware',
 ] + MIDDLEWARE
+
+SESSION_COOKIE_DOMAIN = SITE_DOMAIN

@@ -16,3 +16,5 @@ STORE_URL = 'https://ridibooks.com'
 RIDIBOOKS_LOGIN_URL = 'https://ridibooks.com/account/login'
 
 CORS_ORIGIN_REGEX_WHITELIST = (r'^(https?://)?(\w+\.)?ridibooks\.com$',)
+
+SESSION_COOKIE_DOMAIN = SITE_DOMAIN
