@@ -16,8 +16,6 @@ from lib.utils.url import generate_query_url
 
 
 class RidiLoginView(LoginView):  # pylint: disable=too-many-ancestors
-    redirect_field_name = 'return_url'
-
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             # 로그인 되어 있으면 Next로 이동한다.
@@ -27,7 +25,7 @@ class RidiLoginView(LoginView):  # pylint: disable=too-many-ancestors
         else:
             # 로그인 안되어 있으면 리디북스 홈페이지로 이동하고 돌아온다.
             params = {
-                'return_url': request.build_absolute_uri()
+                'next': request.build_absolute_uri()
             }
 
             url = GeneralConfig.get_ridibooks_login_url()
