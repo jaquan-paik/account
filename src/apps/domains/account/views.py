@@ -1,9 +1,10 @@
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
-from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
-from apps.domains.account.services.account_info_service import AccountInfoService
+from rest_framework.views import APIView
+
 from apps.domains.account.schemas import RidiAccountInfoGetSchema
+from apps.domains.account.services.account_info_service import AccountInfoService
 from infra.configure.config import GeneralConfig
 from infra.network.constants.api_status_code import ApiStatusCodes
 from lib.base.exceptions import ErrorException
@@ -24,7 +25,7 @@ class RidiLoginView(LoginView):  # pylint: disable=too-many-ancestors
         else:
             # 로그인 안되어 있으면 리디북스 홈페이지로 이동하고 돌아온다.
             params = {
-                'return_url': request.build_absolute_uri()
+                'next': request.build_absolute_uri()
             }
 
             url = GeneralConfig.get_ridibooks_login_url()
