@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
@@ -24,7 +25,7 @@ from lib.utils.string import generate_random_str
 from lib.utils.url import generate_query_url
 
 
-class AuthorizeView(OAuth2SessionMixin, TokenCookieMixin, View):
+class AuthorizeView(LoginRequiredMixin, OAuth2SessionMixin, TokenCookieMixin, View):
     def get(self, request):
         client_id = request.GET.get('client_id', None)
         redirect_uri = request.GET.get('redirect_uri', None)
