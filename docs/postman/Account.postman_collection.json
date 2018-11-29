@@ -1,14 +1,12 @@
 {
 	"info": {
+		"_postman_id": "04da5eb1-2bfa-4be9-ae9f-237c19c2b8d7",
 		"name": "Account",
-		"_postman_id": "18e81068-a373-f42d-35d7-e526cfb4d0a3",
-		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "전역 변수 초기화",
-			"description": "",
 			"item": [
 				{
 					"name": "Pre Script",
@@ -48,14 +46,16 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{host}}",
 							"host": [
 								"{{host}}"
 							]
-						},
-						"description": null
+						}
 					},
 					"response": []
 				}
@@ -63,11 +63,9 @@
 		},
 		{
 			"name": "authorization_code",
-			"description": "",
 			"item": [
 				{
 					"name": "/authorize",
-					"description": "",
 					"item": [
 						{
 							"name": "[302] 비로그인 인증요청 -> 로그인 페이지로 redirect",
@@ -75,7 +73,7 @@
 								{
 									"listen": "test",
 									"script": {
-										"type": "text/javascript",
+										"id": "4270c7fb-04a6-445a-8657-a26c4524f808",
 										"exec": [
 											"",
 											"const h = eval(globals.loadHelpers);",
@@ -84,14 +82,18 @@
 											"",
 											"tests[\"Redirect to login page\"] = postman.getResponseHeader(\"Location\").has('/accounts/login/?next=');",
 											""
-										]
+										],
+										"type": "text/javascript"
 									}
 								}
 							],
 							"request": {
 								"method": "GET",
 								"header": [],
-								"body": {},
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
 									"raw": "{{host}}{{authorize_path}}?response_type=code&client_id={{client_id}}&state={{state}}&redirect_uri={{redirect_uri}}",
 									"host": [
@@ -100,27 +102,22 @@
 									"query": [
 										{
 											"key": "response_type",
-											"value": "code",
-											"equals": true
+											"value": "code"
 										},
 										{
 											"key": "client_id",
-											"value": "{{client_id}}",
-											"equals": true
+											"value": "{{client_id}}"
 										},
 										{
 											"key": "state",
-											"value": "{{state}}",
-											"equals": true
+											"value": "{{state}}"
 										},
 										{
 											"key": "redirect_uri",
-											"value": "{{redirect_uri}}",
-											"equals": true
+											"value": "{{redirect_uri}}"
 										}
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -173,8 +170,7 @@
 										"action",
 										"login"
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -205,7 +201,10 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"body": {},
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
 									"raw": "{{host}}{{authorize_path}}?response_type=code&client_id=dummy_client_id&state={{state}}&redirect_uri={{redirect_uri}}",
 									"host": [
@@ -214,27 +213,22 @@
 									"query": [
 										{
 											"key": "response_type",
-											"value": "code",
-											"equals": true
+											"value": "code"
 										},
 										{
 											"key": "client_id",
-											"value": "dummy_client_id",
-											"equals": true
+											"value": "dummy_client_id"
 										},
 										{
 											"key": "state",
-											"value": "{{state}}",
-											"equals": true
+											"value": "{{state}}"
 										},
 										{
 											"key": "redirect_uri",
-											"value": "{{redirect_uri}}",
-											"equals": true
+											"value": "{{redirect_uri}}"
 										}
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -265,7 +259,10 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"body": {},
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
 									"raw": "{{host}}{{authorize_path}}?response_type=code&state={{state}}&redirect_uri={{redirect_uri}}",
 									"host": [
@@ -274,22 +271,18 @@
 									"query": [
 										{
 											"key": "response_type",
-											"value": "code",
-											"equals": true
+											"value": "code"
 										},
 										{
 											"key": "state",
-											"value": "{{state}}",
-											"equals": true
+											"value": "{{state}}"
 										},
 										{
 											"key": "redirect_uri",
-											"value": "{{redirect_uri}}",
-											"equals": true
+											"value": "{{redirect_uri}}"
 										}
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -320,36 +313,34 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"body": {},
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
-									"raw": "{{host}}{{authorize_path}}?response_type=code&state={{state}}&client_id={{client_id}}&redirect_uri={{redirect_uri}}",
+									"raw": "{{host}}{{authorize_path}}?response_type=code&state={{state}}&client_id={{client_id}}&redirect_uri=https://dummy.com/receive/",
 									"host": [
 										"{{host}}{{authorize_path}}"
 									],
 									"query": [
 										{
 											"key": "response_type",
-											"value": "code",
-											"equals": true
+											"value": "code"
 										},
 										{
 											"key": "state",
-											"value": "{{state}}",
-											"equals": true
+											"value": "{{state}}"
 										},
 										{
 											"key": "client_id",
-											"value": "{{client_id}}",
-											"equals": true
+											"value": "{{client_id}}"
 										},
 										{
 											"key": "redirect_uri",
-											"value": "https://dummy.com/receive/",
-											"equals": true
+											"value": "https://dummy.com/receive/"
 										}
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -360,7 +351,6 @@
 									"listen": "test",
 									"script": {
 										"id": "d6a8e534-b78b-4d33-9dbe-9c16acce2ea1",
-										"type": "text/javascript",
 										"exec": [
 											"function parseQuery(queryString) {",
 											"    var query = {};",
@@ -383,14 +373,18 @@
 											"tests[\"Redirect url has code param\"] = query['code'];",
 											"tests[\"Redirect url has state param\"] = !query.hasOwnProperty('state');",
 											""
-										]
+										],
+										"type": "text/javascript"
 									}
 								}
 							],
 							"request": {
 								"method": "GET",
 								"header": [],
-								"body": {},
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
 									"raw": "{{host}}{{authorize_path}}?response_type=code&client_id={{client_id}}&redirect_uri={{redirect_uri}}",
 									"host": [
@@ -399,22 +393,18 @@
 									"query": [
 										{
 											"key": "response_type",
-											"value": "code",
-											"equals": true
+											"value": "code"
 										},
 										{
 											"key": "client_id",
-											"value": "{{client_id}}",
-											"equals": true
+											"value": "{{client_id}}"
 										},
 										{
 											"key": "redirect_uri",
-											"value": "{{redirect_uri}}",
-											"equals": true
+											"value": "{{redirect_uri}}"
 										}
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -455,7 +445,10 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"body": {},
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
 									"raw": "{{host}}{{authorize_path}}?response_type=code&client_id={{client_id}}&state={{state}}&redirect_uri={{redirect_uri}}",
 									"host": [
@@ -464,27 +457,22 @@
 									"query": [
 										{
 											"key": "response_type",
-											"value": "code",
-											"equals": true
+											"value": "code"
 										},
 										{
 											"key": "client_id",
-											"value": "{{client_id}}",
-											"equals": true
+											"value": "{{client_id}}"
 										},
 										{
 											"key": "state",
-											"value": "{{state}}",
-											"equals": true
+											"value": "{{state}}"
 										},
 										{
 											"key": "redirect_uri",
-											"value": "{{redirect_uri}}",
-											"equals": true
+											"value": "{{redirect_uri}}"
 										}
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						}
@@ -493,7 +481,6 @@
 				},
 				{
 					"name": "/token",
-					"description": "",
 					"item": [
 						{
 							"name": "# 코드 준비",
@@ -534,7 +521,10 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"body": {},
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
 									"raw": "{{host}}{{authorize_path}}?response_type=code&client_id={{client_id}}&state={{state}}&redirect_uri={{redirect_uri}}",
 									"host": [
@@ -543,27 +533,22 @@
 									"query": [
 										{
 											"key": "response_type",
-											"value": "code",
-											"equals": true
+											"value": "code"
 										},
 										{
 											"key": "client_id",
-											"value": "{{client_id}}",
-											"equals": true
+											"value": "{{client_id}}"
 										},
 										{
 											"key": "state",
-											"value": "{{state}}",
-											"equals": true
+											"value": "{{state}}"
 										},
 										{
 											"key": "redirect_uri",
-											"value": "{{redirect_uri}}",
-											"equals": true
+											"value": "{{redirect_uri}}"
 										}
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -609,31 +594,26 @@
 										{
 											"key": "grant_type",
 											"value": "authorization_code",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_id",
 											"value": "{{client_id}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_secret",
 											"value": "{{client_secret}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "redirect_uri",
 											"value": "{{redirect_uri}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "code",
 											"value": "{{authorization_code}}",
-											"description": "",
 											"type": "text"
 										}
 									]
@@ -643,28 +623,35 @@
 									"host": [
 										"{{host}}{{token_path}}"
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
 						{
-							"name": "[401] 이미 사용한 authorization code",
+							"name": "[200] 이미 사용한 authorization code",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"id": "ab66627d-9956-4237-bb5c-57918f149f4e",
-										"type": "text/javascript",
 										"exec": [
 											"const h = eval(globals.loadHelpers);",
 											"h.printResponseBody();",
-											"h.testStatus(401);",
+											"h.testStatus(200);",
 											"",
 											"const jsonData = JSON.parse(responseBody);",
-											"tests[\"error exists\"] = jsonData.error === 'invalid_grant';",
+											"",
+											"tests[\"access_token exists\"] = jsonData.access_token;",
+											"tests[\"refresh_token exists\"] = jsonData.refresh_token;",
+											"tests[\"expires_in exists\"] = jsonData.expires_in === 3600;",
+											"tests[\"token_type exists\"] = jsonData.token_type === 'Bearer';",
+											"tests[\"scope exists\"] = jsonData.scope === 'all';",
+											"",
+											"postman.setGlobalVariable('access_token', jsonData.access_token);",
+											"postman.setGlobalVariable('refresh_token', jsonData.refresh_token);",
 											""
-										]
+										],
+										"type": "text/javascript"
 									}
 								}
 							],
@@ -682,31 +669,26 @@
 										{
 											"key": "grant_type",
 											"value": "authorization_code",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_id",
 											"value": "{{client_id}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_secret",
 											"value": "{{client_secret}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "code",
 											"value": "{{authorization_code}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "redirect_uri",
 											"value": "{{redirect_uri}}",
-											"description": "",
 											"type": "text"
 										}
 									]
@@ -716,8 +698,7 @@
 									"host": [
 										"{{host}}{{token_path}}"
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -755,31 +736,26 @@
 										{
 											"key": "grant_type",
 											"value": "authorization_code",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_id",
 											"value": "dummy-client-id",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_secret",
 											"value": "dummy-client-secret",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "code",
 											"value": "{{authorization_code}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "redirect_uri",
 											"value": "{{redirect_uri}}",
-											"description": "",
 											"type": "text"
 										}
 									]
@@ -789,8 +765,7 @@
 									"host": [
 										"{{host}}{{token_path}}"
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -828,31 +803,26 @@
 										{
 											"key": "grant_type",
 											"value": "authorization_code",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_id",
 											"value": "{{client_id}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_secret",
 											"value": "dummy-client-secret",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "code",
 											"value": "{{authorization_code}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "redirect_uri",
 											"value": "{{redirect_uri}}",
-											"description": "",
 											"type": "text"
 										}
 									]
@@ -862,8 +832,7 @@
 									"host": [
 										"{{host}}{{token_path}}"
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						}
@@ -874,11 +843,9 @@
 		},
 		{
 			"name": "refresh_token",
-			"description": "",
 			"item": [
 				{
 					"name": "/token",
-					"description": "",
 					"item": [
 						{
 							"name": "[200] 토큰 발급 성공",
@@ -922,25 +889,21 @@
 										{
 											"key": "grant_type",
 											"value": "refresh_token",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "refresh_token",
 											"value": "{{refresh_token}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_id",
 											"value": "{{client_id}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_secret",
 											"value": "{{client_secret}}",
-											"description": "",
 											"type": "text"
 										}
 									]
@@ -950,8 +913,7 @@
 									"host": [
 										"{{host}}{{token_path}}"
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -989,25 +951,21 @@
 										{
 											"key": "grant_type",
 											"value": "refresh_token",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "refresh_token",
 											"value": "{{refresh_token}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_id",
 											"value": "dummy-client-id",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_secret",
 											"value": "{{client_secret}}",
-											"description": "",
 											"type": "text"
 										}
 									]
@@ -1017,8 +975,7 @@
 									"host": [
 										"{{host}}{{token_path}}"
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -1056,25 +1013,21 @@
 										{
 											"key": "grant_type",
 											"value": "refresh_token",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "refresh_token",
 											"value": "{{refresh_token}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_id",
 											"value": "{{client_id}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_secret",
 											"value": "dummy-client-secret",
-											"description": "",
 											"type": "text"
 										}
 									]
@@ -1084,8 +1037,7 @@
 									"host": [
 										"{{host}}{{token_path}}"
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -1123,25 +1075,21 @@
 										{
 											"key": "grant_type",
 											"value": "refresh_token",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "refresh_token",
 											"value": "dummy-refresh-token",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_id",
 											"value": "{{client_id}}",
-											"description": "",
 											"type": "text"
 										},
 										{
 											"key": "client_secret",
 											"value": "{{client_secret}}",
-											"description": "",
 											"type": "text"
 										}
 									]
@@ -1151,8 +1099,7 @@
 									"host": [
 										"{{host}}{{token_path}}"
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						}
@@ -1163,7 +1110,6 @@
 		},
 		{
 			"name": "전역 변수 초기화",
-			"description": null,
 			"item": [
 				{
 					"name": "Pre Script",
@@ -1211,8 +1157,7 @@
 							"host": [
 								"{{host}}"
 							]
-						},
-						"description": null
+						}
 					},
 					"response": []
 				}
@@ -1220,11 +1165,9 @@
 		},
 		{
 			"name": "callback",
-			"description": null,
 			"item": [
 				{
 					"name": "authorization",
-					"description": "",
 					"item": [
 						{
 							"name": "# 로그인",
@@ -1273,8 +1216,7 @@
 										"action",
 										"login"
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -1298,29 +1240,8 @@
 								"method": "GET",
 								"header": [],
 								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "grant_type",
-											"value": "refresh_token",
-											"type": "text"
-										},
-										{
-											"key": "refresh_token",
-											"value": "{{refresh_token}}",
-											"type": "text"
-										},
-										{
-											"key": "client_id",
-											"value": "dummy-client-id",
-											"type": "text"
-										},
-										{
-											"key": "client_secret",
-											"value": "{{client_secret}}",
-											"type": "text"
-										}
-									]
+									"mode": "raw",
+									"raw": ""
 								},
 								"url": {
 									"raw": "{{host}}{{callback_authorize_url}}?response_type=code&client_id={{not_in_house_client_id}}&state={{state}}&redirect_uri={{redirect_uri}}",
@@ -1330,27 +1251,22 @@
 									"query": [
 										{
 											"key": "response_type",
-											"value": "code",
-											"equals": true
+											"value": "code"
 										},
 										{
 											"key": "client_id",
-											"value": "{{not_in_house_client_id}}",
-											"equals": true
+											"value": "{{not_in_house_client_id}}"
 										},
 										{
 											"key": "state",
-											"value": "{{state}}",
-											"equals": true
+											"value": "{{state}}"
 										},
 										{
 											"key": "redirect_uri",
-											"value": "{{redirect_uri}}",
-											"equals": true
+											"value": "{{redirect_uri}}"
 										}
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -1389,27 +1305,22 @@
 									"query": [
 										{
 											"key": "response_type",
-											"value": "code",
-											"equals": true
+											"value": "code"
 										},
 										{
 											"key": "client_id",
-											"value": "{{client_id}}",
-											"equals": true
+											"value": "{{client_id}}"
 										},
 										{
 											"key": "state",
-											"value": "{{state}}",
-											"equals": true
+											"value": "{{state}}"
 										},
 										{
 											"key": "redirect_uri",
-											"value": "{{redirect_uri}}",
-											"equals": true
+											"value": "{{redirect_uri}}"
 										}
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -1420,7 +1331,6 @@
 									"listen": "test",
 									"script": {
 										"id": "7a4d8074-59ae-41f7-835b-aaad33efa39c",
-										"type": "text/javascript",
 										"exec": [
 											"",
 											"const h = eval(globals.loadHelpers);",
@@ -1429,8 +1339,10 @@
 											"",
 											"tests[\"Redirect to callback page\"] = postman.getResponseHeader(\"Location\").has(\"/callback/?\");",
 											"",
-											"postman.setGlobalVariable(\"callback_code_uri\", postman.getResponseHeader(\"Location\"));"
-										]
+											"postman.setGlobalVariable(\"callback_code_uri\", postman.getResponseHeader(\"Location\"));",
+											""
+										],
+										"type": "text/javascript"
 									}
 								}
 							],
@@ -1446,8 +1358,7 @@
 									"host": [
 										"{{host}}{{authorize_url}}"
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						},
@@ -1483,8 +1394,7 @@
 									"host": [
 										"{{callback_code_uri}}"
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						}
@@ -1493,7 +1403,6 @@
 				},
 				{
 					"name": "token",
-					"description": "",
 					"item": [
 						{
 							"name": "[200] 토큰 정보 확인",
@@ -1529,8 +1438,7 @@
 									"host": [
 										"{{host}}{{callback_token_url}}"
 									]
-								},
-								"description": null
+								}
 							},
 							"response": []
 						}
@@ -1538,6 +1446,333 @@
 					"_postman_isSubFolder": true
 				}
 			]
+		},
+		{
+			"name": "password",
+			"item": [
+				{
+					"name": "[200]password grant 토큰 발급 성공",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "92b8737d-f614-4ff7-a72b-40024961468e",
+								"exec": [
+									"const h = eval(globals.loadHelpers);",
+									"h.printResponseBody();",
+									"h.testStatus(200);",
+									"",
+									"const jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"access_token exists\"] = jsonData.access_token;",
+									"tests[\"refresh_token exists\"] = jsonData.refresh_token;",
+									"tests[\"expires_in exists\"] = jsonData.expires_in === 3600;",
+									"tests[\"token_type exists\"] = jsonData.token_type === 'Bearer';",
+									"tests[\"scope exists\"] = jsonData.scope === 'all';",
+									"",
+									"postman.setGlobalVariable('access_token', jsonData.access_token);",
+									"postman.setGlobalVariable('refresh_token', jsonData.refresh_token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{password_client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{password_client_secret}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "popopopk",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "987654321a",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}{{token_path}}",
+							"host": [
+								"{{host}}{{token_path}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "security",
+			"item": [
+				{
+					"name": "[200]cors test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "92b8737d-f614-4ff7-a72b-40024961468e",
+								"exec": [
+									"const h = eval(globals.loadHelpers);",
+									"h.printResponseBody();",
+									"h.testStatus(200);",
+									"",
+									"const jsonData = JSON.parse(responseBody);",
+									"const origin = postman.getResponseHeader(\"Access-Control-Allow-Origin\");",
+									"",
+									"tests[\"Access Control Allow Origin\"] = origin === pm.environment.get('host')",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Origin",
+								"value": "{{host}}",
+								"type": "text"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{host}}{{complete_path}}",
+							"host": [
+								"{{host}}{{complete_path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[200] iframe SAMEOPTION test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "92b8737d-f614-4ff7-a72b-40024961468e",
+								"exec": [
+									"const h = eval(globals.loadHelpers);",
+									"h.printResponseBody();",
+									"h.testStatus(200);",
+									"",
+									"const jsonData = JSON.parse(responseBody);",
+									"",
+									"const frameOption = postman.getResponseHeader(\"X-Frame-Options\");",
+									"tests[\"X Frame Option\"] =  frameOption==='SAMEORIGIN'"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Origin",
+								"type": "text",
+								"value": "{{host}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{host}}{{complete_path}}",
+							"host": [
+								"{{host}}{{complete_path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[200]cors block test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "92b8737d-f614-4ff7-a72b-40024961468e",
+								"exec": [
+									"const h = eval(globals.loadHelpers);",
+									"h.printResponseBody();",
+									"h.testStatus(200);",
+									"",
+									"const jsonData = JSON.parse(responseBody);",
+									"const origin = postman.getResponseHeader(\"Access-Control-Allow-Origin\");",
+									"",
+									"// access control allow origin 에 www.naver.com이 오면 안된다",
+									"tests[\"Access Control Allow Origin\"] = origin != 'www.naver.com'",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Origin",
+								"type": "text",
+								"value": "www.naver.com"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{host}}{{complete_path}}",
+							"host": [
+								"{{host}}{{complete_path}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "e3ad5b44-4f7f-4bb2-a240-9bfade86872e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "11be1fec-a9fc-4d9d-8552-bb0f3798bc89",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "9e65e1e6-66bf-467b-a552-ce40092d9754",
+			"key": "host",
+			"value": "https://account.dev.ridi.io",
+			"type": "string"
+		},
+		{
+			"id": "e557da1e-21b2-47fc-bd7f-b630d6ae42c4",
+			"key": "authorize_path",
+			"value": "/oauth2/authorize/",
+			"type": "string"
+		},
+		{
+			"id": "f5935989-2849-4849-8119-1054718cc540",
+			"key": "token_path",
+			"value": "/oauth2/token/",
+			"type": "string"
+		},
+		{
+			"id": "a7ae579e-5d47-4bb8-9afc-ab13343eac2f",
+			"key": "callback_authorize_url",
+			"value": "/ridi/authorize/",
+			"type": "string"
+		},
+		{
+			"id": "83903cf1-1a0e-4e5a-82dd-1bf8017a0f9a",
+			"key": "callback_token_url",
+			"value": "/ridi/token/",
+			"type": "string"
+		},
+		{
+			"id": "7a3c471d-40ac-4c9b-a0e1-7cf086852ff7",
+			"key": "client_id",
+			"value": "Nkt2Xdc0zMuWmye6MSkYgqCh9q6JjeMCsUiH1kgL",
+			"type": "string"
+		},
+		{
+			"id": "a4ac7332-0ee4-42c1-b36c-e70185a1d114",
+			"key": "client_secret",
+			"value": "TJcf9DgxFCFpgA6k5ESnsK49i0MUwbjkkzznLMfj9KGfTbiwtI3HPlQsc20V5prrrOx7wOn2Mbx7x0ngEp7gWOCQnBJzpXhNVtygAOYV9cxEhFRB5GYhEtg7RvGLnaSt",
+			"type": "string"
+		},
+		{
+			"id": "3fdc86c6-9bc5-4bb8-a8f3-cea275c35f39",
+			"key": "redirect_uri",
+			"value": "https://account.dev.ridi.io/ridi/callback/",
+			"type": "string"
+		},
+		{
+			"id": "81c76946-ddd8-4ef7-93b9-d53ce29605f6",
+			"key": "user_id",
+			"value": "ridioauth2test",
+			"type": "string"
+		},
+		{
+			"id": "e6753b5c-b728-42ef-88aa-493a35361cac",
+			"key": "password",
+			"value": "!Doffltm135",
+			"type": "string"
+		},
+		{
+			"id": "e8813099-d425-464a-94a3-8e6f9d7c111b",
+			"key": "not_in_house_client_id",
+			"value": "iax7OcCuYJ8Su5p9swjs7RNosL7zYZ4zdV5xyHV2",
+			"type": "string"
 		}
 	]
 }
