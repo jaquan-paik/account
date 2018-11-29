@@ -32,9 +32,9 @@ services:
       - account-redis
       - account-mariadb
 
-  account-nginx:
+  account.dev.ridi.io: # pm test 시, host 설정을 위해 container 이름을 domain 으로 함
     image: nginx:stable
-    container_name: account-nginx
+    container_name: account.dev.ridi.io
     restart: always
     volumes:
       - ./docs/dev/nginx:/etc/nginx/conf.d:ro
