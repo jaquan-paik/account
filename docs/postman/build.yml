@@ -8,3 +8,9 @@ services:
       args:
          PM_API_KEY: ${PM_API_KEY}
     image: account-pm-test:${TAG}
+  account-www:
+    build:
+      context: ../../
+      dockerfile: ./docs/postman/account-www/Dockerfile
+    image: account-www:${TAG}
+
