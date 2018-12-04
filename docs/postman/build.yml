@@ -3,9 +3,8 @@ version: '2'
 services:
   account-pm-test:
     build:
-      context: ./docs/postman/
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: ./Dockerfile
       args:
-        PM_API_KEY: ${PM_API_KEY}
-        ENVIRONMENT: ${ENVIRONMENT}
-    image: ${ENVIRONMENT}/account-pm-test:${TAG}
+         PM_API_KEY: ${PM_API_KEY}
+    image: account-pm-test:${TAG}
