@@ -1,0 +1,39 @@
+image: ridibooks/python:bootstrap-django-2018.11.12.2
+
+stages:
+- build
+- test
+
+build:
+  image: ridibooks/python:gitlab-ci-2018.11.12.1
+  stage: build
+  before_script:
+  - export TAG=${CI_COMMIT_SHA::8}
+  script:
+  - ENVIRONMENT=development docker-compose -f ./docs/docker/compose/build.yml build
+  - docker-compose -f ./docs/postman/build.yml build
+
+test:
+  image: ridibooks/node:pm-test-2018.12.5.1
+  services:
+  - name: pm-test/account-mariadb:${TAG}
+    alias: account-mariadb
+  - name: redis:4.0.6
+    alias: account-redis
+  - name: pm-test/account-www:${TAG}
+    alias: account-www
+    dependencies:
+      - account-mariadb
+      - account-redis
+  - name: pm-test/account-nginx:${TAG}
+    alias: account.dev.ridi.io
+    dependencies:
+      - account-www
+  variables:
+    PM_API_KEY: $PM_API_KEY
+    COLLECTION_NAMES: "['Account']"
+  before_script:
+  - echo "127.0.0.1 account.dev.ridi.io" >> /etc/hosts
+  script:
+    - bash pm-test.sh
+
