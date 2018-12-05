@@ -1,8 +1,5 @@
 FROM node:slim
 
-ADD docs/postman/account-pm-test /src
-WORKDIR /src
+ADD . /tmp
+WORKDIR /tmp
 RUN npm install
-ARG PM_API_KEY
-ENV PM_API_KEY=$PM_API_KEY
-CMD bash wait_for_response.sh "npm run pm-test -- development $PM_API_KEY"

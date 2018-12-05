@@ -1,41 +1,60 @@
 const newman = require('newman');
-const { getCollection, getEnvironment } = require('./requests');
+const { getCollections, getEnvironment } = require('./requests');
 
 const noticeError = (error) => {
   console.log(error); // 우선은 로그만 찍어본다.
 };
 
-// 결과를 체크하여 에러가 있으면 어디서 어떤 에러가 났는지 알려준다.
+const getParsedRequest = (request) => ({
+    method: request.method,
+    url: `${request.url.protocol}/${request.url.host.join('.')}`,
+    query: JSON.stringify(request.url.query.reference),
+    header: JSON.stringify(request.headers.reference),
+    body: JSON.stringify(request.body)
+});
+
 const checkErrorAndSummary = (err, summary) => {
+  const collectionName = summary.collection.name;
   let errorRaised = false;
   if (err !== null) {
-    noticeError(err);
-    return;
+      noticeError(err);
+      throw new Error(` collections: "${collectionName}" test fail`); 
   }
-  /* eslint-disable no-restricted-syntax */
   for (const exceution of summary.run.executions) {
-    for (const assertion of exceution.assertions) {
-      if (assertion.error) {
-        errorRaised = true;
-        noticeError({ error: assertion.error, request: exceution.request });
+      if (exceution.requestError) {
+          noticeError({collectionName,error: exceution.requestError, request: getParsedRequest(exceution.request)});
+          errorRaised = true;
+          continue;
       }
-    }
+      for (const assertion of exceution.assertions) {
+          if (assertion.error) {
+              errorRaised = true;
+              noticeError({collectionName, error: assertion.error, request: getParsedRequest(exceution.request)});
+          }
+      }
   }
+
   if (errorRaised) {
-    throw new Error('api test fail');
+      throw new Error(` collections: "${collectionName}" test fail`);
   }
-  console.log('no error');
+  console.log(`collection: "${collectionName}" passed`);
 };
-const scenarioTest = async () => {
-  const [collection, environment] = await Promise.all([getCollection(), getEnvironment()]);
+
+const scenarioTest = (collection, environment)=>{
   const options = {
     collection,
     environment,
     insecure: true,
     ignoreRedirects: true,
-    // reporters: 'cli', error가 있으면 그것만 출력하고 전체 결과는 reporter는 사용하지 않는다.
+    // reporters: 'cli',// error가 있으면 그것만 출력하고 전체 결과는 reporter는 사용하지 않는다.
   };
   newman.run(options, checkErrorAndSummary);
+}
+
+const main = async () => {
+  const [collections, environment] = await Promise.all([getCollections(), getEnvironment()]);
+  collections.forEach(collection=>scenarioTest(collection,environment))
 };
 
-scenarioTest();
+main();
+
