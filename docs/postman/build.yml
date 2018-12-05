@@ -6,11 +6,24 @@ services:
       context: ./
       dockerfile: ./Dockerfile
       args:
-         PM_API_KEY: ${PM_API_KEY}
-    image: account-pm-test:${TAG}
+        PM_API_KEY: ${PM_API_KEY}
+    image: pm-test/account-pm-test:${TAG}
+
   account-www:
     build:
       context: ../../
       dockerfile: ./docs/postman/account-www/Dockerfile
-    image: account-www:${TAG}
+    image: pm-test/account-www:${TAG}
+
+  account-mariadb:
+    build:
+      context: ../../
+      dockerfile: ./docs/postman/account-mariadb/Dockerfile
+    image: pm-test/account-mariadb:${TAG}
+
+  account-ngix:
+    build:
+      context: ../../
+      dockerfile: ./docs/postman/account-nginx/Dockerfile
+    image: pm-test/account-nginx:${TAG}
 
