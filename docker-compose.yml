@@ -46,15 +46,3 @@ services:
       - account-www
     links:
       - account-www
-
-  account-pm-test:
-    build:
-      context: ./docs/postman/
-      dockerfile: Dockerfile
-    container_name: account-pm-test
-    image: account-pm-test
-    command: ['./wait_for_response.sh','npm run pm-test -- $ENVIRONMENT $PM_API_KEY']
-    depends_on:
-      - account.dev.ridi.io
-    links:
-      - account.dev.ridi.io
