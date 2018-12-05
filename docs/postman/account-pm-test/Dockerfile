@@ -1,6 +1,6 @@
 FROM node:slim
 
-ADD . /src
+ADD docs/postman/account-pm-test /src
 WORKDIR /src
 RUN npm install
 ARG PM_API_KEY
