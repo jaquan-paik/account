@@ -29,7 +29,7 @@ test:
     ENVIRONMENT: development
     STATUS_CHECK_URL: https://account.dev.ridi.io/health
   before_script:
+  - export TAG=${CI_COMMIT_SHA::8}
   - echo "127.0.0.1 account.dev.ridi.io" >> /etc/hosts
   script:
-    - bash pm-test.sh
-
+  - bash pm-test.sh
