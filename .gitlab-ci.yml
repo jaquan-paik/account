@@ -22,6 +22,7 @@ test:
   image: ridibooks/python:gitlab-ci-2018.11.12.1
   before_script:
   - export TAG=${CI_COMMIT_SHA::8}
+  - export PM_API_KEY=${PM_API_KEY}
 #  - echo "127.0.0.1 account.dev.ridi.io" >> /etc/hosts
 #  - docker-compose -f ./docs/postman/docker-compose.yml up
   script:
