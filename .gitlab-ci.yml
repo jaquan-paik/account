@@ -9,6 +9,7 @@ build:
   stage: build
   variables:
     PM_API_KEY: $PM_API_KEY
+    CI_DEBUG_TRACE: "true"
   before_script:
   - "echo $PM_API_KEY"
   - echo $PM_API_KEY
