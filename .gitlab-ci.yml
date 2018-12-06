@@ -18,8 +18,8 @@ test:
     PM_API_KEY: $PM_API_KEY
   before_script:
   - export TAG=${CI_COMMIT_SHA::8}
-  - echo "127.0.0.1 account.dev.ridi.io" >> /etc/hosts
-  - docker-compose -f ./docs/postman/docker-compose.yml up
+#  - echo "127.0.0.1 account.dev.ridi.io" >> /etc/hosts
+#  - docker-compose -f ./docs/postman/docker-compose.yml up
   script:
   - docker run -e PM_API_KEY=$PM_API_KEY --env-file ./docs/postman/.env -it ridibooks/pm-test:latest /bin/bash pm-test.sh
   - docker-compose down
