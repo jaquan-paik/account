@@ -16,13 +16,13 @@ build:
 test:
   image: ridibooks/pm-test:feature_image
   services:
-  - name: pm-test/account-mariadb:${TAG}
+  - name: pm-test/account-mariadb:${CI_COMMIT_SHA::8}
     alias: account-mariadb
   - name: redis:4.0.6
     alias: account-redis
-  - name: pm-test/account-www:${TAG}
+  - name: pm-test/account-www:${CI_COMMIT_SHA::8}
     alias: account-www
-  - name: pm-test/account-nginx:${TAG}
+  - name: pm-test/account-nginx:${CI_COMMIT_SHA::8}
     alias: account.dev.ridi.io
   variables:
     PM_API_KEY: $PM_API_KEY
