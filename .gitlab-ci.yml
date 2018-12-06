@@ -10,6 +10,9 @@ build:
 #  variables:
 #    PM_API_KEY: $PM_API_KEY
   before_script:
+  - "echo $PM_API_KEY"
+  - echo $PM_API_KEY
+  - echo ${PM_API_KEY}
   - export TAG=${CI_COMMIT_SHA::8}
   - export PM_API_KEY=${PM_API_KEY}
   - echo ${PM_API_KEY}
