@@ -16,8 +16,9 @@ test:
   image: ridibooks/python:gitlab-ci-2018.11.12.1
   before_script:
   - export TAG=${CI_COMMIT_SHA::8}
+  - docker rm -f $(docker ps -a | grep pm-test | awk '{print $1}')
   - docker-compose -f ./docs/postman/docker-compose.yml up &
   script:
   - sh ./docs/docker/wait_for_it.sh "docker exec account-pm-test /bin/bash pm-test.sh"
   after_script:
-  - docker-compose down
+  - docker rm -f $(docker ps -a | grep pm-test | awk '{print $1}')
