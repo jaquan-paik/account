@@ -13,23 +13,13 @@ build:
   - docker-compose -f ./docs/postman/build.yml build
 
 test:
-  image: ridibooks/pm-test:latest
-  services:
-#  - name: pm-test/account-mariadb:12345678
-#    alias: account-mariadb
-  - name: redis:4.0.6
-    alias: account-redis
-#  - name: pm-test/account-www:12345678
-#    alias: account-www
-#  - name: pm-test/account-nginx:12345678
-#    alias: account.dev.ridi.io
+  image: ridibooks/python:gitlab-ci-2018.11.12.1
   variables:
     PM_API_KEY: $PM_API_KEY
-    COLLECTION_NAMES: "['Account']"
-    ENVIRONMENT: development
-    STATUS_CHECK_URL: https://account.dev.ridi.io/health
   before_script:
   - export TAG=${CI_COMMIT_SHA::8}
   - echo "127.0.0.1 account.dev.ridi.io" >> /etc/hosts
+  - docker-compose -f ./docs/postman/docker-compose.yml up
   script:
-  - ./docs/postman/pm-test.sh
+  - docker run -e PM_API_KEY=$PM_API_KEY --env-file ./docs/postman/.env -it ridibooks/pm-test:latest /bin/bash pm-test.sh
+  - docker-compose down

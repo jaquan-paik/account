@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+  account-mariadb:
+    image: pm-test/account-mariadb:${TAG}
+    container_name: account-mariadb
+    restart: always
+
+  account-redis:
+    image: redis:4.0.6
+    container_name: account-redis
+    restart: always
+
+  account-www:
+    image: pm-test/account-www:${TAG}
+    container_name: account-www
+    depends_on:
+    - account-redis
+    - account-mariadb
+    links:
+    - account-redis
+    - account-mariadb
+
+  account.dev.ridi.io: # 로컬이나 테스트 환경에서 self call 할 때, host 설정을 위해 domain으로 container 이름을 설정함.
+    image: pm-test/account-nginx:${TAG}
+    container_name: account.dev.ridi.io
+    restart: always
+    ports:
+    - 80:80
+    - 443:443
+    depends_on:
+      - account-www
+    links:
+      - account-www
