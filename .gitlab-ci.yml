@@ -32,4 +32,5 @@ test:
   - export TAG=${CI_COMMIT_SHA::8}
   - echo "127.0.0.1 account.dev.ridi.io" >> /etc/hosts
   script:
+  - ls && pwd
   - bash pm-test.sh
