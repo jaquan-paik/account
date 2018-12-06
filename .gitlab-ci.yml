@@ -7,10 +7,11 @@ stages:
 build:
   image: ridibooks/python:gitlab-ci-2018.11.12.1
   stage: build
-  variables:
-    PM_API_KEY: $PM_API_KEY
+#  variables:
+#    PM_API_KEY: $PM_API_KEY
   before_script:
   - export TAG=${CI_COMMIT_SHA::8}
+  - export PM_API_KEY=${PM_API_KEY}
   script:
   - "echo $PM_API_KEY"
   - echo $PM_API_KEY
