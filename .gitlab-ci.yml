@@ -21,7 +21,6 @@ test:
 #  - echo "127.0.0.1 account.dev.ridi.io" >> /etc/hosts
 #  - docker-compose -f ./docs/postman/docker-compose.yml up
   script:
-  - echo $PM_API_KEY
-  - docker run -e PM_API_KEY=$PM_API_KEY --env-file ./docs/postman/.env ridibooks/pm-test:feature_image /bin/bash pm-test.sh
+  - docker run -e PM_API_KEY=${PM_API_KEY} --env-file ./docs/postman/.env ridibooks/pm-test:feature_image /bin/bash pm-test.sh
   after_script:
   - docker-compose down
