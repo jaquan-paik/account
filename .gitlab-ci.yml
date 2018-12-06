@@ -14,15 +14,15 @@ build:
 
 test:
   image: ridibooks/pm-test:latest
-  services:
-  - name: pm-test/account-mariadb:${TAG}
-    alias: account-mariadb
-  - name: redis:4.0.6
-    alias: account-redis
-  - name: pm-test/account-www:${TAG}
-    alias: account-www
-  - name: pm-test/account-nginx:${TAG}
-    alias: account.dev.ridi.io
+#  services:
+#  - name: pm-test/account-mariadb:${TAG}
+#    alias: account-mariadb
+#  - name: redis:4.0.6
+#    alias: account-redis
+#  - name: pm-test/account-www:${TAG}
+#    alias: account-www
+#  - name: pm-test/account-nginx:${TAG}
+#    alias: account.dev.ridi.io
   variables:
     PM_API_KEY: $PM_API_KEY
     COLLECTION_NAMES: "['Account']"
