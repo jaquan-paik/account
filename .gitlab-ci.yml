@@ -8,21 +8,22 @@ build:
   image: ridibooks/python:gitlab-ci-2018.11.12.1
   stage: build
   before_script:
-  - export TAG=${CI_COMMIT_SHA::8}
+#  - export TAG=${CI_COMMIT_SHA::8}
+  - export TAG=12345678
   script:
   - docker-compose -f ./docs/postman/build.yml build
 
 test:
   image: ridibooks/pm-test:latest
   services:
-  - name: pm-test/account-mariadb:${TAG}
+  - name: pm-test/account-mariadb:12345678
     alias: account-mariadb
   - name: redis:4.0.6
     alias: account-redis
-  - name: pm-test/account-www:${TAG}
+  - name: pm-test/account-www:12345678
     alias: account-www
-#  - name: pm-test/account-nginx:${TAG}
-#    alias: account.dev.ridi.io
+  - name: pm-test/account-nginx:12345678
+    alias: account.dev.ridi.io
   variables:
     PM_API_KEY: $PM_API_KEY
     COLLECTION_NAMES: "['Account']"
