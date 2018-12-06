@@ -4,25 +4,24 @@ stages:
 - build
 - test
 
-before_script:
-- export TAG=${CI_COMMIT_SHA::8}
-
 build:
   image: ridibooks/python:gitlab-ci-2018.11.12.1
   stage: build
+  before_script:
+  - export TAG=${CI_COMMIT_SHA::8}
   script:
   - docker-compose -f ./docs/postman/build.yml build
 
 test:
-  image: ridibooks/pm-test:feature_image
+  image: ridibooks/pm-test:latest
   services:
-  - name: pm-test/account-mariadb:${CI_COMMIT_SHA::8}
+  - name: pm-test/account-mariadb:${TAG}
     alias: account-mariadb
   - name: redis:4.0.6
     alias: account-redis
-  - name: pm-test/account-www:${CI_COMMIT_SHA::8}
+  - name: pm-test/account-www:${TAG}
     alias: account-www
-  - name: pm-test/account-nginx:${CI_COMMIT_SHA::8}
+  - name: pm-test/account-nginx:${TAG}
     alias: account.dev.ridi.io
   variables:
     PM_API_KEY: $PM_API_KEY
@@ -30,6 +29,7 @@ test:
     ENVIRONMENT: development
     STATUS_CHECK_URL: https://account.dev.ridi.io/health
   before_script:
+  - export TAG=${CI_COMMIT_SHA::8}
   - echo "127.0.0.1 account.dev.ridi.io" >> /etc/hosts
   script:
   - bash pm-test.sh
