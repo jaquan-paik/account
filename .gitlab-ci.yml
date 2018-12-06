@@ -14,6 +14,15 @@ build:
 
 test:
   image: ridibooks/pm-test:latest
+  services:
+  - name: pm-test/account-mariadb:${TAG}
+    alias: account-mariadb
+  - name: redis:4.0.6
+    alias: account-redis
+  - name: pm-test/account-www:${TAG}
+    alias: account-www
+#  - name: pm-test/account-nginx:${TAG}
+#    alias: account.dev.ridi.io
   variables:
     PM_API_KEY: $PM_API_KEY
     COLLECTION_NAMES: "['Account']"
@@ -22,6 +31,5 @@ test:
   before_script:
   - export TAG=${CI_COMMIT_SHA::8}
   - echo "127.0.0.1 account.dev.ridi.io" >> /etc/hosts
-  - docker-compose up
   script:
   - bash ./docs/postman/pm-test.sh
