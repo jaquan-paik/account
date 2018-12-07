@@ -18,4 +18,9 @@ services:
       context: ../../
       dockerfile: ./docs/postman/account-nginx/Dockerfile
     image: pm-test/account-nginx:${TAG}
+  account-redis:
+    build:
+      context: ../../
+      dockerfile: ./docs/postman/account-redis/Dockerfile
+    image: pm-test/account-redis:${TAG}
 

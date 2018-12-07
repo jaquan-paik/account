@@ -7,7 +7,7 @@ services:
     restart: always
 
   account-redis:
-    image: redis:4.0.6
+    image: pm-test/account-redis:${TAG}
     container_name: account-redis
     restart: always
 
@@ -34,7 +34,7 @@ services:
       - account-www
 
   account-pm-test:
-    image: ridibooks/pm-test:2018.12.07
+    image: ridibooks/pm-test:feature_image
     container_name: account-pm-test
     env_file:
       - .env
