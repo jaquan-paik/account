@@ -17,7 +17,7 @@ test:
   - export TAG=${CI_COMMIT_SHA::8}
   - docker-compose -f ./docs/postman/docker-compose.yml up -d
   script:
-  - sh ./docs/docker/wait_for_it.sh "docker exec account-pm-test /bin/bash" "docker exec account-pm-test /bin/bash pm-test.sh"
+  - sh ./docs/docker/wait_for_it.sh "docker exec account-pm-test-${TAG} /bin/bash" "docker exec account-pm-test-${TAG} /bin/bash pm-test.sh"
   after_script:
   - docker rm -f $(docker ps -a | grep pm-test | grep $TAG | awk '{print $1}') # pm-test 관련 컨테이너 제거
   - docker image rm -f $(docker image ls -a | grep pm-test | grep $TAG | awk '{print $3}') # pm-test 관련 이미지 제거
