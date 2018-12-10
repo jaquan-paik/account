@@ -35,7 +35,7 @@ services:
 
   account-pm-test:
     image: ridibooks/pm-test:latest
-    container_name: account-pm-test
+    container_name: account-pm-test-${TAG}
     env_file:
       - .env
     environment:
