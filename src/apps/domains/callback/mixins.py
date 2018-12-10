@@ -1,9 +1,6 @@
-from typing import Optional
-
-from apps.domains.callback.dtos import OAuth2Data, TokenData
+from apps.domains.callback.dtos import TokenData
 from apps.domains.callback.helpers.url_helper import UrlHelper
 from lib.django.views.cookie.mixins import CookieMixin
-from lib.django.views.session.mixins import SessionMixin
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 
 SESSION_STATE_KEY = 'oauth2.state'
@@ -28,31 +25,3 @@ class TokenCookieMixin(CookieMixin):
 
     def get_root_domain(self) -> str:
         return UrlHelper.get_root_domain(self.request)
-
-
-class OAuth2SessionMixin(SessionMixin):
-    def get_oauth2_data(self, code: str, state: Optional[str]=None) -> OAuth2Data:
-        oauth2_data = OAuth2Data(
-            self.get_session(key=SESSION_STATE_KEY),
-            self.get_session(key=SESSION_CLIENT_ID_KEY),
-            self.get_session(key=SESSION_REDIRECT_URI_KEY),
-        )
-        oauth2_data.code = code
-        self.validate_oauth2_data(oauth2_data=oauth2_data, is_valid_state=True, state=state)
-
-        return oauth2_data
-
-    def set_oauth2_data(self, client_id: str, redirect_uri: str, state: Optional[str]):
-        oauth2_data = OAuth2Data(state, client_id, redirect_uri)
-        self.validate_oauth2_data(oauth2_data=oauth2_data)
-
-        self.set_session(key=SESSION_CLIENT_ID_KEY, value=client_id)
-        self.set_session(key=SESSION_REDIRECT_URI_KEY, value=redirect_uri)
-        self.set_session(key=SESSION_STATE_KEY, value=state)
-
-    def validate_oauth2_data(self, oauth2_data: OAuth2Data, is_valid_state: bool=False, state: Optional[str]=None):
-        oauth2_data.validate_client()
-        oauth2_data.validate_redirect_uri()
-
-        if is_valid_state:
-            oauth2_data.validate_state(state=state)

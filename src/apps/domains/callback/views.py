@@ -13,7 +13,7 @@ from apps.domains.callback.helpers.client_helper import ClientHelper
 from apps.domains.callback.helpers.token_helper import TokenCodeHelper
 from apps.domains.callback.helpers.url_helper import UrlHelper
 from apps.domains.callback.helpers.state_helper import StateHelper
-from apps.domains.callback.mixins import OAuth2SessionMixin, TokenCookieMixin
+from apps.domains.callback.mixins import TokenCookieMixin
 from apps.domains.callback.response import InHouseHttpResponseRedirect
 from apps.domains.callback.schemas import TokenGetSchema
 from apps.domains.callback.services.token_refresh_service import TokenRefreshService
