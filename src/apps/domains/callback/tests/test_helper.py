@@ -16,7 +16,7 @@ from infra.configure.config import GeneralConfig
 
 class UrlHelperTestCase(TestCase):
     def test_redirect_uri(self):
-        redirect_uri = UrlHelper.get_redirect_uri()
+        redirect_uri = UrlHelper.get_callback_view_url()
 
         self.assertIn('https://', redirect_uri)
         self.assertIn(GeneralConfig.get_site_domain(), redirect_uri)

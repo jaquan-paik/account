@@ -9,9 +9,10 @@ from drf_yasg.utils import swagger_auto_schema
 from requests import HTTPError
 from rest_framework.views import APIView
 
-from apps.domains.callback.constants import CookieRootDomains, ROOT_DOMAIN_SESSION_KEY
+from apps.domains.callback.helpers.client_helper import ClientHelper
 from apps.domains.callback.helpers.token_helper import TokenCodeHelper
 from apps.domains.callback.helpers.url_helper import UrlHelper
+from apps.domains.callback.helpers.state_helper import StateHelper
 from apps.domains.callback.mixins import OAuth2SessionMixin, TokenCookieMixin
 from apps.domains.callback.response import InHouseHttpResponseRedirect
 from apps.domains.callback.schemas import TokenGetSchema
@@ -21,22 +22,17 @@ from apps.domains.oauth2.token import JwtHandler
 from infra.network.constants.http_status_code import HttpStatusCodes
 from lib.django.http.response import HttpResponseUnauthorized
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
-from lib.utils.string import generate_random_str
 from lib.utils.url import generate_query_url
 
 
-class AuthorizeView(LoginRequiredMixin, OAuth2SessionMixin, TokenCookieMixin, View):  # pylint: disable=too-many-ancestors
+class AuthorizeView(LoginRequiredMixin, View):  # pylint: disable=too-many-ancestors
     def get(self, request):
         client_id = request.GET.get('client_id', None)
         redirect_uri = request.GET.get('redirect_uri', None)
-        state = generate_random_str(10)
-
-        self.set_oauth2_data(client_id, redirect_uri, state)
-        self.set_session(key=ROOT_DOMAIN_SESSION_KEY, value=CookieRootDomains.to_value(self.get_root_domain()))
-
+        state = StateHelper.create_encrypted_state(request.user.idx)
         params = {
             'client_id': client_id,
-            'redirect_uri': UrlHelper.get_redirect_uri(),
+            'redirect_uri': UrlHelper.get_redirect_url(redirect_uri, client_id),
             'response_type': 'code',
             'state': state,
         }
@@ -45,22 +41,22 @@ class AuthorizeView(LoginRequiredMixin, OAuth2SessionMixin, TokenCookieMixin, Vi
         return HttpResponseRedirect(url)
 
 
-class CallbackView(OAuth2SessionMixin, TokenCookieMixin, View):
+class CallbackView(TokenCookieMixin, View):
     def get(self, request):
         code = request.GET.get('code', None)
         state = request.GET.get('state', None)
-
-        oauth2_data = self.get_oauth2_data(code=code, state=state)
-
+        client_id = request.GET.get('client_id', None)
+        in_house_redirect_uri = request.GET.get('in_house_redirect_uri', None)
+        StateHelper.validate_state(state, request.user.idx)
         try:
             access_token, refresh_token = TokenCodeHelper.get_tokens(
-                oauth2_data.client, oauth2_data.code, oauth2_data.state
+                ClientHelper.get_client(client_id), code, UrlHelper.get_redirect_url(in_house_redirect_uri, client_id)
             )
         except HTTPError as e:
             return JsonResponse(data=e.response.json(), status=e.response.status_code)
 
-        root_domain = CookieRootDomains.to_string(self.get_session(key=ROOT_DOMAIN_SESSION_KEY))
-        response = InHouseHttpResponseRedirect(oauth2_data.redirect_uri)
+        root_domain = UrlHelper.get_root_domain(self.request)
+        response = InHouseHttpResponseRedirect(in_house_redirect_uri)
         self.add_token_cookie(
             response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
         )
