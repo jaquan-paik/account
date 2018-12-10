@@ -9,22 +9,22 @@ from lib.cache.memorize import memorize
 class UrlHelper:
     @staticmethod
     @memorize
-    def get_callback_view_url():
+    def get_callback_view_url() -> str:
         return f'https://{GeneralConfig.get_site_domain()}{reverse("ridi:callback")}'
 
     @staticmethod
     @memorize
-    def get_token():
+    def get_token() -> str:
         return f'https://{GeneralConfig.get_site_domain()}{reverse("oauth2_provider:token")}'
 
     @classmethod
     @memorize
-    def get_redirect_url(cls, in_house_redirect_uri: str, client_id: str):
+    def get_redirect_url(cls, in_house_redirect_uri: str, client_id: str) -> str:
         return f'{cls.get_callback_view_url()}?in_house_redirect_uri={in_house_redirect_uri}&client_id={client_id}'
 
     @staticmethod
     @memorize
-    def get_root_uri():
+    def get_root_uri() -> str:
         return GeneralConfig.get_store_url()
 
     @staticmethod

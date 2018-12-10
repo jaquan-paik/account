@@ -36,7 +36,6 @@ class AuthorizeView(LoginRequiredMixin, View):  # pylint: disable=too-many-ances
             'response_type': 'code',
             'state': state,
         }
-
         url = generate_query_url(reverse('oauth2_provider:authorize'), params)
         return HttpResponseRedirect(url)
 
