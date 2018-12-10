@@ -34,7 +34,7 @@ services:
       - account-www
 
   account-pm-test:
-    image: ridibooks/pm-test:feature_image
+    image: ridibooks/pm-test:latest
     container_name: account-pm-test
     env_file:
       - .env
