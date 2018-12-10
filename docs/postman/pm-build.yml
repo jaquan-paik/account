@@ -6,22 +6,3 @@ services:
       context: ../../
       dockerfile: ./docs/postman/account-www/Dockerfile
     image: pm-test/account-www:${TAG}
-
-  account-mariadb:
-    build:
-      context: ../../
-      dockerfile: ./docs/postman/account-mariadb/Dockerfile
-    image: pm-test/account-mariadb:${TAG}
-
-  account-ngix:
-    build:
-      context: ../../
-      dockerfile: ./docs/postman/account-nginx/Dockerfile
-    image: pm-test/account-nginx:${TAG}
-
-  account-redis:
-    build:
-      context: ../../
-      dockerfile: ./docs/postman/account-redis/Dockerfile
-    image: pm-test/account-redis:${TAG}
-
