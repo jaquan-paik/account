@@ -20,8 +20,11 @@ services:
     restart: always
 
   account-www:
-    image: pm-test/account-www:${TAG}
+    image: ridibooks/python:bootstrap-django-2018.11.12.2
     container_name: account-www
+    volumes:
+    - ../../.:/htdocs/www
+    command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h account-mariadb -u root -proot', 'make docker-all']
     depends_on:
     - account-redis
     - account-mariadb

@@ -54,7 +54,7 @@ test:
 	@python3.6 src/manage.py test src --noinput --settings=sites.settings.test
 
 pm-test:
-	@npm run test
+	@docker-compose down && docker-compose  -f ./docs/postman/docker-compose.yml up -d && sh ./docs/docker/wait_for_it.sh "docker exec account-pm-test /bin/bash" "docker exec account-pm-test /bin/bash pm-test.sh"
 
 
 # docker

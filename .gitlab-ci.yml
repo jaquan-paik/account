@@ -12,9 +12,7 @@ build:
   - docker-compose -f ./docs/postman/pm-build.yml build
 
 test:
+  image: ridibooks/python:bootstrap-django-2018.11.12.2
   stage: test
   before_script:
-  - export TAG=${CI_COMMIT_SHA::8}
-  - docker-compose -f ./docs/postman/docker-compose.yml up -d
-  script:
-  - sh ./docs/docker/wait_for_it.sh "docker exec account-pm-test /bin/bash" "docker exec account-pm-test /bin/bash pm-test.sh"
+  - make pm-test
