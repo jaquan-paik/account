@@ -12,6 +12,7 @@ build:
   - docker-compose -f ./docs/postman/build.yml build
 
 test:
+  stage: test
   before_script:
   - export TAG=${CI_COMMIT_SHA::8}
   - docker-compose -f ./docs/postman/docker-compose.yml up &
