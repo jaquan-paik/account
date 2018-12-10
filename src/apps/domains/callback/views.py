@@ -28,13 +28,16 @@ from lib.utils.url import generate_query_url
 class AuthorizeView(LoginRequiredMixin, View):  # pylint: disable=too-many-ancestors
     def get(self, request):
         client_id = request.GET.get('client_id', None)
+        client = ClientHelper.get_in_house_client(client_id)
         redirect_uri = request.GET.get('redirect_uri', None)
-        state = StateHelper.create_encrypted_state(request.user.idx)
+
+        ClientHelper.validate_redirect_uri(client, redirect_uri)
+
         params = {
-            'client_id': client_id,
+            'client_id': client.client_id,
             'redirect_uri': UrlHelper.get_redirect_url(redirect_uri, client_id),
             'response_type': 'code',
-            'state': state,
+            'state': StateHelper.create_encrypted_state(request.user.idx),
         }
         url = generate_query_url(reverse('oauth2_provider:authorize'), params)
         return HttpResponseRedirect(url)
@@ -46,10 +49,12 @@ class CallbackView(TokenCookieMixin, View):
         state = request.GET.get('state', None)
         client_id = request.GET.get('client_id', None)
         in_house_redirect_uri = request.GET.get('in_house_redirect_uri', None)
+
         StateHelper.validate_state(state, request.user.idx)
+
         try:
             access_token, refresh_token = TokenCodeHelper.get_tokens(
-                ClientHelper.get_client(client_id), code, UrlHelper.get_redirect_url(in_house_redirect_uri, client_id)
+                ClientHelper.get_in_house_client(client_id), code, UrlHelper.get_redirect_url(in_house_redirect_uri, client_id)
             )
         except HTTPError as e:
             return JsonResponse(data=e.response.json(), status=e.response.status_code)
