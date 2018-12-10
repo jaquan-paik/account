@@ -1,5 +1,5 @@
 import requests_mock
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django_dynamic_fixture import G
@@ -53,7 +53,7 @@ class ClientHelperTestCase(TestCase):
         self.assertEqual(client.client_id, self.client.client_id)
 
     def test_not_exists_client(self):
-        with self.assertRaises(ObjectDoesNotExist):
+        with self.assertRaises(PermissionDenied):
             ClientHelper.get_client(client_id='is_dummy')
 
     def test_not_implemented(self):
