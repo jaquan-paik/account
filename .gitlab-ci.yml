@@ -1,11 +1,10 @@
-image: ridibooks/python:bootstrap-django-2018.11.12.2
+image: ridibooks/python:gitlab-ci-2018.11.12.1
 
 stages:
 - build
 - test
 
 build:
-  image: ridibooks/python:gitlab-ci-2018.11.12.1
   stage: build
   before_script:
   - export TAG=${CI_COMMIT_SHA::8}
@@ -13,7 +12,6 @@ build:
   - docker-compose -f ./docs/postman/build.yml build
 
 test:
-  image: ridibooks/python:gitlab-ci-2018.11.12.1
   before_script:
   - export TAG=${CI_COMMIT_SHA::8}
   - docker-compose -f ./docs/postman/docker-compose.yml up &
