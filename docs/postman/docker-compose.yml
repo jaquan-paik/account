@@ -5,7 +5,7 @@ services:
     image: mariadb:10.1
     restart: always
     volumes:
-    - ../../docs/dev/settings/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    - ../dev/settings/dump.sql:/docker-entrypoint-initdb.d/dump.sql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: account
@@ -19,11 +19,9 @@ services:
 
   account-www:
     image: ridibooks/python:bootstrap-django-2018.11.12.2
-    container_name: account-www-123987
     volumes:
-      - ../../:/htdocs/www
-      - ../../src:/htdocs/www
-    command: sleep 30000
+    - ../../:/htdocs/www
+    command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h account-mariadb -u root -proot', 'make docker-all']
     depends_on:
     - account-redis
     - account-mariadb
@@ -35,8 +33,8 @@ services:
     image: nginx:stable
     restart: always
     volumes:
-    - ../../docs/dev/nginx:/etc/nginx/conf.d:ro
-    - ../../docs/dev/cert:/etc/nginx/cert/:ro
+    - ../dev/nginx:/etc/nginx/conf.d:ro
+    - ../dev/cert:/etc/nginx/cert/:ro
     depends_on:
     - account-www
     links:
