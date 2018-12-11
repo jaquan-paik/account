@@ -5,7 +5,7 @@ services:
     image: mariadb:10.1
     restart: always
     volumes:
-    - ./docs/dev/settings/dump.sql:/docker-entrypoint-initdb.d/dump.sql:ro
+    - ./docs/dev/settings/dump.sql:/docker-entrypoint-initdb.d/dump.sql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: account
@@ -21,7 +21,7 @@ services:
     image: ridibooks/python:bootstrap-django-2018.11.12.2
     container_name: account-www-123456
     volumes:
-    - .:/htdocs/www:ro
+    - .:/htdocs/www
     command: sleep 6000
     depends_on:
     - account-redis

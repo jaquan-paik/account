@@ -7,11 +7,7 @@ test:
   stage: test
   script:
   - export TAG=${CI_COMMIT_SHA::8}
-  - echo $TAG
-  - make pm-test-up
-  - echo $TAG && docker exec account-www-123456 ls
-  - docker exec account-www-123456 ls docs
-  - docker exec account-www-123456 ls src
+  - docker exec account-www-123456 find ./  -maxdepth 2
   - docker ps
 #  - make pm-test-run
   after_script:
