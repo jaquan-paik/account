@@ -21,7 +21,7 @@ services:
     image: ridibooks/python:bootstrap-django-2018.11.12.2
     container_name: account-www-123987
     volumes:
-      - ../../../:/htdocs/www
+      - ../../../account/.:/htdocs/www
     command: sleep 30000
     depends_on:
     - account-redis
