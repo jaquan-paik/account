@@ -7,4 +7,5 @@ test:
   stage: test
   script:
   - make pm-test-up
-  - make pm-test-test
+  - docker exec account-www-123987 ls
+  - docker exec account-www-123987 ls docs/
