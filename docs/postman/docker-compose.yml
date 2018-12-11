@@ -22,8 +22,7 @@ services:
     container_name: account-www-123987
     volumes:
       - ../../:/htdocs/www
-    command: ls
-    stdin_open: true
+    command: sleep 30000
     depends_on:
     - account-redis
     - account-mariadb
