@@ -21,7 +21,7 @@ services:
     image: ridibooks/python:bootstrap-django-2018.11.12.2
     volumes:
       - ../../:/htdocs/www
-    command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h account-mariadb -u root -proot', 'make docker-all']
+    command: ['make docker-all']
     depends_on:
     - account-redis
     - account-mariadb
@@ -33,7 +33,7 @@ services:
     image: nginx:stable
     restart: always
     volumes:
-    - ../../docs/dev/nginx:/etc/nginx/conf.d:ro
+    - ../../docs/dev/nginx:/etc/nginx/conf.d
     - ../../docs/dev/cert:/etc/nginx/cert/:ro
     depends_on:
     - account-www
