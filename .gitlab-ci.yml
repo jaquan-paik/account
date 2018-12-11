@@ -11,5 +11,7 @@ test:
   - make pm-test-up
   - docker exec account-www-123456 ls
   - docker exec account-www-123456 ls docs
+  - docker exec account-www-123456 ls src
+  - make pm-test-run
   after_script:
   - make pm-test-down

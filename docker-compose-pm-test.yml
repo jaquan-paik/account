@@ -22,7 +22,7 @@ services:
     container_name: account-www-123456
     volumes:
       - .:/htdocs/www
-    command: sleep 30000
+    command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h account-mariadb -u root -proot', 'make docker-all']
     depends_on:
     - account-redis
     - account-mariadb
