@@ -6,7 +6,9 @@ stages:
 test:
   stage: test
   script:
-  - docker ps -a
+  - docker ps
   - ls
   - pwd
   - make pm-test
+  after_script:
+  - docker ps
