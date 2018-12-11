@@ -57,16 +57,14 @@ pm-test: pm-test-up pm-test-run pm-test-down
 
 
 pm-test-up:
-	@docker-compose  -f ./docs/postman/docker-compose.yml up -d
+	@docker-compose  -f docker-compose-pm-test.yml up -d
 
 pm-test-run:
 	@sh ./docs/docker/wait_for_it.sh "docker exec account-pm-test /bin/bash" "docker exec account-pm-test /bin/bash pm-test.sh"
 
 pm-test-down:
-	@docker-compose  -f ./docs/postman/docker-compose.yml down
+	@docker-compose  -f docker-compose-pm-test.yml down
 
-pm-test-test:
-	docker exec account-www-123987 ls && docker exec account-www-123987 ls docs/
 
 # docker
 docker-up:
