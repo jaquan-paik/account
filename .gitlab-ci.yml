@@ -9,7 +9,7 @@ test:
   - export TAG=${CI_COMMIT_SHA::8}
   - echo $TAG
   - make pm-test-up
-  - docker exec account-www-123456 ls
+  - echo $TAG && docker exec account-www-123456 ls
   - docker exec account-www-123456 ls docs
   - docker exec account-www-123456 ls src
   - docker ps
