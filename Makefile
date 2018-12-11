@@ -54,12 +54,15 @@ test:
 	@python3.6 src/manage.py test src --noinput --settings=sites.settings.test
 
 pm-test:
-	@docker-compose down && docker-compose  -f ./docs/postman/docker-compose.yml up -d && sh ./docs/docker/wait_for_it.sh "docker exec account-pm-test /bin/bash" "docker exec account-pm-test /bin/bash pm-test.sh"
-
+	@docker-compose  -f ./docs/postman/docker-compose.yml up -d && sh ./docs/docker/wait_for_it.sh "docker exec account-pm-test /bin/bash" "docker exec account-pm-test /bin/bash pm-test.sh"
 
 # docker
 docker-up:
 	@docker-compose up
+
+# docker
+docker-down:
+	@docker-compose down
 
 docker-logs:
 	@docker ps -a -q -f name=account-www | awk '{print $1}' | xargs docker logs -f

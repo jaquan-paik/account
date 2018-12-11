@@ -3,7 +3,6 @@ version: '3.4'
 services:
   account-mariadb:
     image: mariadb:10.1
-    container_name: account-mariadb
     restart: always
     volumes:
     - ../../docs/dev/settings/dump.sql:/docker-entrypoint-initdb.d/dump.sql
@@ -16,12 +15,10 @@ services:
 
   account-redis:
     image: redis:4.0.6
-    container_name: account-redis
     restart: always
 
   account-www:
     image: ridibooks/python:bootstrap-django-2018.11.12.2
-    container_name: account-www
     volumes:
     - ../../.:/htdocs/www
     command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h account-mariadb -u root -proot', 'make docker-all']
@@ -34,14 +31,10 @@ services:
 
   account.dev.ridi.io: # 로컬이나 테스트 환경에서 self call 할 때, host 설정을 위해 domain으로 container 이름을 설정함.
     image: nginx:stable
-    container_name: account.dev.ridi.io
     restart: always
     volumes:
     - ../../docs/dev/nginx:/etc/nginx/conf.d:ro
     - ../../docs/dev/cert:/etc/nginx/cert/:ro
-    ports:
-    - 80:80
-    - 443:443
     depends_on:
     - account-www
     links:
@@ -50,6 +43,8 @@ services:
   account-pm-test:
     image: ridibooks/pm-test:latest
     container_name: account-pm-test
+    volumes:
+    - ./src/:/tmp/src/
     env_file:
     - .env
     environment:
