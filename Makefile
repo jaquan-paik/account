@@ -65,6 +65,9 @@ pm-test-run:
 pm-test-down:
 	@docker-compose  -f ./docs/postman/docker-compose.yml down
 
+pm-test-test:
+	docker exec account-www /bin/bash ls && docker exec account-www /bin/bash pwd
+
 # docker
 docker-up:
 	@docker-compose up

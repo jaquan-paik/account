@@ -6,4 +6,5 @@ stages:
 test:
   stage: test
   script:
-  - make pm-test
+  - make pm-test-up
+  - make pm-test-test

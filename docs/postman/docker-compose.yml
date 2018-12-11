@@ -21,7 +21,8 @@ services:
     image: ridibooks/python:bootstrap-django-2018.11.12.2
     volumes:
       - ../../:/htdocs/www
-    command: ['make docker-all']
+    command: ls
+    stdin_open: true
     depends_on:
     - account-redis
     - account-mariadb
