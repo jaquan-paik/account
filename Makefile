@@ -66,7 +66,7 @@ pm-test-down:
 	@docker-compose  -f ./docs/postman/docker-compose.yml down
 
 pm-test-test:
-	docker exec account-www-123987 ls && docker exec account-www-123987 pwd
+	docker exec account-www-123987 ls && docker exec account-www-123987 ls docs/
 
 # docker
 docker-up:
