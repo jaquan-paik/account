@@ -81,3 +81,8 @@ pipenv run make lint
 ```
 pipenv run make test
 ``` 
+
+## Postman Test
+```
+pipenv run make pm-test
+```
