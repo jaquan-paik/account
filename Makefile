@@ -53,13 +53,27 @@ check-deprecated:
 test:
 	@python3.6 src/manage.py test src --noinput --settings=sites.settings.test
 
-pm-test:
-	@npm run test
+
+# pm-test
+pm-test: pm-test-up pm-test-run pm-test-down
+
+pm-test-up:
+	@docker-compose  -f ./docs/postman/docker-compose.yml up -d
+
+pm-test-run:
+	@sh ./docs/docker/wait_for_it.sh "docker exec account-pm-test /bin/bash" "docker exec account-pm-test /bin/bash pm-test.sh"
+
+pm-test-down:
+	@docker-compose  -f ./docs/postman/docker-compose.yml down
 
 
 # docker
 docker-up:
 	@docker-compose up
+
+# docker
+docker-down:
+	@docker-compose down
 
 docker-logs:
 	@docker ps -a -q -f name=account-www | awk '{print $1}' | xargs docker logs -f
