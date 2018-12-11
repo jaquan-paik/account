@@ -5,6 +5,8 @@ stages:
 
 test:
   stage: test
+  before_script:
+  - export TAG=${CI_COMMIT_SHA::8}
   script:
   - make pm-test-up
   - docker exec account-www-123456 ls

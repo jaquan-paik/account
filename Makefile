@@ -60,7 +60,7 @@ pm-test-up:
 	@docker-compose  -f docker-compose-pm-test.yml up -d
 
 pm-test-run:
-	@sh ./docs/docker/wait_for_it.sh "docker exec account-pm-test /bin/bash" "docker exec account-pm-test /bin/bash pm-test.sh"
+	@sh ./docs/docker/wait_for_it.sh "docker exec account-pm-test-$TAG /bin/bash" "docker exec account-pm-test_$TAG /bin/bash pm-test.sh"
 
 pm-test-down:
 	@docker-compose  -f docker-compose-pm-test.yml down
