@@ -1,4 +1,4 @@
-image: ridibooks/python:bootstrap-django-2018.11.12.2
+image: ridibooks/python:gitlab-ci-2018.11.12.1
 
 stages:
 - test
