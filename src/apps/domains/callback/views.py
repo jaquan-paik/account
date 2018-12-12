@@ -36,7 +36,7 @@ class AuthorizeView(LoginRequiredMixin, OAuth2SessionMixin, TokenCookieMixin, Vi
 
         params = {
             'client_id': client_id,
-            'redirect_uri': UrlHelper.get_redirect_uri(),
+            'redirect_uri': UrlHelper.get_redirect_url(redirect_uri, client_id),
             'response_type': 'code',
             'state': state,
         }
@@ -49,18 +49,19 @@ class CallbackView(OAuth2SessionMixin, TokenCookieMixin, View):
     def get(self, request):
         code = request.GET.get('code', None)
         state = request.GET.get('state', None)
+        in_house_redirect_uri = request.GET.get('in_house_redirect_uri', None)
 
         oauth2_data = self.get_oauth2_data(code=code, state=state)
 
         try:
             access_token, refresh_token = TokenCodeHelper.get_tokens(
-                oauth2_data.client, oauth2_data.code, oauth2_data.state
+                oauth2_data.client, oauth2_data.code, UrlHelper.get_redirect_url(in_house_redirect_uri, oauth2_data.client.client_id)
             )
         except HTTPError as e:
             return JsonResponse(data=e.response.json(), status=e.response.status_code)
 
         root_domain = CookieRootDomains.to_string(self.get_session(key=ROOT_DOMAIN_SESSION_KEY))
-        response = InHouseHttpResponseRedirect(oauth2_data.redirect_uri)
+        response = InHouseHttpResponseRedirect(in_house_redirect_uri)
         self.add_token_cookie(
             response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
         )

@@ -17,6 +17,11 @@ class UrlHelper:
     def get_token():
         return f'https://{GeneralConfig.get_site_domain()}{reverse("oauth2_provider:token")}'
 
+    @classmethod
+    @memorize
+    def get_redirect_url(cls, in_house_redirect_uri: str, client_id: str) -> str:
+        return f'{cls.get_redirect_uri()}?in_house_redirect_uri={in_house_redirect_uri}&client_id={client_id}&deprecated=1'
+
     @staticmethod
     @memorize
     def get_root_uri():
