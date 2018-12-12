@@ -23,7 +23,7 @@ class TokenHelper:
     def _take_token(cls, client: Application, code: str, redirect_uri: str) -> Tuple[TokenData, TokenData]:
         verify = not GeneralConfig.is_dev()
         req = requests.post(
-            UrlHelper.get_token(), data=cls._get_request_data(client, code, redirect_uri), verify=verify,
+            UrlHelper.get_oauth2_token_url(), data=cls._get_request_data(client, code, redirect_uri), verify=verify,
         )
         req.raise_for_status()
 

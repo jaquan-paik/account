@@ -14,7 +14,7 @@ class UrlHelper:
 
     @staticmethod
     @memorize
-    def get_token() -> str:
+    def get_oauth2_token_url() -> str:
         return f'https://{GeneralConfig.get_site_domain()}{reverse("oauth2_provider:token")}'
 
     @classmethod

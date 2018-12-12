@@ -23,7 +23,7 @@ class UrlHelperTestCase(TestCase):
         self.assertIn(reverse("ridi:callback"), redirect_uri)
 
     def test_get_token(self):
-        token_url = UrlHelper.get_token()
+        token_url = UrlHelper.get_oauth2_token_url()
 
         self.assertIn('https://', token_url)
         self.assertIn(GeneralConfig.get_site_domain(), token_url)
@@ -67,7 +67,7 @@ class TokenHelperTestCase(TestCase):
 
     def test_token_code_helper(self):
         with requests_mock.mock() as m:
-            m.post(UrlHelper.get_token(), json={
+            m.post(UrlHelper.get_oauth2_token_url(), json={
                 'access_token': 'test-access-token1111',
                 'expires_in': 1111111,
                 'refresh_token': 'test-refresh-token1111',
@@ -85,7 +85,7 @@ class TokenHelperTestCase(TestCase):
 
     def test_token_refresh_helper(self):
         with requests_mock.mock() as m:
-            m.post(UrlHelper.get_token(), json={
+            m.post(UrlHelper.get_oauth2_token_url(), json={
                 'access_token': 'test-access-token2222',
                 'expires_in': 1111111,
                 'refresh_token': 'test-refresh-token2222',
