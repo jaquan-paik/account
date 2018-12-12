@@ -1,12 +1,10 @@
 from datetime import datetime
 from django.core.exceptions import PermissionDenied
-
-from infra.configure.constants import SecretKeyName
-from lib.secret.secret import Secret
+from django.conf import settings
 from lib.crypto.encrypt import CryptoHelper
 import json
 
-CRYPTO_KEY = Secret().get(SecretKeyName.SECRET_KEY)[:32]
+CRYPTO_KEY = settings.STATE_CRYPTO_KEY
 EXPIRE_TIME = 10
 
 

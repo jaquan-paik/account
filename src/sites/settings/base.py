@@ -124,7 +124,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 LANGUAGE_CODE = 'ko-kr'
 TIME_ZONE = 'Asia/Seoul'
@@ -132,11 +131,9 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = False
 
-
 # Static files (CSS, JavaScript, Images)
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-
 
 # Logging
 IGNORE_404_FILTER_URLS = []
@@ -146,11 +143,9 @@ APPEND_SLASH = False
 
 AUTH_USER_MODEL = 'account_app.User'
 
-
 # Login
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
-
 
 # Session
 SESSION_COOKIE_AGE = 60 * 12
@@ -167,7 +162,6 @@ SESSION_REDIS = {
     'prefix': 'session',
     'socket_timeout': 1
 }
-
 
 # OAuth2
 OAUTH2_PROVIDER = {
@@ -216,7 +210,6 @@ CORS_URLS_REGEX = r'^/(ridi|oauth2|health|accounts)/.*$'
 
 ALLOWED_HOSTS = []
 
-
 # Sentry
 RAVEN_CONFIG = {
     'dsn': Secret().get(SecretKeyName.SENTRY_DSN),
@@ -232,3 +225,5 @@ RAVEN_CONFIG = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (),
 }
+
+STATE_CRYPTO_KEY = Secret().get(SecretKeyName.STATE_CRYPTO_KEY)
