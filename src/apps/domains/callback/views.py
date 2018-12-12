@@ -10,7 +10,7 @@ from requests import HTTPError
 from rest_framework.views import APIView
 
 from apps.domains.callback.helpers.client_helper import ClientHelper
-from apps.domains.callback.helpers.token_helper import TokenCodeHelper
+from apps.domains.callback.helpers.token_request_helper import TokenRequestHelper
 from apps.domains.callback.helpers.url_helper import UrlHelper
 from apps.domains.callback.helpers.state_helper import StateHelper
 from apps.domains.callback.mixins import TokenCookieMixin
@@ -53,8 +53,9 @@ class CallbackView(TokenCookieMixin, View):
         StateHelper.validate_state(state, request.user.idx)
 
         try:
-            access_token, refresh_token = TokenCodeHelper.get_tokens(
-                ClientHelper.get_in_house_client(client_id), code, UrlHelper.get_redirect_url(in_house_redirect_uri, client_id)
+            access_token, refresh_token = TokenRequestHelper.get_tokens(
+                grant_type='authorization_code', client=ClientHelper.get_in_house_client(client_id),
+                code=code, redirect_uri=UrlHelper.get_redirect_url(in_house_redirect_uri, client_id)
             )
         except HTTPError as e:
             return JsonResponse(data=e.response.json(), status=e.response.status_code)

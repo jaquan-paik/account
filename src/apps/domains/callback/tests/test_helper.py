@@ -8,7 +8,7 @@ from apps.domains.callback.constants import CookieRootDomains
 from apps.domains.callback.dtos import TokenData
 from apps.domains.callback.exceptions import NotAllowedRootDomainException
 from apps.domains.callback.helpers.client_helper import ClientHelper
-from apps.domains.callback.helpers.token_helper import TokenCodeHelper, TokenRefreshHelper
+from apps.domains.callback.helpers.token_request_helper import TokenRequestHelper
 from apps.domains.callback.helpers.url_helper import UrlHelper
 from apps.domains.oauth2.models import Application
 from infra.configure.config import GeneralConfig
@@ -73,7 +73,7 @@ class TokenHelperTestCase(TestCase):
                 'refresh_token': 'test-refresh-token1111',
                 'refresh_token_expires_in': 2222222,
             })
-            at, rt = TokenCodeHelper.get_tokens(client=self.client, code='test-code')
+            at, rt = TokenRequestHelper.get_tokens(grant_type='authorization_code', client=self.client, code='test-code')
 
             self.assertIsInstance(at, TokenData)
             self.assertIsInstance(rt, TokenData)
@@ -91,7 +91,7 @@ class TokenHelperTestCase(TestCase):
                 'refresh_token': 'test-refresh-token2222',
                 'refresh_token_expires_in': 2222222,
             })
-            at, rt = TokenRefreshHelper.get_tokens(client=self.client, code='test-refresh-token')
+            at, rt = TokenRequestHelper.get_tokens(grant_type='refresh_token', client=self.client, refresh_token='test-refresh-token')
 
             self.assertIsInstance(at, TokenData)
             self.assertIsInstance(rt, TokenData)
