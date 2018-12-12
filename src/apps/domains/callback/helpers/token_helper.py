@@ -59,7 +59,7 @@ class TokenCodeHelper(TokenHelper):
 
 class TokenRefreshHelper(TokenHelper):
     @classmethod
-    def _get_request_data(cls, client: Application, refresh_token: str):
+    def _get_request_data(cls, client: Application, refresh_token: str, redirect_uri: str):
         data = cls._get_default_request_data(client)
         data['refresh_token'] = refresh_token
         data['grant_type'] = 'refresh_token'
