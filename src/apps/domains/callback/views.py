@@ -25,7 +25,7 @@ from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKE
 from lib.utils.url import generate_query_url
 
 
-class AuthorizeView(LoginRequiredMixin, View):  # pylint: disable=too-many-ancestors
+class AuthorizeView(LoginRequiredMixin, View):
     def get(self, request):
         client_id = request.GET.get('client_id', None)
         client = ClientHelper.get_in_house_client(client_id)
