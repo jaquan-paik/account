@@ -50,7 +50,7 @@ class CallbackView(TokenCookieMixin, View):
         client_id = request.GET.get('client_id', None)
         in_house_redirect_uri = request.GET.get('in_house_redirect_uri', None)
 
-        # -------- 재배포시 삭제할 부분 ----------
+        # TODO : 재배포시 삭제
         deprecated = request.GET.get('deprecated', None)
         if deprecated:
             try:
@@ -68,7 +68,6 @@ class CallbackView(TokenCookieMixin, View):
             )
 
             return response
-        # -------- 재배포시 삭제할 부분----------
 
         StateHelper.validate_state(state, request.user.idx)
 
