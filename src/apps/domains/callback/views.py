@@ -50,6 +50,26 @@ class CallbackView(TokenCookieMixin, View):
         client_id = request.GET.get('client_id', None)
         in_house_redirect_uri = request.GET.get('in_house_redirect_uri', None)
 
+        # -------- 재배포시 삭제할 부분 ----------
+        deprecated = request.GET.get('deprecated', None)
+        if deprecated:
+            try:
+                access_token, refresh_token = TokenRequestHelper.get_tokens(
+                    grant_type='authorization_code', client=ClientHelper.get_in_house_client(client_id),
+                    code=code, redirect_uri=f'{UrlHelper.get_redirect_url(in_house_redirect_uri, client_id)}&deprecated=1'
+                )
+            except HTTPError as e:
+                return JsonResponse(data=e.response.json(), status=e.response.status_code)
+
+            root_domain = UrlHelper.get_root_domain(self.request)
+            response = InHouseHttpResponseRedirect(in_house_redirect_uri)
+            self.add_token_cookie(
+                response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
+            )
+
+            return response
+        # -------- 재배포시 삭제할 부분----------
+
         StateHelper.validate_state(state, request.user.idx)
 
         try:
