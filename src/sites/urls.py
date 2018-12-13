@@ -4,7 +4,7 @@ from django.urls import include, path, re_path
 
 from apps.domains.account import urls as account_urls
 from apps.domains.oauth2 import urls as oauth2_urls
-from apps.domains.callback import urls as callback_urls
+from apps.domains.ridi import urls as callback_urls
 from .views import Index, script_serve
 
 

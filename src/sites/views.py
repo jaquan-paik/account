@@ -4,7 +4,7 @@ from django.views import View
 from django.views.decorators.cache import never_cache, cache_page
 from django.views.static import serve
 
-from apps.domains.callback.helpers.url_helper import UrlHelper
+from apps.domains.ridi.helpers.url_helper import UrlHelper
 
 script_serve = cache_page(timeout=1200, key_prefix='script-serve')(never_cache(serve))
 

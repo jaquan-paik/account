@@ -4,12 +4,12 @@ from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django_dynamic_fixture import G
 
-from apps.domains.callback.constants import CookieRootDomains
-from apps.domains.callback.dtos import TokenData
-from apps.domains.callback.exceptions import NotAllowedRootDomainException
-from apps.domains.callback.helpers.client_helper import ClientHelper
-from apps.domains.callback.helpers.token_request_helper import TokenRequestHelper
-from apps.domains.callback.helpers.url_helper import UrlHelper
+from apps.domains.ridi.constants import CookieRootDomains
+from apps.domains.ridi.dtos import TokenData
+from apps.domains.ridi.exceptions import NotAllowedRootDomainException
+from apps.domains.ridi.helpers.client_helper import ClientHelper
+from apps.domains.ridi.helpers.token_request_helper import TokenRequestHelper
+from apps.domains.ridi.helpers.url_helper import UrlHelper
 from apps.domains.oauth2.models import Application
 from infra.configure.config import GeneralConfig
 

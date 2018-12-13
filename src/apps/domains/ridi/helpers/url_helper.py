@@ -1,7 +1,7 @@
 from django.urls import reverse
 
-from apps.domains.callback.constants import CookieRootDomains
-from apps.domains.callback.exceptions import NotAllowedRootDomainException
+from apps.domains.ridi.constants import CookieRootDomains
+from apps.domains.ridi.exceptions import NotAllowedRootDomainException
 from infra.configure.config import GeneralConfig
 from lib.cache.memorize import memorize
 

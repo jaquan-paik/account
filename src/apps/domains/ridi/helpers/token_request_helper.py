@@ -2,8 +2,8 @@ from typing import Tuple
 
 import requests
 
-from apps.domains.callback.dtos import TokenData
-from apps.domains.callback.helpers.url_helper import UrlHelper
+from apps.domains.ridi.dtos import TokenData
+from apps.domains.ridi.helpers.url_helper import UrlHelper
 from apps.domains.oauth2.models import Application
 from infra.configure.config import GeneralConfig
 

@@ -3,8 +3,8 @@ from typing import Tuple
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from oauth2_provider.oauth2_validators import RefreshToken
 
-from apps.domains.callback.dtos import TokenData
-from apps.domains.callback.helpers.token_request_helper import TokenRequestHelper
+from apps.domains.ridi.dtos import TokenData
+from apps.domains.ridi.helpers.token_request_helper import TokenRequestHelper
 
 
 class TokenRefreshService:

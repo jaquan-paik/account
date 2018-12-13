@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     # app
     'apps.domains.account.apps.AccountConfig',
     'apps.domains.oauth2.apps.OAuth2Config',
-    'apps.domains.callback.apps.CallbackConfig',
+    'apps.domains.ridi.apps.RidiConfig',
 ]
 
 MIDDLEWARE = [

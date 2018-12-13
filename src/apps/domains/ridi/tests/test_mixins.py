@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.test import TestCase
 
-from apps.domains.callback.dtos import TokenData
-from apps.domains.callback.mixins import TokenCookieMixin
+from apps.domains.ridi.dtos import TokenData
+from apps.domains.ridi.mixins import TokenCookieMixin
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 
 

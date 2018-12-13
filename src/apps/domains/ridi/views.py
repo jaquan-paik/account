@@ -9,14 +9,14 @@ from drf_yasg.utils import swagger_auto_schema
 from requests import HTTPError
 from rest_framework.views import APIView
 
-from apps.domains.callback.helpers.client_helper import ClientHelper
-from apps.domains.callback.helpers.token_request_helper import TokenRequestHelper
-from apps.domains.callback.helpers.url_helper import UrlHelper
-from apps.domains.callback.helpers.state_helper import StateHelper
-from apps.domains.callback.mixins import TokenCookieMixin
-from apps.domains.callback.response import InHouseHttpResponseRedirect
-from apps.domains.callback.schemas import TokenGetSchema
-from apps.domains.callback.services.token_refresh_service import TokenRefreshService
+from apps.domains.ridi.helpers.client_helper import ClientHelper
+from apps.domains.ridi.helpers.token_request_helper import TokenRequestHelper
+from apps.domains.ridi.helpers.url_helper import UrlHelper
+from apps.domains.ridi.helpers.state_helper import StateHelper
+from apps.domains.ridi.mixins import TokenCookieMixin
+from apps.domains.ridi.response import InHouseHttpResponseRedirect
+from apps.domains.ridi.schemas import TokenGetSchema
+from apps.domains.ridi.services.token_refresh_service import TokenRefreshService
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
 from infra.network.constants.http_status_code import HttpStatusCodes

@@ -4,9 +4,9 @@ from django.test import TestCase
 from django_dynamic_fixture import G
 
 from apps.domains.account.models import User
-from apps.domains.callback.dtos import TokenData
-from apps.domains.callback.helpers.url_helper import UrlHelper
-from apps.domains.callback.services.token_refresh_service import TokenRefreshService
+from apps.domains.ridi.dtos import TokenData
+from apps.domains.ridi.helpers.url_helper import UrlHelper
+from apps.domains.ridi.services.token_refresh_service import TokenRefreshService
 from apps.domains.oauth2.models import Application, RefreshToken
 
 
