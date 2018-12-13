@@ -9,12 +9,13 @@ from rest_framework.views import APIView
 from apps.domains.ridi.helpers.client_helper import ClientHelper
 from apps.domains.ridi.helpers.response_cookie_helper import ResponseCookieHelper
 from apps.domains.ridi.helpers.token_request_helper import TokenRequestHelper
+from apps.domains.ridi.helpers.token_helper import TokenHelper
 from apps.domains.ridi.helpers.url_helper import UrlHelper
 from apps.domains.ridi.response import InHouseHttpResponseRedirect
 from apps.domains.ridi.schemas import TokenGetSchema
 from apps.domains.ridi.services.token_refresh_service import TokenRefreshService
+from apps.domains.ridi.services.authorization_code_service import AuthorizationCodeService
 from apps.domains.oauth2.token import JwtHandler
-from apps.domains.ridi.services.ridi_service import RidiService
 from apps.domains.ridi.forms import AuthorizeForm, CallbackForm, TokenForm
 
 from infra.network.constants.http_status_code import HttpStatusCodes
@@ -24,7 +25,7 @@ from lib.django.http.response import HttpResponseUnauthorized
 class AuthorizeView(LoginRequiredMixin, View):
     def get(self, request):
         valid_data = AuthorizeForm(request.GET).get_valid_data_with_client_check()
-        url = RidiService.get_oauth2_authorize_url(valid_data['client_id'], valid_data['redirect_uri'], request.user.idx)
+        url = AuthorizationCodeService.get_oauth2_authorize_url(valid_data['client_id'], valid_data['redirect_uri'], request.user.idx)
         return HttpResponseRedirect(url)
 
 
@@ -56,7 +57,7 @@ class CallbackView(View):
 
         valid_data = CallbackForm(request.GET).get_valid_data_with_state_check(request.user.idx)
         try:
-            access_token, refresh_token = RidiService.get_token(
+            access_token, refresh_token = AuthorizationCodeService.get_token(
                 valid_data['code'], valid_data['client_id'], valid_data['in_house_redirect_uri']
             )
             root_domain = UrlHelper.get_root_domain(self.request)
@@ -85,13 +86,13 @@ class TokenView(APIView):
         try:
             if not access_token:
                 access_token, refresh_token = TokenRefreshService.refresh(valid_data['refresh_token'])
-                data = RidiService.get_token_data_info(access_token)
+                data = TokenHelper.get_token_data_info(access_token)
                 response = JsonResponse(data)
                 ResponseCookieHelper.add_token_cookie(
                     response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
                 )
             else:
-                data = RidiService.get_token_info(access_token)
+                data = TokenHelper.get_token_info(access_token)
                 response = JsonResponse(data)
 
             return response
