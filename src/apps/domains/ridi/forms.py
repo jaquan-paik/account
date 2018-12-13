@@ -3,6 +3,8 @@ from django import forms
 from apps.domains.ridi.helpers.client_helper import ClientHelper
 from apps.domains.ridi.helpers.state_helper import StateHelper
 
+from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
+
 
 class RequestFrom(forms.Form):
     def get_valid_data(self) -> dict:
@@ -32,3 +34,13 @@ class CallbackForm(RequestFrom):
         valid_data = self.get_valid_data()
         StateHelper.validate_state(valid_data['state'], u_idx)
         return valid_data
+
+
+class TokenForm(RequestFrom):
+    ridi_at = forms.CharField()
+    ridi_rt = forms.CharField()
+
+    def get_valid_data(self):
+        self.data['ridi_at'] = self.data[ACCESS_TOKEN_COOKIE_KEY]
+        self.data['ridi_rt'] = self.data[REFRESH_TOKEN_COOKIE_KEY]
+        return super().get_valid_data()
