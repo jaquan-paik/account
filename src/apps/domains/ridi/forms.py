@@ -41,6 +41,6 @@ class TokenForm(RequestFrom):
     refresh_token = forms.CharField()
 
     def get_valid_data(self):
-        self.data['access_token'] = self.data.get(ACCESS_TOKEN_COOKIE_KEY, None)
-        self.data['refresh_token'] = self.data.get(REFRESH_TOKEN_COOKIE_KEY, None)
+        self.data['access_token'] = self.data.pop(ACCESS_TOKEN_COOKIE_KEY, None)
+        self.data['refresh_token'] = self.data.pop(REFRESH_TOKEN_COOKIE_KEY, None)
         return super().get_valid_data()
