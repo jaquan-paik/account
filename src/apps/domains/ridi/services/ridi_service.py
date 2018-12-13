@@ -1,12 +1,14 @@
 from typing import Tuple
-
+from datetime import datetime
 from django.urls import reverse
+from oauth2_provider.oauth2_validators import AccessToken
 
 from apps.domains.ridi.dtos import TokenData
 from apps.domains.ridi.helpers.client_helper import ClientHelper
 from apps.domains.ridi.helpers.state_helper import StateHelper
 from apps.domains.ridi.helpers.token_request_helper import TokenRequestHelper
 from apps.domains.ridi.helpers.url_helper import UrlHelper
+
 from lib.utils.url import generate_query_url
 
 
@@ -29,3 +31,17 @@ class RidiService:
             code=code, redirect_uri=UrlHelper.get_redirect_url(in_house_redirect_uri, client_id)
         )
         return access_token, refresh_token
+
+    @staticmethod
+    def get_token_data_info(token_data: TokenData) -> dict:
+        return {
+            'expires_at': token_data.expires_at,
+            'expires_in': token_data.expires_in
+        }
+
+    @staticmethod
+    def get_token_info(access_token: AccessToken) -> dict:
+        return {
+            'expires_at': access_token.expires,
+            'expires_in': int(access_token.expires - datetime.now().timestamp()),
+        }

@@ -66,10 +66,8 @@ class RidiOAuth2Validator(OAuth2Validator):
     def validate_bearer_token(self, token, scopes, request):
         if not token:
             return False
-
-        try:
-            access_token = JwtHandler.get_access_token(token)
-        except JwtTokenErrorException:
+        access_token = JwtHandler.get_access_token(token)
+        if not access_token:
             logger.error('Jwt token error. token: %s', token)
             return False
 

@@ -37,10 +37,10 @@ class CallbackForm(RequestFrom):
 
 
 class TokenForm(RequestFrom):
-    ridi_at = forms.CharField()
-    ridi_rt = forms.CharField()
+    access_token = forms.CharField(required=False)
+    refresh_token = forms.CharField()
 
     def get_valid_data(self):
-        self.data['ridi_at'] = self.data[ACCESS_TOKEN_COOKIE_KEY]
-        self.data['ridi_rt'] = self.data[REFRESH_TOKEN_COOKIE_KEY]
+        self.data['access_token'] = self.data.get(ACCESS_TOKEN_COOKIE_KEY, None)
+        self.data['refresh_token'] = self.data.get(REFRESH_TOKEN_COOKIE_KEY, None)
         return super().get_valid_data()

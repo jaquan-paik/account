@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
@@ -18,12 +16,11 @@ from apps.domains.ridi.services.token_refresh_service import TokenRefreshService
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
 from apps.domains.ridi.services.ridi_service import RidiService
-from apps.domains.ridi.forms import AuthorizeForm, CallbackForm
+from apps.domains.ridi.forms import AuthorizeForm, CallbackForm, TokenForm
 
 from infra.network.constants.http_status_code import HttpStatusCodes
 
 from lib.django.http.response import HttpResponseUnauthorized
-from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 
 
 class AuthorizeView(LoginRequiredMixin, View):
@@ -84,41 +81,26 @@ class CompleteView(View):
 class TokenView(TokenCookieMixin, APIView):
     @swagger_auto_schema(**TokenGetSchema.to_swagger_schema())
     def post(self, request):
-        root_domain = self.get_root_domain()
-        cookie_access_token = self.get_cookie(request, ACCESS_TOKEN_COOKIE_KEY)
-        cookie_refresh_token = self.get_cookie(request, REFRESH_TOKEN_COOKIE_KEY)
+        valid_data = TokenForm(request.COOKIES).get_valid_data()
+        root_domain = UrlHelper.get_root_domain(self.request)
+        access_token = JwtHandler.get_access_token(valid_data['access_token'])
 
         try:
-            access_token = JwtHandler.get_access_token(cookie_access_token)
-        except JwtTokenErrorException:
-            try:
-                new_access_token, new_refresh_token = TokenRefreshService.refresh(cookie_refresh_token)
-
-            except PermissionDenied:
-                response = HttpResponseUnauthorized()
-                self.clear_token_cookie(response=response, root_domain=root_domain)
-                return response
-            except HTTPError as e:
-                return JsonResponse(data=e.response.json(), status=e.response.status_code)
-
-            else:
-                data = {
-                    'expires_at': new_access_token.expires_at,
-                    'expires_in': new_access_token.expires_in,
-                }
+            if not access_token:
+                access_token, refresh_token = TokenRefreshService.refresh(valid_data['refresh_token'])
+                data = RidiService.get_token_data_info(access_token)
                 response = JsonResponse(data)
                 self.add_token_cookie(
-                    response=response, access_token=new_access_token, refresh_token=new_refresh_token,
+                    response=response, access_token=access_token, refresh_token=refresh_token,
                     root_domain=root_domain
                 )
-                return response
+            else:
+                data = RidiService.get_token_info(access_token)
+                response = JsonResponse(data)
 
-        else:
-            data = {
-                'expires_at': access_token.expires,
-                'expires_in': int(access_token.expires - datetime.now().timestamp()),
-            }
-            return JsonResponse(data)
+            return response
+        except HTTPError as e:
+            return JsonResponse(data=e.response.json(), status=e.response.status_code)
 
 
 class LogoutView(TokenCookieMixin, View):
