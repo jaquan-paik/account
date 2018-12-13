@@ -3,7 +3,6 @@ from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
-from django.urls import reverse
 from django.views import View
 from drf_yasg.utils import swagger_auto_schema
 from requests import HTTPError
@@ -19,27 +18,19 @@ from apps.domains.ridi.schemas import TokenGetSchema
 from apps.domains.ridi.services.token_refresh_service import TokenRefreshService
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
+from apps.domains.ridi.services.ridi_service import RidiService
+from apps.domains.ridi.forms import AuthorizeForm
+
 from infra.network.constants.http_status_code import HttpStatusCodes
+
 from lib.django.http.response import HttpResponseUnauthorized
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
-from lib.utils.url import generate_query_url
 
 
 class AuthorizeView(LoginRequiredMixin, View):
     def get(self, request):
-        client_id = request.GET.get('client_id', None)
-        client = ClientHelper.get_in_house_client(client_id)
-        redirect_uri = request.GET.get('redirect_uri', None)
-
-        ClientHelper.validate_redirect_uri(client, redirect_uri)
-
-        params = {
-            'client_id': client.client_id,
-            'redirect_uri': UrlHelper.get_redirect_url(redirect_uri, client_id),
-            'response_type': 'code',
-            'state': StateHelper.create_encrypted_state(request.user.idx),
-        }
-        url = generate_query_url(reverse('oauth2_provider:authorize'), params)
+        valid_data = AuthorizeForm(request.GET).get_valid_data()
+        url = RidiService.get_oauth2_authorize_url(valid_data['client_id'], valid_data['redirect_uri'], request.user.idx)
         return HttpResponseRedirect(url)
 
 
