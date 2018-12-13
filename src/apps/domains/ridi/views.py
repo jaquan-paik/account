@@ -11,7 +11,6 @@ from rest_framework.views import APIView
 from apps.domains.ridi.helpers.client_helper import ClientHelper
 from apps.domains.ridi.helpers.token_request_helper import TokenRequestHelper
 from apps.domains.ridi.helpers.url_helper import UrlHelper
-from apps.domains.ridi.helpers.state_helper import StateHelper
 from apps.domains.ridi.mixins import TokenCookieMixin
 from apps.domains.ridi.response import InHouseHttpResponseRedirect
 from apps.domains.ridi.schemas import TokenGetSchema
@@ -19,7 +18,7 @@ from apps.domains.ridi.services.token_refresh_service import TokenRefreshService
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
 from apps.domains.ridi.services.ridi_service import RidiService
-from apps.domains.ridi.forms import AuthorizeForm
+from apps.domains.ridi.forms import AuthorizeForm, CallbackForm
 
 from infra.network.constants.http_status_code import HttpStatusCodes
 
@@ -29,20 +28,19 @@ from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKE
 
 class AuthorizeView(LoginRequiredMixin, View):
     def get(self, request):
-        valid_data = AuthorizeForm(request.GET).get_valid_data()
+        valid_data = AuthorizeForm(request.GET).get_valid_data_with_client_check()
         url = RidiService.get_oauth2_authorize_url(valid_data['client_id'], valid_data['redirect_uri'], request.user.idx)
         return HttpResponseRedirect(url)
 
 
 class CallbackView(TokenCookieMixin, View):
     def get(self, request):
+
+        # TODO : ------ 재배포시 삭제 시작 부분 ------
+        deprecated = request.GET.get('deprecated', None)
         code = request.GET.get('code', None)
-        state = request.GET.get('state', None)
         client_id = request.GET.get('client_id', None)
         in_house_redirect_uri = request.GET.get('in_house_redirect_uri', None)
-
-        # TODO : 재배포시 삭제
-        deprecated = request.GET.get('deprecated', None)
         if deprecated:
             try:
                 access_token, refresh_token = TokenRequestHelper.get_tokens(
@@ -59,13 +57,12 @@ class CallbackView(TokenCookieMixin, View):
             )
 
             return response
+        # TODO : ------- 재배포시 삭제 -------
 
-        StateHelper.validate_state(state, request.user.idx)
-
+        valid_data = CallbackForm(request.GET).get_valid_data_with_state_check(request.user.idx)
         try:
-            access_token, refresh_token = TokenRequestHelper.get_tokens(
-                grant_type='authorization_code', client=ClientHelper.get_in_house_client(client_id),
-                code=code, redirect_uri=UrlHelper.get_redirect_url(in_house_redirect_uri, client_id)
+            access_token, refresh_token = RidiService.get_token(
+                valid_data['code'], valid_data['client_id'], valid_data['in_house_redirect_uri']
             )
         except HTTPError as e:
             return JsonResponse(data=e.response.json(), status=e.response.status_code)
