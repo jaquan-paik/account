@@ -1,4 +1,5 @@
 from django import forms
+from rest_framework.exceptions import ValidationError
 
 from apps.domains.ridi.helpers.client_helper import ClientHelper
 from apps.domains.ridi.helpers.state_helper import StateHelper
@@ -9,7 +10,7 @@ from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKE
 class RequestFrom(forms.Form):
     def get_valid_data(self) -> dict:
         if not super().is_valid():
-            raise Exception('test')  # TODO : invalid reqeust로 error 연동 (뭐가 없는지), 아니면 form error 관련 찾아서 추가
+            raise ValidationError
         return self.clean()
 
 
@@ -38,7 +39,7 @@ class CallbackForm(RequestFrom):
 
 class TokenForm(RequestFrom):
     access_token = forms.CharField(required=False)
-    refresh_token = forms.CharField()
+    refresh_token = forms.CharField(required=False)
 
     def get_valid_data(self):
         self.data['access_token'] = self.data.pop(ACCESS_TOKEN_COOKIE_KEY, None)
