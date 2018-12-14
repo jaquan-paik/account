@@ -1,3 +1,5 @@
+from typing import Callable
+
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from requests import HTTPError
@@ -7,7 +9,7 @@ from apps.domains.ridi.helpers.url_helper import UrlHelper
 from lib.django.http.response import HttpResponseUnauthorized
 
 
-def exception_handler(func):
+def exception_handler(func: Callable):
     def wrapper(self, request, *args, **kwargs):
         try:
             return func(self, request, *args, **kwargs)
