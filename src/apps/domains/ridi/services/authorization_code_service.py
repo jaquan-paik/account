@@ -13,7 +13,7 @@ from lib.utils.url import generate_query_url
 
 class AuthorizationCodeService:
     @staticmethod
-    def get_token(code: str, client_id: str, in_house_redirect_uri: str) -> Tuple[TokenData, TokenData]:
+    def get_tokens(code: str, client_id: str, in_house_redirect_uri: str) -> Tuple[TokenData, TokenData]:
         access_token, refresh_token = TokenRequestHelper.get_tokens(
             grant_type=GrantType.AUTHORIZATION_CODE, client=ClientHelper.get_in_house_client(client_id),
             code=code, redirect_uri=UrlHelper.get_redirect_url(in_house_redirect_uri, client_id)

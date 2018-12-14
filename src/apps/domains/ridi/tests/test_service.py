@@ -29,11 +29,11 @@ class TokenRefreshServiceTestCase(TestCase):
     def test_not_exist_refresh_token(self):
         token = 'this is invalid token'
         with self.assertRaises(PermissionDenied):
-            TokenRefreshService.refresh(cookie_refresh_token=token)
+            TokenRefreshService.get_tokens(cookie_refresh_token=token)
 
     def test_not_in_house_client(self):
         with self.assertRaises(PermissionDenied):
-            TokenRefreshService.refresh(cookie_refresh_token=self.not_in_house_refresh_token.token)
+            TokenRefreshService.get_tokens(cookie_refresh_token=self.not_in_house_refresh_token.token)
 
     def test_success_refresh(self):
         with requests_mock.mock() as m:
@@ -44,7 +44,7 @@ class TokenRefreshServiceTestCase(TestCase):
                 'refresh_token_expires_in': 2222222,
             })
 
-            at, rt = TokenRefreshService.refresh(cookie_refresh_token=self.refresh_token.token)
+            at, rt = TokenRefreshService.get_tokens(cookie_refresh_token=self.refresh_token.token)
             self.assertIsInstance(at, TokenData)
             self.assertIsInstance(rt, TokenData)
 

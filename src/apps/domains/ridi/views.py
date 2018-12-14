@@ -57,7 +57,7 @@ class CallbackView(View):
 
         valid_data = CallbackForm(request.GET).get_valid_data_with_state_check(request.user.idx)
         try:
-            access_token, refresh_token = AuthorizationCodeService.get_token(
+            access_token, refresh_token = AuthorizationCodeService.get_tokens(
                 valid_data['code'], valid_data['client_id'], valid_data['in_house_redirect_uri']
             )
             root_domain = UrlHelper.get_root_domain(self.request)
@@ -85,7 +85,7 @@ class TokenView(APIView):
 
         try:
             if not access_token:
-                access_token, refresh_token = TokenRefreshService.refresh(valid_data['refresh_token'])
+                access_token, refresh_token = TokenRefreshService.get_tokens(valid_data['refresh_token'])
                 data = TokenHelper.get_token_data_info(access_token)
                 response = JsonResponse(data)
                 ResponseCookieHelper.add_token_cookie(

@@ -10,7 +10,7 @@ from apps.domains.oauth2.constants import GrantType
 
 class TokenRefreshService:
     @staticmethod
-    def refresh(cookie_refresh_token: str) -> Tuple[TokenData, TokenData]:
+    def get_tokens(cookie_refresh_token: str) -> Tuple[TokenData, TokenData]:
         try:
             refresh_token = RefreshToken.objects.select_related('application').get(token=cookie_refresh_token)
         except ObjectDoesNotExist:
