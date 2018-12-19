@@ -20,12 +20,16 @@ from apps.domains.oauth2.token import JwtHandler
 from apps.domains.ridi.forms import AuthorizeForm, CallbackForm, TokenForm
 
 from infra.network.constants.http_status_code import HttpStatusCodes
+from lib.base.invalid_form_response import InvalidFormResponse
 from lib.django.http.response import HttpResponseUnauthorized
 
 
 class AuthorizeView(LoginRequiredMixin, View):
     def get(self, request):
-        valid_data = AuthorizeForm(request.GET).get_valid_data_with_client_check()
+        authorize_form = AuthorizeForm(request.GET)
+        if not authorize_form.is_valid():
+            return InvalidFormResponse(authorize_form)
+        valid_data = authorize_form.clean()
         url = AuthorizationCodeService.get_oauth2_authorize_url(valid_data['client_id'], valid_data['redirect_uri'], request.user.idx)
         return HttpResponseRedirect(url)
 
@@ -56,7 +60,12 @@ class CallbackView(View):
             return response
         # TODO : ------- 재배포시 삭제 -------
 
-        valid_data = CallbackForm(request.GET).get_valid_data_with_state_check(request.user.idx)
+        data = request.GET.copy()
+        data['u_idx'] = request.user.idx
+        callback_form = CallbackForm(data)
+        if not callback_form.is_valid():
+            return InvalidFormResponse(callback_form)
+        valid_data = callback_form.clean()
         try:
             access_token, refresh_token = AuthorizationCodeService.get_tokens(
                 valid_data['code'], valid_data['client_id'], valid_data['in_house_redirect_uri']
@@ -80,7 +89,10 @@ class CompleteView(View):
 class TokenView(APIView):
     @swagger_auto_schema(**TokenGetSchema.to_swagger_schema())
     def post(self, request):
-        valid_data = TokenForm(request.COOKIES).get_valid_data()
+        token_form = TokenForm(TokenHelper.get_token_data_from_cookie(request.COOKIES))
+        if not token_form.is_valid():
+            return InvalidFormResponse(token_form)
+        valid_data = token_form.clean()
         root_domain = UrlHelper.get_root_domain(self.request)
         try:
             access_token = JwtHandler.get_access_token(valid_data['access_token'])
@@ -92,6 +104,7 @@ class TokenView(APIView):
                 ResponseCookieHelper.add_token_cookie(
                     response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
                 )
+                return response
             except PermissionDenied:
                 response = HttpResponseUnauthorized()
                 ResponseCookieHelper.clear_token_cookie(response, root_domain)

@@ -1,47 +1,33 @@
 from django import forms
-from rest_framework.exceptions import ValidationError
 
 from apps.domains.ridi.helpers.client_helper import ClientHelper
 from apps.domains.ridi.helpers.state_helper import StateHelper
 
-from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 
-
-class RequestFrom(forms.Form):
-    def get_valid_data(self) -> dict:
-        if not super().is_valid():
-            raise ValidationError
-        return self.clean()
-
-
-class AuthorizeForm(RequestFrom):
+class AuthorizeForm(forms.Form):
     client_id = forms.CharField()
     redirect_uri = forms.URLField()
 
-    def get_valid_data_with_client_check(self):
-        valid_data = super().get_valid_data()
-        client = ClientHelper.get_in_house_client(valid_data['client_id'])
-        ClientHelper.validate_redirect_uri(client, valid_data['redirect_uri'])
-        return valid_data
+    def clean(self) -> dict:
+        cleaned_data = super().clean()
+        client = ClientHelper.get_in_house_client(cleaned_data.get('client_id'))
+        ClientHelper.validate_redirect_uri(client, cleaned_data.get('redirect_uri'))
+        return cleaned_data
 
 
-class CallbackForm(RequestFrom):
+class CallbackForm(forms.Form):
     code = forms.CharField()
     state = forms.CharField()
     client_id = forms.CharField()
     in_house_redirect_uri = forms.URLField()
+    u_idx = forms.IntegerField()
 
-    def get_valid_data_with_state_check(self, u_idx) -> dict:
-        valid_data = self.get_valid_data()
-        StateHelper.validate_state(valid_data['state'], u_idx)
-        return valid_data
+    def clean(self) -> dict:
+        cleaned_data = super().clean()
+        StateHelper.validate_state(cleaned_data.get('state'), cleaned_data.get('u_idx'))
+        return cleaned_data
 
 
-class TokenForm(RequestFrom):
+class TokenForm(forms.Form):
     access_token = forms.CharField(required=False)
     refresh_token = forms.CharField(required=False)
-
-    def get_valid_data(self):
-        self.data['access_token'] = self.data.pop(ACCESS_TOKEN_COOKIE_KEY, None)
-        self.data['refresh_token'] = self.data.pop(REFRESH_TOKEN_COOKIE_KEY, None)
-        return super().get_valid_data()
