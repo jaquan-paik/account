@@ -49,11 +49,8 @@ class JwtHandler:
         raise NotImplementedError(f'Jwt alg is not implemented: {client.jwt_alg}')
 
     @classmethod
-    def get_access_token(cls, token: str) -> AccessToken or None:
-        try:
-            client = cls._get_client_from_token(token)
-            payload = cls.validate(token, client)
-            access_token = AccessToken.from_payload(token, payload, client)
-            return access_token
-        except JwtTokenErrorException:
-            return None
+    def get_access_token(cls, token: str) -> AccessToken:
+        client = cls._get_client_from_token(token)
+        payload = cls.validate(token, client)
+        access_token = AccessToken.from_payload(token, payload, client)
+        return access_token

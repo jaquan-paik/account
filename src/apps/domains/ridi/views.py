@@ -6,6 +6,7 @@ from drf_yasg.utils import swagger_auto_schema
 from requests import HTTPError
 from rest_framework.views import APIView
 
+from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.ridi.helpers.client_helper import ClientHelper
 from apps.domains.ridi.helpers.response_cookie_helper import ResponseCookieHelper
 from apps.domains.ridi.helpers.token_request_helper import TokenRequestHelper
@@ -81,27 +82,27 @@ class TokenView(APIView):
     def post(self, request):
         valid_data = TokenForm(request.COOKIES).get_valid_data()
         root_domain = UrlHelper.get_root_domain(self.request)
-        access_token = JwtHandler.get_access_token(valid_data['access_token'])
-
         try:
-            if not access_token:
+            access_token = JwtHandler.get_access_token(valid_data['access_token'])
+        except JwtTokenErrorException:
+            try:
                 access_token, refresh_token = TokenRefreshService.get_tokens(valid_data['refresh_token'])
                 data = TokenHelper.get_token_data_info(access_token)
                 response = JsonResponse(data)
                 ResponseCookieHelper.add_token_cookie(
-                    response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
+                    response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
                 )
-            else:
-                data = TokenHelper.get_token_info(access_token)
-                response = JsonResponse(data)
+            except PermissionDenied:
+                response = HttpResponseUnauthorized()
+                ResponseCookieHelper.clear_token_cookie(response, root_domain)
+                return response
+            except HTTPError as e:
+                return JsonResponse(data=e.response.json(), status=e.response.status_code)
+        else:
+            data = TokenHelper.get_token_info(access_token)
+            response = JsonResponse(data)
 
             return response
-        except PermissionDenied:
-            response = HttpResponseUnauthorized()
-            ResponseCookieHelper.clear_token_cookie(response, root_domain)
-            return response
-        except HTTPError as e:
-            return JsonResponse(data=e.response.json(), status=e.response.status_code)
 
 
 class LogoutView(View):
