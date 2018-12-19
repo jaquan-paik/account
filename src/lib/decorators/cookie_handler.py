@@ -9,10 +9,8 @@ def add_tokens_in_cookie(func: Callable):
     def wrapper(self, request, *args, **kwargs):
         response, (access_token, refresh_token) = func(self, request, *args, **kwargs)
         root_domain = UrlHelper.get_root_domain(request)
-        if access_token and refresh_token:
-            ResponseCookieHelper.add_token_cookie(
-                response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
-            )
+        if access_token or refresh_token:
+            ResponseCookieHelper.add_token_cookie(response, access_token, refresh_token, root_domain)
         return response
 
     return wrapper
