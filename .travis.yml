@@ -49,18 +49,18 @@ before_deploy:
 deploy:
 # Deploy development
   - provider: script
-    script: bash docs/scripts/deploy.sh development
+    script: bash docs/scripts/travis_deploy.sh development
     on:
       branch: master
 
 # Deploy staging
   - provider: script
-    script: bash docs/scripts/deploy.sh staging
+    script: bash docs/scripts/travis_deploy.sh staging
     on:
       branch: master
 
 # Deploy production
   - provider: script
-    script: bash docs/scripts/deploy.sh production
+    script: bash docs/scripts/travis_deploy.sh production
     on:
       tags: true
