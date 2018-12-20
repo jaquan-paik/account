@@ -69,7 +69,7 @@ CREATE TABLE `oauth2_grant` (
   `code` varchar(255) NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `application_id` bigint(20) unsigned NOT NULL,
-  `redirect_uri` varchar(255) NOT NULL,
+  `redirect_uri` longtext NOT NULL,
   `scope` longtext NOT NULL,
   `expires` datetime NOT NULL,
   `created` datetime NOT NULL,
