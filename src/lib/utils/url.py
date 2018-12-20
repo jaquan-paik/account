@@ -11,6 +11,7 @@ def generate_query_url(url: str, params: dict):
     return urllib.parse.urlunparse(url_parts)
 
 
+# TODO: query key value 비교로 후에 변경
 def get_url_until_path(url: str):
     split_url = urllib.parse.urlsplit(url)
     return f"{split_url[0]}/{split_url[1]}{split_url[2]}"

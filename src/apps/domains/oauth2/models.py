@@ -59,6 +59,7 @@ class Grant(AbstractGrant):
 
     objects = GrantManager()
 
+    # TODO: 후에 삭제
     def redirect_uri_allowed(self, uri):
         return get_url_until_path(self.redirect_uri) == get_url_until_path(uri)
 
