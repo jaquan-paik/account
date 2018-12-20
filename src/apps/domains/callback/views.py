@@ -49,10 +49,8 @@ class CallbackView(OAuth2SessionMixin, TokenCookieMixin, View):
     def get(self, request):
         code = request.GET.get('code', None)
         state = request.GET.get('state', None)
-        in_house_redirect_uri = request.GET.get('in_house_redirect_uri', None)
-
         oauth2_data = self.get_oauth2_data(code=code, state=state)
-
+        in_house_redirect_uri = request.GET.get('in_house_redirect_uri', oauth2_data.redirect_uri)
         try:
             access_token, refresh_token = TokenCodeHelper.get_tokens(
                 oauth2_data.client, oauth2_data.code, UrlHelper.get_redirect_url(in_house_redirect_uri, oauth2_data.client.client_id)
