@@ -52,7 +52,7 @@ class Application(AbstractApplication):
 
 class Grant(AbstractGrant):
     user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
-
+    redirect_uri = models.TextField()
     updated = None
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
     last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
