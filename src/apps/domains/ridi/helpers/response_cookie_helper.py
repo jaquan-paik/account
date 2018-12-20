@@ -1,7 +1,7 @@
 from apps.domains.ridi.dtos import TokenData
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 
-EPOCH_TIME = 'Thu, 01-Jan-1970 00:00:00 GMT'
+COOKIE_EXPIRE_DEFAULT_TIME = 'Thu, 01-Jan-1970 00:00:00 GMT'
 
 
 class ResponseCookieHelper:
@@ -26,7 +26,7 @@ class ResponseCookieHelper:
     @staticmethod
     def clear_cookie(response, key: str, domain: str):
         response.set_cookie(
-            key, '', max_age=0, expires=EPOCH_TIME, domain=domain, secure=True, httponly=True
+            key, '', max_age=0, expires=COOKIE_EXPIRE_DEFAULT_TIME, domain=domain, secure=True, httponly=True
         )
 
     @classmethod
