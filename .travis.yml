@@ -51,13 +51,13 @@ deploy:
   - provider: script
     script: bash docs/scripts/deploy.sh development
     on:
-      branch: master
+      branch: feature/grant_urlcompare
 
 # Deploy staging
   - provider: script
     script: bash docs/scripts/deploy.sh staging
     on:
-      branch: master
+      branch: feature/grant_urlcompare
 
 # Deploy production
   - provider: script
