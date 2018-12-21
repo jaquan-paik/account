@@ -46,7 +46,7 @@ class TokenViewTestCase(TestCase):
         api = StoreApi()
         with requests_mock.mock() as m:
             m.get(api._make_url(StoreApi.ACCOUNT_INFO), json={'result': {'idx': 1, 'id': 'testuser'}})
-            m.post(UrlHelper.get_token(), json={
+            m.post(UrlHelper.get_oauth2_token_url(), json={
                 'access_token': 'test-access-token1111',
                 'expires_in': 1111111,
                 'refresh_token': 'test-refresh-token1111',
