@@ -72,7 +72,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(primary_key=True, serialize=False)),
                 ('code', models.CharField(max_length=255, unique=True)),
                 ('expires', models.DateTimeField()),
-                ('redirect_uri', models.CharField(max_length=255)),
+                ('redirect_uri', models.CharField(max_length=16384)),
                 ('scope', models.TextField(blank=True)),
                 ('created', models.DateTimeField(auto_now_add=True, verbose_name='등록일')),
                 ('last_modified', models.DateTimeField(auto_now=True, verbose_name='수정일')),
