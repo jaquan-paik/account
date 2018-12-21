@@ -10,14 +10,15 @@ stages:
 pytest:
   stage: build
   services:
-  - name: mysql
+  - name: mariadb:10.1
+    alias: account-mariadb
     command: ["mysqld", "--character-set-server=utf8", "--collation-server=utf8_unicode_ci"]
   variables:
     MYSQL_ROOT_PASSWORD: root
   script:
   - make global-python-package-install-development
   - make settings
-  - make test
+  - make gitlab-test
 
 lint:
   stage: build
