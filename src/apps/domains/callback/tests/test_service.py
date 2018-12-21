@@ -37,7 +37,7 @@ class TokenRefreshServiceTestCase(TestCase):
 
     def test_success_refresh(self):
         with requests_mock.mock() as m:
-            m.post(UrlHelper.get_token(), json={
+            m.post(UrlHelper.get_oauth2_token_url(), json={
                 'access_token': 'test-access-token2222',
                 'expires_in': 1111111,
                 'refresh_token': 'test-refresh-token2222',
