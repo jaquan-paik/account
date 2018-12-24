@@ -47,9 +47,7 @@ class CallbackView(View):
         )
         root_domain = UrlHelper.get_root_domain(self.request)
         response = InHouseHttpResponseRedirect(cleaned_data['in_house_redirect_uri'])
-        ResponseCookieHelper.add_token_cookie(
-            response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
-        )
+        ResponseCookieHelper.add_token_cookie(response, access_token, refresh_token, root_domain)
         return response
 
 
@@ -75,9 +73,8 @@ class TokenView(APIView):
             access_token, refresh_token = TokenRefreshService.get_tokens(cleaned_data['refresh_token'])
             data = TokenHelper.get_token_data_info(access_token)
             response = JsonResponse(data)
-            ResponseCookieHelper.add_token_cookie(
-                response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
-            )
+            ResponseCookieHelper.add_token_cookie(response, access_token, refresh_token, root_domain)
+
         else:
             data = TokenHelper.get_token_info(access_token)
             response = JsonResponse(data)
