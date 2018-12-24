@@ -1,9 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views import View
 from drf_yasg.utils import swagger_auto_schema
-from requests import HTTPError
 from rest_framework.views import APIView
 
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
@@ -19,7 +17,8 @@ from apps.domains.ridi.forms import AuthorizeForm, CallbackForm, TokenForm
 
 from infra.network.constants.http_status_code import HttpStatusCodes
 from lib.base.invalid_form_response import InvalidFormResponse
-from lib.django.http.response import HttpResponseUnauthorized
+from lib.decorators.cookie_handler import clear_tokens_in_cookie
+from lib.decorators.exception_handler import exception_handler
 
 
 class AuthorizeView(LoginRequiredMixin, View):
@@ -33,6 +32,7 @@ class AuthorizeView(LoginRequiredMixin, View):
 
 
 class CallbackView(View):
+    @exception_handler
     def get(self, request):
         data = request.GET.copy()
         data['u_idx'] = request.user.idx
@@ -40,19 +40,15 @@ class CallbackView(View):
         if not callback_form.is_valid():
             return InvalidFormResponse(callback_form)
         valid_data = callback_form.clean()
-        try:
-            access_token, refresh_token = AuthorizationCodeService.get_tokens(
-                valid_data['code'], valid_data['client_id'], valid_data['in_house_redirect_uri']
-            )
-            root_domain = UrlHelper.get_root_domain(self.request)
-            response = InHouseHttpResponseRedirect(valid_data['in_house_redirect_uri'])
-            ResponseCookieHelper.add_token_cookie(
-                response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
-            )
-            return response
-
-        except HTTPError as e:
-            return JsonResponse(data=e.response.json(), status=e.response.status_code)
+        access_token, refresh_token = AuthorizationCodeService.get_tokens(
+            valid_data['code'], valid_data['client_id'], valid_data['in_house_redirect_uri']
+        )
+        root_domain = UrlHelper.get_root_domain(self.request)
+        response = InHouseHttpResponseRedirect(valid_data['in_house_redirect_uri'])
+        ResponseCookieHelper.add_token_cookie(
+            response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
+        )
+        return response
 
 
 class CompleteView(View):
@@ -62,6 +58,7 @@ class CompleteView(View):
 
 class TokenView(APIView):
     @swagger_auto_schema(**TokenGetSchema.to_swagger_schema())
+    @exception_handler
     def post(self, request):
         token_form = TokenForm(TokenHelper.get_token_data_from_cookie(request.COOKIES))
         if not token_form.is_valid():
@@ -70,29 +67,23 @@ class TokenView(APIView):
         root_domain = UrlHelper.get_root_domain(self.request)
         try:
             access_token = JwtHandler.get_access_token(valid_data['access_token'])
+
         except JwtTokenErrorException:
-            try:
-                access_token, refresh_token = TokenRefreshService.get_tokens(valid_data['refresh_token'])
-                data = TokenHelper.get_token_data_info(access_token)
-                response = JsonResponse(data)
-                ResponseCookieHelper.add_token_cookie(
-                    response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
-                )
-                return response
-            except PermissionDenied:
-                response = HttpResponseUnauthorized()
-                ResponseCookieHelper.clear_token_cookie(response, root_domain)
-                return response
-            except HTTPError as e:
-                return JsonResponse(data=e.response.json(), status=e.response.status_code)
+            access_token, refresh_token = TokenRefreshService.get_tokens(valid_data['refresh_token'])
+            data = TokenHelper.get_token_data_info(access_token)
+            response = JsonResponse(data)
+            ResponseCookieHelper.add_token_cookie(
+                response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
+            )
         else:
             data = TokenHelper.get_token_info(access_token)
             response = JsonResponse(data)
 
-            return response
+        return response
 
 
 class LogoutView(View):
+    @clear_tokens_in_cookie
     def get(self, request):
         root_domain = UrlHelper.get_root_domain(self.request)
         return_url = request.GET.get('return_url', None)
@@ -100,5 +91,4 @@ class LogoutView(View):
             return_url = f'https://{root_domain}'
 
         response = HttpResponseRedirect(return_url)
-        ResponseCookieHelper.clear_token_cookie(response, root_domain)
         return response
