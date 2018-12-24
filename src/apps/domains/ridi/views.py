@@ -7,9 +7,7 @@ from requests import HTTPError
 from rest_framework.views import APIView
 
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
-from apps.domains.ridi.helpers.client_helper import ClientHelper
 from apps.domains.ridi.helpers.response_cookie_helper import ResponseCookieHelper
-from apps.domains.ridi.helpers.token_request_helper import TokenRequestHelper
 from apps.domains.ridi.helpers.token_helper import TokenHelper
 from apps.domains.ridi.helpers.url_helper import UrlHelper
 from apps.domains.ridi.response import InHouseHttpResponseRedirect
@@ -36,30 +34,6 @@ class AuthorizeView(LoginRequiredMixin, View):
 
 class CallbackView(View):
     def get(self, request):
-
-        # TODO : ------ 재배포시 삭제 시작 부분 ------
-        deprecated = request.GET.get('deprecated', None)
-        code = request.GET.get('code', None)
-        client_id = request.GET.get('client_id', None)
-        in_house_redirect_uri = request.GET.get('in_house_redirect_uri', None)
-        if deprecated:
-            try:
-                access_token, refresh_token = TokenRequestHelper.get_tokens(
-                    grant_type='authorization_code', client=ClientHelper.get_in_house_client(client_id),
-                    code=code, redirect_uri=f'{UrlHelper.get_redirect_url(in_house_redirect_uri, client_id)}&deprecated=1'
-                )
-            except HTTPError as e:
-                return JsonResponse(data=e.response.json(), status=e.response.status_code)
-
-            root_domain = UrlHelper.get_root_domain(self.request)
-            response = InHouseHttpResponseRedirect(in_house_redirect_uri)
-            ResponseCookieHelper.add_token_cookie(
-                response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
-            )
-
-            return response
-        # TODO : ------- 재배포시 삭제 -------
-
         data = request.GET.copy()
         data['u_idx'] = request.user.idx
         callback_form = CallbackForm(data)
@@ -71,7 +45,7 @@ class CallbackView(View):
                 valid_data['code'], valid_data['client_id'], valid_data['in_house_redirect_uri']
             )
             root_domain = UrlHelper.get_root_domain(self.request)
-            response = InHouseHttpResponseRedirect(in_house_redirect_uri)
+            response = InHouseHttpResponseRedirect(valid_data['in_house_redirect_uri'])
             ResponseCookieHelper.add_token_cookie(
                 response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
             )
