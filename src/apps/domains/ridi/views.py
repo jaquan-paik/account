@@ -67,6 +67,7 @@ class TokenView(APIView):
             return InvalidFormResponse(token_form)
         cleaned_data = token_form.clean()
         root_domain = UrlHelper.get_root_domain(self.request)
+
         try:
             access_token = JwtHandler.get_access_token(cleaned_data['access_token'])
 

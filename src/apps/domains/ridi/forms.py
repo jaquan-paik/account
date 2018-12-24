@@ -11,7 +11,6 @@ class CallbackForm(forms.Form):
     state = forms.CharField()
     client_id = forms.CharField()
     in_house_redirect_uri = forms.URLField()
-    u_idx = forms.IntegerField()
 
 
 class TokenForm(forms.Form):

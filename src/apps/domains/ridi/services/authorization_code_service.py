@@ -17,17 +17,17 @@ class AuthorizationCodeService:
         client = ClientHelper.get_in_house_client(client_id)
         ClientHelper.validate_redirect_uri(client, redirect_uri)
 
-    @classmethod
-    def get_tokens(cls, code: str, client_id: str, in_house_redirect_uri: str) -> Tuple[TokenData, TokenData]:
-        cls._validate_client_and_redirect_uri(client_id, in_house_redirect_uri)
+    @staticmethod
+    def get_tokens(code: str, client_id: str, in_house_redirect_uri: str) -> Tuple[TokenData, TokenData]:
         access_token, refresh_token = TokenRequestHelper.get_tokens(
             grant_type=GrantType.AUTHORIZATION_CODE, client=ClientHelper.get_in_house_client(client_id),
             code=code, redirect_uri=UrlHelper.get_redirect_url(in_house_redirect_uri, client_id)
         )
         return access_token, refresh_token
 
-    @staticmethod
-    def get_oauth2_authorize_url(client_id: str, redirect_uri: str, u_idx: str) -> str:
+    @classmethod
+    def get_oauth2_authorize_url(cls, client_id: str, redirect_uri: str, u_idx: str) -> str:
+        cls._validate_client_and_redirect_uri(client_id, redirect_uri)
         params = {
             'client_id': client_id,
             'redirect_uri': UrlHelper.get_redirect_url(redirect_uri, client_id),
