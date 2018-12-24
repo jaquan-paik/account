@@ -71,6 +71,8 @@ if [ $? -ne 0 ]; then
 fi
 
 
+curl -X POST --data-urlencode "payload={\"text\": \"[Account][$ENVIRONMENT - $TAG] 배포가 시작됩니다.\nRepo: https://github.com/ridi/account\"}" $SLACK_DEPLOY_HOOK
+
 # Deploy
 if [ "$1" = staging ]; then
 run_and_check_exit_code "ecs-cli compose --cluster account-staging-cluster --project-name account-staging-www -f docs/docker/compose/account.yml service up --timeout 1200"
