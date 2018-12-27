@@ -58,8 +58,8 @@ class Grant(AbstractGrant):
     last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
 
     # TODO: 후에 삭제
-    # def redirect_uri_allowed(self, uri):
-    #     return get_url_until_path(self.redirect_uri) == get_url_until_path(uri)
+    def redirect_uri_allowed(self, uri):
+        return get_url_until_path(self.redirect_uri) == get_url_until_path(uri)
 
     objects = GrantManager()
 
