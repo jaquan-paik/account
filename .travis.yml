@@ -50,7 +50,7 @@ deploy:
   - provider: script
     script: bash docs/scripts/deploy.sh development
     on:
-      branch: fix/remove_session
+      branch: fix/remove_session #TODO: 마스터 머지 전,변경
 
 # Deploy staging
   - provider: script
