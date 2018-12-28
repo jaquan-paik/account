@@ -1,20 +1,27 @@
 import os
 
-from django.conf import settings
-
-from lib.base.exceptions import MsgException
+from django.core.exceptions import ImproperlyConfigured
 
 
 class FileHandler:
-    def __init__(self, relative_file_path: str):
-        self.relative_file_path = relative_file_path
+    def __init__(self):
+        self._set_root_path()
 
-    def get_absolute_file_path(self) -> str:
-        return os.path.join(settings.BASE_DIR, self.relative_file_path)
+    def _set_root_path(self) -> None:
+        self.root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-    def load(self) -> str:
+    def get_file_path(self, file_name: str) -> str:
+        return os.path.join(self.root_path, file_name)
+
+    def save_file(self, file_name: str, content: str) -> None:
+        file_path = self.get_file_path(file_name)
+        with open(file_path, 'w') as file:
+            file.write(content)
+
+    def load(self, file_name: str) -> str:
+        file_path = self.get_file_path(file_name)
         try:
-            with open(self.get_absolute_file_path()) as file:
+            with open(file_path) as file:
                 return file.read()
         except (OSError, IOError):
-            raise MsgException('존재하지 않는 파일입니다.')
+            raise ImproperlyConfigured('There is no setting file %s' % file_path)

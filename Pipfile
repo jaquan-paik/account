@@ -51,6 +51,7 @@ name = "pypi"
 "requests" = "==2.18.4"
 "PyJWT" = "==1.6.1"
 "cryptography" = "==2.2.2"
+"dotenv" = "==0.10.1"
 
 
 [dev-packages]

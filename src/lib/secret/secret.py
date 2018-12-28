@@ -86,13 +86,13 @@ class SecretFileHandler:
 
 
 class SecretFileGenerator(SecretFileHandler):
-    def generate(self, env: str) -> None:
-        secrets = self._load_secrets(env)
-
+    def generate(self, stage: str, env: dict) -> None:
+        secrets = self._load_secrets_from_parameter_store(stage)
+        secrets.update(env)
         encrypted_secrets_json = self.encrypt_secrets(secrets)
         self._save_encrypted_file(encrypted_secrets_json)
 
-    def _load_secrets(self, env: str) -> Dict:
+    def _load_secrets_from_parameter_store(self, env: str) -> Dict:
         return ParameterStoreConnector().load_parameters(env)
 
     def encrypt_secrets(self, secrets: Dict) -> str:
