@@ -2,15 +2,20 @@ import json
 import os
 from typing import Dict
 
+from infra.configure.constants import SecretKeyName
 from infra.storage.ssm.connectors import ParameterStoreConnector
 from lib.crypto.encrypt import CryptoHelper
 from lib.singleton.singleton import Singleton
+
+from lib.utils.file import FileHandler
+from dotenv import dotenv_values
 
 DEFAULT_ROOT_PATH = '/htdocs/www'
 CRYPTO_KEY = '!Ck[v%W}$5,4@-5R'
 ENC_SECRET_FILE_NAME = 'enc_secrets.json'
 SECRET_FILE_NAME = 'secrets.json'
 VERSION_FILE_NAME = 'version'
+ENV_PATH = './src/sites/settings/.env'
 
 
 class ImproperlyConfigured(Exception):
@@ -35,8 +40,21 @@ class _Secret:
             raise ImproperlyConfigured('Set the {} environment variable!'.format(key))
 
     def _load(self) -> None:
-        self.__secrets = json.loads(self.file_handler.load())
+        env = self._load_env()
+        secret = json.loads(self.file_handler.load())
+        secret.update(env)
+        from lib.log.logger import logger
+        logger.info(secret)
+        self.__secrets = secret
         self.version = self._load_version_file()
+
+    def _load_env(self) -> dict:
+        file_handler = FileHandler()
+        env_file_path = file_handler.get_file_path(ENV_PATH)
+        env = dotenv_values(dotenv_path=env_file_path)
+        if SecretKeyName.ALLOWED_HOSTS in env:  # allowed host는 env에서는 string 형식이기 때문에 load하여서 배열로 바꿔야 한다.
+            env[SecretKeyName.ALLOWED_HOSTS] = json.loads(env[SecretKeyName.ALLOWED_HOSTS])
+        return env
 
     def _load_version_file(self) -> str:
         file_path = '%s/%s' % (self.root_path, VERSION_FILE_NAME)
@@ -86,9 +104,8 @@ class SecretFileHandler:
 
 
 class SecretFileGenerator(SecretFileHandler):
-    def generate(self, stage: str, env: dict) -> None:
+    def generate(self, stage: str) -> None:
         secrets = self._load_secrets_from_parameter_store(stage)
-        secrets.update(env)
         encrypted_secrets_json = self.encrypt_secrets(secrets)
         self._save_encrypted_file(encrypted_secrets_json)
 

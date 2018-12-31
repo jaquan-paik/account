@@ -35,3 +35,8 @@ class SecretKeyName:
     RIDI_INTERNAL_AUTH_ACCOUNT_TO_STORE = 'ridi_internal_auth_account_to_store'
 
     STATE_CRYPTO_KEY = 'state_crypto_key'
+
+    SITE_DOMAIN = 'site_domain'
+    STORE_URL = 'store_url'
+    RIDIBOOKS_LOGIN_URL = 'ridibooks_login_url'
+    ALLOWED_HOSTS = 'allowed_hosts'
