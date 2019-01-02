@@ -23,6 +23,7 @@ from infra.network.constants.http_status_code import HttpStatusCodes
 from lib.django.http.response import HttpResponseUnauthorized
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 from lib.utils.url import generate_query_url
+from lib.log.logger import logger
 
 
 class AuthorizeView(LoginRequiredMixin, View):
@@ -45,31 +46,18 @@ class AuthorizeView(LoginRequiredMixin, View):
 
 class CallbackView(TokenCookieMixin, View):
     def get(self, request):
+        if request.user.is_anonymous:
+            logger.info('callback:AnonymousUser', extra=request.GET)
+            return JsonResponse(data={}, status=HttpStatusCodes.C_401_UNAUTHORIZED)
+
         code = request.GET.get('code', None)
         state = request.GET.get('state', None)
         client_id = request.GET.get('client_id', None)
         in_house_redirect_uri = request.GET.get('in_house_redirect_uri', None)
 
-        # TODO : 재배포시 삭제
         deprecated = request.GET.get('deprecated', None)
-        if deprecated:
-            try:
-                access_token, refresh_token = TokenRequestHelper.get_tokens(
-                    grant_type='authorization_code', client=ClientHelper.get_in_house_client(client_id),
-                    code=code, redirect_uri=f'{UrlHelper.get_redirect_url(in_house_redirect_uri, client_id)}&deprecated=1'
-                )
-            except HTTPError as e:
-                return JsonResponse(data=e.response.json(), status=e.response.status_code)
-
-            root_domain = UrlHelper.get_root_domain(self.request)
-            response = InHouseHttpResponseRedirect(in_house_redirect_uri)
-            self.add_token_cookie(
-                response=response, access_token=access_token, refresh_token=refresh_token, root_domain=root_domain
-            )
-
-            return response
-
-        StateHelper.validate_state(state, request.user.idx)
+        if not deprecated:
+            StateHelper.validate_state(state, request.user.idx)  # TODO : 재배포시, deprecated 삭제
 
         try:
             access_token, refresh_token = TokenRequestHelper.get_tokens(

@@ -16,10 +16,10 @@ class StateHelper:
 
     @staticmethod
     def _decrypt_state(state: str) -> dict:
-        decrypted_data = json.loads(CryptoHelper(CRYPTO_KEY).decrypt(state))
-        if not decrypted_data:
+        decrypted_str = CryptoHelper(CRYPTO_KEY).decrypt(state)
+        if not decrypted_str:
             raise PermissionDenied()
-        return decrypted_data
+        return json.loads(decrypted_str)
 
     @classmethod
     def validate_state(cls, state: str, u_idx: str):
