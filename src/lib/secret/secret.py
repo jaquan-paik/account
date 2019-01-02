@@ -8,7 +8,7 @@ from lib.crypto.encrypt import CryptoHelper
 from lib.singleton.singleton import Singleton
 
 from lib.utils.file import FileHandler
-from dotenv import dotenv_values
+from dotenv import dotenv_values, load_dotenv
 
 DEFAULT_ROOT_PATH = '/htdocs/www'
 CRYPTO_KEY = '!Ck[v%W}$5,4@-5R'
@@ -43,15 +43,26 @@ class _Secret:
         secret = json.loads(self.file_handler.load())
         if SecretKeyName.ALLOWED_HOSTS in secret:  # allowed host는 env에서는 string 형식이기 때문에 load하여서 배열로 바꿔야 한다.
             secret[SecretKeyName.ALLOWED_HOSTS] = json.loads(secret[SecretKeyName.ALLOWED_HOSTS])
-        env = self._load_env()
-        secret.update(env)
+        secret.update(self._load_env())
+        secret.update(self._load_env_file())
+
         self.__secrets = secret
         self.version = self._load_version_file()
 
-    def _load_env(self) -> dict:
+    def _load_env_file(self) -> dict:
         file_handler = FileHandler()
         env_file_path = file_handler.get_file_path(ENV_PATH)
         env = dotenv_values(dotenv_path=env_file_path)
+        if SecretKeyName.ALLOWED_HOSTS in env:  # allowed host는 env에서는 string 형식이기 때문에 load하여서 배열로 바꿔야 한다.
+            env[SecretKeyName.ALLOWED_HOSTS] = json.loads(env[SecretKeyName.ALLOWED_HOSTS])
+        return env
+
+    def _load_env(self) -> dict:
+        environ = dict(os.environ)
+        env = {}
+        for key in SecretKeyName.get_list():
+            if key in environ:
+                env[key] = environ[key]
         if SecretKeyName.ALLOWED_HOSTS in env:  # allowed host는 env에서는 string 형식이기 때문에 load하여서 배열로 바꿔야 한다.
             env[SecretKeyName.ALLOWED_HOSTS] = json.loads(env[SecretKeyName.ALLOWED_HOSTS])
         return env
