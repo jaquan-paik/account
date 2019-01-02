@@ -40,8 +40,10 @@ class _Secret:
             raise ImproperlyConfigured('Set the {} environment variable!'.format(key))
 
     def _load(self) -> None:
-        env = self._load_env()
         secret = json.loads(self.file_handler.load())
+        if SecretKeyName.ALLOWED_HOSTS in secret:  # allowed host는 env에서는 string 형식이기 때문에 load하여서 배열로 바꿔야 한다.
+            secret[SecretKeyName.ALLOWED_HOSTS] = json.loads(secret[SecretKeyName.ALLOWED_HOSTS])
+        env = self._load_env()
         secret.update(env)
         self.__secrets = secret
         self.version = self._load_version_file()
