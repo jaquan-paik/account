@@ -10,7 +10,7 @@ if __name__ == "__main__":
     # copy system arguments
     arguments = sys.argv[:]
     if Secret().get(SecretKeyName.ENVIRONMENT) == 'development':
-        setting_path = f'sites.settings.{Secret().get(SecretKeyName.ENVIRONMENT)}'
+        setting_path = 'sites.settings.development'
     else:
         setting_path = 'sites.settings.base'
 
