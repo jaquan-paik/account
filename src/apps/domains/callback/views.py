@@ -23,6 +23,7 @@ from infra.network.constants.http_status_code import HttpStatusCodes
 from lib.django.http.response import HttpResponseUnauthorized
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 from lib.utils.url import generate_query_url
+from lib.log.logger import logger
 
 
 class AuthorizeView(LoginRequiredMixin, View):
@@ -52,6 +53,9 @@ class CallbackView(TokenCookieMixin, View):
 
         deprecated = request.GET.get('deprecated', None)
         if not deprecated:
+            if request.user.is_anonymous:
+                logger.info('callback:AnonymousUser', extra=request.GET)
+                return JsonResponse(data={}, status=HttpStatusCodes.C_401_UNAUTHORIZED)
             StateHelper.validate_state(state, request.user.idx)  # TODO : 재배포시, deprecated 삭제
 
         try:
