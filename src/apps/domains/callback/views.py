@@ -23,6 +23,7 @@ from infra.network.constants.http_status_code import HttpStatusCodes
 from lib.django.http.response import HttpResponseUnauthorized
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, REFRESH_TOKEN_COOKIE_KEY
 from lib.utils.url import generate_query_url
+from lib.log.logger import logger
 
 
 class AuthorizeView(LoginRequiredMixin, View):
@@ -45,6 +46,10 @@ class AuthorizeView(LoginRequiredMixin, View):
 
 class CallbackView(TokenCookieMixin, View):
     def get(self, request):
+        if request.user.is_anonymous:
+            logger.info('callback:AnonymousUser', extra=request.GET)
+            return JsonResponse(data={}, status=HttpStatusCodes.C_401_UNAUTHORIZED)
+
         code = request.GET.get('code', None)
         state = request.GET.get('state', None)
         client_id = request.GET.get('client_id', None)
