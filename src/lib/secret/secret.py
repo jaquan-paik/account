@@ -43,8 +43,6 @@ class _Secret:
         env = self._load_env()
         secret = json.loads(self.file_handler.load())
         secret.update(env)
-        from lib.log.logger import logger
-        logger.info(secret)
         self.__secrets = secret
         self.version = self._load_version_file()
 
