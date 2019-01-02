@@ -46,6 +46,10 @@ class AuthorizeView(LoginRequiredMixin, View):
 
 class CallbackView(TokenCookieMixin, View):
     def get(self, request):
+        if request.user.is_anonymous:
+            logger.info('callback:AnonymousUser', extra=request.GET)
+            return JsonResponse(data={}, status=HttpStatusCodes.C_401_UNAUTHORIZED)
+
         code = request.GET.get('code', None)
         state = request.GET.get('state', None)
         client_id = request.GET.get('client_id', None)
@@ -53,9 +57,6 @@ class CallbackView(TokenCookieMixin, View):
 
         deprecated = request.GET.get('deprecated', None)
         if not deprecated:
-            if request.user.is_anonymous:
-                logger.info('callback:AnonymousUser', extra=request.GET)
-                return JsonResponse(data={}, status=HttpStatusCodes.C_401_UNAUTHORIZED)
             StateHelper.validate_state(state, request.user.idx)  # TODO : 재배포시, deprecated 삭제
 
         try:
