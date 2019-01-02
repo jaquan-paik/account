@@ -50,13 +50,13 @@ deploy:
   - provider: script
     script: bash docs/scripts/deploy.sh development
     on:
-      branch: master
+      branch: feature/remove_session
 
 # Deploy staging
   - provider: script
     script: bash docs/scripts/deploy.sh staging
     on:
-      branch: master
+      branch: feature/remove_session
 
 # Deploy production
   - provider: script
