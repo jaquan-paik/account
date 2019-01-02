@@ -41,11 +41,11 @@ class _Secret:
 
     def _load(self) -> None:
         secret = json.loads(self.file_handler.load())
-        if SecretKeyName.ALLOWED_HOSTS in secret:  # allowed host는 env에서는 string 형식이기 때문에 load하여서 배열로 바꿔야 한다.
-            secret[SecretKeyName.ALLOWED_HOSTS] = json.loads(secret[SecretKeyName.ALLOWED_HOSTS])
         secret.update(self._load_env())
         secret.update(self._load_env_file())
 
+        if SecretKeyName.ALLOWED_HOSTS in secret:
+            secret[SecretKeyName.ALLOWED_HOSTS] = json.loads(secret[SecretKeyName.ALLOWED_HOSTS])
         self.__secrets = secret
         self.version = self._load_version_file()
 
@@ -53,8 +53,6 @@ class _Secret:
         file_handler = FileHandler()
         env_file_path = file_handler.get_file_path(ENV_PATH)
         env = dotenv_values(dotenv_path=env_file_path)
-        if SecretKeyName.ALLOWED_HOSTS in env:  # allowed host는 env에서는 string 형식이기 때문에 load하여서 배열로 바꿔야 한다.
-            env[SecretKeyName.ALLOWED_HOSTS] = json.loads(env[SecretKeyName.ALLOWED_HOSTS])
         return env
 
     def _load_env(self) -> dict:
@@ -63,8 +61,6 @@ class _Secret:
         for key in SecretKeyName.get_list():
             if key in environ:
                 env[key] = environ[key]
-        if SecretKeyName.ALLOWED_HOSTS in env:  # allowed host는 env에서는 string 형식이기 때문에 load하여서 배열로 바꿔야 한다.
-            env[SecretKeyName.ALLOWED_HOSTS] = json.loads(env[SecretKeyName.ALLOWED_HOSTS])
         return env
 
     def _load_version_file(self) -> str:
