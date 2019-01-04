@@ -1,3 +1,4 @@
+import binascii
 from datetime import datetime
 from django.core.exceptions import PermissionDenied
 from django.conf import settings
@@ -16,9 +17,12 @@ class StateHelper:
 
     @staticmethod
     def _decrypt_state(state: str) -> dict:
-        decrypted_str = CryptoHelper(CRYPTO_KEY).decrypt(state)
+        try:
+            decrypted_str = CryptoHelper(CRYPTO_KEY).decrypt(state)
+        except binascii.Error:
+            raise PermissionDenied()  # state 길이가 다를때 발생
         if not decrypted_str:
-            raise PermissionDenied()
+            raise PermissionDenied()  # 복호화가 되지 않을 때 발생
         return json.loads(decrypted_str)
 
     @classmethod
