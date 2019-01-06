@@ -15,7 +15,7 @@ CRYPTO_KEY = '!Ck[v%W}$5,4@-5R'
 ENC_SECRET_FILE_NAME = 'enc_secrets.json'
 SECRET_FILE_NAME = 'secrets.json'
 VERSION_FILE_NAME = 'version'
-ENV_PATH = '.env'
+ENV_FILE_NAME = '.env'
 
 
 class ImproperlyConfigured(Exception):
@@ -51,7 +51,7 @@ class _Secret:
 
     def _load_env_file(self) -> dict:
         file_handler = FileHandler()
-        env_file_path = file_handler.get_file_path(ENV_PATH)
+        env_file_path = file_handler.get_file_path(ENV_FILE_NAME)
         env = dotenv_values(dotenv_path=env_file_path)
         return env
 
