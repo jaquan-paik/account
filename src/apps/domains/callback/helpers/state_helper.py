@@ -20,9 +20,11 @@ class StateHelper:
         try:
             decrypted_str = CryptoHelper(CRYPTO_KEY).decrypt(state)
         except binascii.Error:
-            raise PermissionDenied()  # state 길이가 다를때 발생
+            raise PermissionDenied()  # base 64 decode 시, padding 길이가 다를 때 발생
+        except ValueError:
+            raise PermissionDenied()  # cipher text 의 길이가 다를 때 발생
         if not decrypted_str:
-            raise PermissionDenied()  # 복호화가 되지 않을 때 발생
+            raise PermissionDenied()  # 복호화가 정상적으로 되지 않을 때 발생
         return json.loads(decrypted_str)
 
     @classmethod
