@@ -6,6 +6,7 @@ from apps.domains.oauth2.constants import JwtAlg
 from apps.domains.oauth2.managers import ApplicationManager, GrantManager, RefreshTokenManager
 from lib.django.db.mysql import TinyBooleanField
 from lib.utils.string import generate_random_str
+from lib.utils.url import is_same_url
 
 JWT_HS_256_SECRET_LEN = 32
 
@@ -58,9 +59,13 @@ class Grant(AbstractGrant):
 
     objects = GrantManager()
 
-    class Meta(AbstractGrant.Meta):
-        swappable = 'OAUTH2_PROVIDER_GRANT_MODEL'
-        db_table = 'oauth2_grant'
+    def redirect_uri_allowed(self, uri):
+        return is_same_url(self.redirect_uri, uri)
+
+
+class Meta(AbstractGrant.Meta):
+    swappable = 'OAUTH2_PROVIDER_GRANT_MODEL'
+    db_table = 'oauth2_grant'
 
 
 class AccessToken(AbstractAccessToken):
