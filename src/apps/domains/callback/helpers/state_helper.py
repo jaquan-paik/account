@@ -36,6 +36,7 @@ class StateHelper:
         if decrypted_data['time'] + EXPIRE_TIME < datetime.now().timestamp():
             logger.info('EXCEED_STATE_EXPIRE_TIME', extra={
                 'u_idx': u_idx,
+                'decrypted_time': decrypted_data['time'],
                 'exceed_seconds': datetime.now().timestamp() - decrypted_data['time']
             })
             raise PermissionDenied()
