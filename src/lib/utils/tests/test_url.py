@@ -23,17 +23,16 @@ class StringTestCase(TestCase):
         second_random_str = generate_random_str(30)
         random_str = generate_random_str(30)
 
-        first_query_url = generate_query_url(base_url_path, {'a': first_random_str, 'b': second_random_str})
-        second_query_url = generate_query_url(base_url_path, {'b': second_random_str, 'a': first_random_str})
+        query_url = generate_query_url(base_url_path, {'a': first_random_str, 'b': second_random_str})
+        different_order_query_url = generate_query_url(base_url_path, {'b': second_random_str, 'a': first_random_str})
 
-        url = generate_query_url(base_url_path, {'a': first_query_url, 'b': random_str})
-        different_order_param_url = generate_query_url(base_url_path, {'b': random_str, 'a': first_query_url})
+        url = generate_query_url(base_url_path, {'a': query_url, 'b': random_str})
 
-        different_order_in_house_redirect_uri_url = generate_query_url(base_url_path, {'a': second_query_url, 'b': random_str})
+        different_order_query_url = generate_query_url(base_url_path, {'a': different_order_query_url, 'b': random_str})
 
         different_param_url = generate_query_url(
-            base_url_path, {'a': first_query_url, 'b': random_str, 'c': generate_random_str(30)}
+            base_url_path, {'a': query_url, 'b': random_str, 'c': generate_random_str(30)}
         )
-        self.assertTrue(is_same_url(url, different_order_param_url))
-        self.assertTrue(is_same_url(url, different_order_in_house_redirect_uri_url))
+        self.assertTrue(is_same_url(query_url, different_order_query_url))
+        self.assertTrue(is_same_url(url, different_order_query_url))
         self.assertFalse(is_same_url(url, different_param_url))
