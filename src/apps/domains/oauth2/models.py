@@ -62,10 +62,9 @@ class Grant(AbstractGrant):
     def redirect_uri_allowed(self, uri):
         return is_same_url(self.redirect_uri, uri)
 
-
-class Meta(AbstractGrant.Meta):
-    swappable = 'OAUTH2_PROVIDER_GRANT_MODEL'
-    db_table = 'oauth2_grant'
+    class Meta(AbstractGrant.Meta):
+        swappable = 'OAUTH2_PROVIDER_GRANT_MODEL'
+        db_table = 'oauth2_grant'
 
 
 class AccessToken(AbstractAccessToken):
