@@ -41,8 +41,8 @@ class _Secret:
 
     def _load(self) -> None:
         secret = json.loads(self.file_handler.load())
-        secret.update(self._load_env())
         secret.update(self._load_env_file())
+        secret.update(self._load_env())
 
         if SecretKeyName.ALLOWED_HOSTS in secret:
             secret[SecretKeyName.ALLOWED_HOSTS] = json.loads(secret[SecretKeyName.ALLOWED_HOSTS])
