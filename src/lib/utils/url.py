@@ -8,13 +8,13 @@ FRAGMENT = 4
 
 
 def generate_query_url(url: str, params: dict):
-    url_parts = list(parse.urlparse(url))
-    query = dict(parse.parse_qsl(url_parts[4]))
+    url_parts = list(parse.urlsplit(url))  # list로 묶지 않으면 query를 업데이트 할 수가 없음.
+    query = dict(parse.parse_qsl(url_parts[QUERY]))
     query.update(params)
 
-    url_parts[4] = parse.urlencode(query)
+    url_parts[QUERY] = parse.urlencode(query)
 
-    return parse.urlunparse(url_parts)
+    return parse.urlunsplit(url_parts)
 
 
 def get_url_until_path(url: str):
@@ -23,7 +23,7 @@ def get_url_until_path(url: str):
 
 
 def is_url(url: str) -> bool:
-    parsed_url = parse.urlparse(url)
+    parsed_url = parse.urlsplit(url)
     return parsed_url[SCHEME] and parsed_url[NETLOC]
 
 
@@ -53,18 +53,19 @@ def is_same_query(first_query: dict, second_query: dict) -> bool:
 def is_same_url(first_url: str, second_url: str) -> bool:
     if not is_url(first_url) or not is_url(second_url):
         return False
+
     first_parsed_url = parse.urlsplit(first_url)
     second_parsed_url = parse.urlsplit(second_url)
-
-    first_url_query = dict(parse.parse_qsl(first_parsed_url[QUERY]))
-    second_url_qeury = dict(parse.parse_qsl(second_parsed_url[QUERY]))
 
     if not first_parsed_url[:QUERY] == second_parsed_url[:QUERY]:
         return False
 
     if not first_parsed_url[FRAGMENT] == second_parsed_url[FRAGMENT]:
         return False
-    if not is_same_query(first_url_query, second_url_qeury):
+
+    first_url_query = dict(parse.parse_qsl(first_parsed_url[QUERY]))
+    second_url_query = dict(parse.parse_qsl(second_parsed_url[QUERY]))
+    if not is_same_query(first_url_query, second_url_query):
         return False
 
     return True
