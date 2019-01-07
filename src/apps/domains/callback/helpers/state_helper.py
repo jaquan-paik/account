@@ -3,6 +3,7 @@ from datetime import datetime
 from django.core.exceptions import PermissionDenied
 from django.conf import settings
 from lib.crypto.encrypt import CryptoHelper
+from lib.log.logger import logger
 import json
 
 CRYPTO_KEY = settings.STATE_CRYPTO_KEY
@@ -28,9 +29,13 @@ class StateHelper:
         return json.loads(decrypted_str)
 
     @classmethod
-    def validate_state(cls, state: str, u_idx: str):
+    def validate_state(cls, state: str, u_idx: int):
         decrypted_data = cls._decrypt_state(state)
         if decrypted_data['u_idx'] != u_idx:
             raise PermissionDenied()
         if decrypted_data['time'] + EXPIRE_TIME < datetime.now().timestamp():
+            logger.info('EXCEED_STATE_EXPIRE_TIME', extra={
+                'u_idx': u_idx,
+                'exceed_seconds': datetime.now().timestamp() - decrypted_data['time']
+            })
             raise PermissionDenied()
