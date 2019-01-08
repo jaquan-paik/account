@@ -24,7 +24,7 @@ STORE_URL = Secret().get(SecretKeyName.STORE_URL)
 
 RIDIBOOKS_LOGIN_URL = Secret().get(SecretKeyName.RIDIBOOKS_LOGIN_URL)
 
-CORS_ORIGIN_REGEX_WHITELIST = (r'^(https?://)?(\w+\.)?ridibooks\.com$',)
+CORS_ORIGIN_REGEX_WHITELIST = rf"{Secret().get(SecretKeyName.CORS_ORIGIN_REGEX_WHITELIST)}"
 
 # Application definition
 INSTALLED_APPS = [
@@ -220,7 +220,6 @@ CSRF_COOKIE_SECURE = True
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_URLS_REGEX = r'^/(ridi|oauth2|health|accounts)/.*$'
-
 
 # Sentry
 RAVEN_CONFIG = {
