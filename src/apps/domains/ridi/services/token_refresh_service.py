@@ -10,9 +10,9 @@ from apps.domains.oauth2.constants import GrantType
 
 class TokenRefreshService:
     @staticmethod
-    def get_tokens(cookie_refresh_token: str) -> Tuple[TokenData, TokenData]:
+    def get_tokens(refresh_token: str) -> Tuple[TokenData, TokenData]:
         try:
-            refresh_token = RefreshToken.objects.select_related('application').get(token=cookie_refresh_token)
+            refresh_token = RefreshToken.objects.select_related('application').get(token=refresh_token)
         except ObjectDoesNotExist:
             raise PermissionDenied()
 
