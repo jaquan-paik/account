@@ -20,6 +20,7 @@ from infra.network.constants.http_status_code import HttpStatusCodes
 from lib.base.invalid_form_response import InvalidFormResponse
 from lib.decorators.cookie_handler import clear_tokens_in_cookie
 from lib.decorators.exception_handler import exception_handler
+from lib.log.logger import logger
 
 
 class AuthorizeView(LoginRequiredMixin, View):
@@ -35,6 +36,10 @@ class AuthorizeView(LoginRequiredMixin, View):
 class CallbackView(View):
     @exception_handler
     def get(self, request):
+        if request.user.is_anonymous:
+            logger.info('callback:AnonymousUser', extra=request.GET)
+            return JsonResponse(data={}, status=HttpStatusCodes.C_401_UNAUTHORIZED)
+
         callback_form = CallbackForm(request.GET)
         if not callback_form.is_valid():
             return InvalidFormResponse(callback_form)
