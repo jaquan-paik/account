@@ -24,7 +24,7 @@ STORE_URL = Secret().get(SecretKeyName.STORE_URL)
 
 RIDIBOOKS_LOGIN_URL = Secret().get(SecretKeyName.RIDIBOOKS_LOGIN_URL)
 
-CORS_ORIGIN_REGEX_WHITELIST = rf"{Secret().get(SecretKeyName.CORS_ORIGIN_REGEX_WHITELIST)}"
+CORS_ORIGIN_REGEX_WHITELIST = (rf"{Secret().get(SecretKeyName.CORS_ORIGIN_REGEX_WHITELIST)}",)
 
 # Application definition
 INSTALLED_APPS = [
