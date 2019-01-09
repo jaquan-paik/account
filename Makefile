@@ -53,9 +53,6 @@ check-deprecated:
 test:
 	@python3.6 src/manage.py test src --noinput --settings=sites.settings.test
 
-gitlab-test:
-	@python3.6 src/manage.py test src --noinput --settings=sites.settings.gitlab_test
-
 # pm-test
 pm-test: pm-test-up pm-test-run pm-test-down
 

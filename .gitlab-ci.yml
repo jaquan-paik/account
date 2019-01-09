@@ -18,7 +18,7 @@ pytest:
   script:
   - make global-python-package-install-development
   - make settings
-  - make gitlab-test
+  - make test
 
 lint:
   stage: build
