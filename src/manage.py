@@ -9,10 +9,7 @@ from lib.secret.secret import Secret
 if __name__ == "__main__":
     # copy system arguments
     arguments = sys.argv[:]
-    if Secret().get(SecretKeyName.ENVIRONMENT) == 'development':
-        setting_path = 'sites.settings.development'
-    else:
-        setting_path = 'sites.settings.base'
+    setting_path = f'sites.settings.{Secret().get(SecretKeyName.ENVIRONMENT)}'
 
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', setting_path)
     from django.core.management import execute_from_command_line
