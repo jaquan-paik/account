@@ -1,6 +1,8 @@
 import os
 
-from lib.secret.secret import ImproperlyConfigured
+
+class ImproperlyConfigured(Exception):
+    pass
 
 
 class FileHandler:
