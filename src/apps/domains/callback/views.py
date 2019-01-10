@@ -55,9 +55,7 @@ class CallbackView(TokenCookieMixin, View):
         client_id = request.GET.get('client_id', None)
         in_house_redirect_uri = request.GET.get('in_house_redirect_uri', None)
 
-        deprecated = request.GET.get('deprecated', None)
-        if not deprecated:
-            StateHelper.validate_state(state, request.user.idx)  # TODO : 재배포시, deprecated 삭제
+        StateHelper.validate_state(state, request.user.idx)
 
         try:
             access_token, refresh_token = TokenRequestHelper.get_tokens(
