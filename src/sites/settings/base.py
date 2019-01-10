@@ -18,7 +18,7 @@ setup_logging(Secret().get(SecretKeyName.SENTRY_DSN))
 
 SITE_DOMAIN = Secret().get(SecretKeyName.SITE_DOMAIN)
 
-ALLOWED_HOSTS = Secret().get(SecretKeyName.ALLOWED_HOSTS)
+ALLOWED_HOSTS = Secret().get(SecretKeyName.ALLOWED_HOSTS).split()
 
 STORE_URL = Secret().get(SecretKeyName.STORE_URL)
 
