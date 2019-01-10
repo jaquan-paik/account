@@ -1,6 +1,6 @@
 import os
 
-from django.core.exceptions import ImproperlyConfigured
+from lib.secret.secret import ImproperlyConfigured
 
 
 class FileHandler:
