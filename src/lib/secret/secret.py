@@ -7,9 +7,6 @@ from lib.crypto.encrypt import CryptoHelper
 from lib.singleton.singleton import Singleton
 from lib.utils.dict import update_only_existed_keys
 
-from lib.utils.file import FileHandler
-from dotenv import dotenv_values
-
 DEFAULT_ROOT_PATH = '/htdocs/www'
 CRYPTO_KEY = '!Ck[v%W}$5,4@-5R'
 ENC_SECRET_FILE_NAME = 'enc_secrets.json'
@@ -42,17 +39,10 @@ class _Secret:
     def _load(self) -> None:
         secret = json.loads(self.file_handler.load())
 
-        update_only_existed_keys(secret, self._load_env_file())
         update_only_existed_keys(secret, dict(os.environ))
 
         self.__secrets = secret
         self.version = self._load_version_file()
-
-    def _load_env_file(self) -> dict:
-        file_handler = FileHandler()
-        env_file_path = file_handler.get_file_path(ENV_FILE_NAME)
-        env = dotenv_values(dotenv_path=env_file_path)
-        return env
 
     def _load_version_file(self) -> str:
         file_path = '%s/%s' % (self.root_path, VERSION_FILE_NAME)
