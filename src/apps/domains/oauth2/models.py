@@ -6,7 +6,7 @@ from apps.domains.oauth2.constants import JwtAlg
 from apps.domains.oauth2.managers import ApplicationManager, GrantManager, RefreshTokenManager
 from lib.django.db.mysql import TinyBooleanField
 from lib.utils.string import generate_random_str
-from lib.utils.url import get_url_until_path
+from lib.utils.url import is_same_url
 
 JWT_HS_256_SECRET_LEN = 32
 
@@ -57,11 +57,10 @@ class Grant(AbstractGrant):
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
     last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
 
-    # TODO: 후에 삭제
-    def redirect_uri_allowed(self, uri):
-        return get_url_until_path(self.redirect_uri) == get_url_until_path(uri)
-
     objects = GrantManager()
+
+    def redirect_uri_allowed(self, uri):
+        return is_same_url(self.redirect_uri, uri)
 
     class Meta(AbstractGrant.Meta):
         swappable = 'OAUTH2_PROVIDER_GRANT_MODEL'
