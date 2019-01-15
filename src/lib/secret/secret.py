@@ -5,6 +5,7 @@ from typing import Dict
 from infra.storage.ssm.connectors import ParameterStoreConnector
 from lib.crypto.encrypt import CryptoHelper
 from lib.singleton.singleton import Singleton
+from lib.utils.dict import update_only_existed_keys
 
 DEFAULT_ROOT_PATH = '/htdocs/www'
 CRYPTO_KEY = '!Ck[v%W}$5,4@-5R'
@@ -35,7 +36,11 @@ class _Secret:
             raise ImproperlyConfigured('Set the {} environment variable!'.format(key))
 
     def _load(self) -> None:
-        self.__secrets = json.loads(self.file_handler.load())
+        secret = json.loads(self.file_handler.load())
+
+        update_only_existed_keys(secret, dict(os.environ))
+
+        self.__secrets = secret
         self.version = self._load_version_file()
 
     def _load_version_file(self) -> str:
@@ -86,13 +91,12 @@ class SecretFileHandler:
 
 
 class SecretFileGenerator(SecretFileHandler):
-    def generate(self, env: str) -> None:
-        secrets = self._load_secrets(env)
-
+    def generate(self, stage: str) -> None:
+        secrets = self._load_secrets_from_parameter_store(stage)
         encrypted_secrets_json = self.encrypt_secrets(secrets)
         self._save_encrypted_file(encrypted_secrets_json)
 
-    def _load_secrets(self, env: str) -> Dict:
+    def _load_secrets_from_parameter_store(self, env: str) -> Dict:
         return ParameterStoreConnector().load_parameters(env)
 
     def encrypt_secrets(self, secrets: Dict) -> str:
