@@ -7,7 +7,7 @@ from lib.log.logger import logger
 import json
 
 CRYPTO_KEY = settings.STATE_CRYPTO_KEY
-EXPIRE_TIME = 10
+EXPIRE_TIME = 300  # 60 * 5
 
 
 class StateHelper:
