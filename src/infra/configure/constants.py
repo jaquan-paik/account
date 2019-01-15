@@ -1,3 +1,6 @@
+from lib.base.constants import BaseConstant
+
+
 class SiteType:
     WWW = 'www'
     TEST = 'test'
@@ -12,7 +15,7 @@ class LogLevel:
     NOTSET = 'NOTSET'
 
 
-class SecretKeyName:
+class SecretKeyName(BaseConstant):
     # static member
     ENVIRONMENT = 'environment'
 
@@ -35,3 +38,15 @@ class SecretKeyName:
     RIDI_INTERNAL_AUTH_ACCOUNT_TO_STORE = 'ridi_internal_auth_account_to_store'
 
     STATE_CRYPTO_KEY = 'state_crypto_key'
+
+    SITE_DOMAIN = 'site_domain'
+    STORE_URL = 'store_url'
+    RIDIBOOKS_LOGIN_URL = 'ridibooks_login_url'
+    ALLOWED_HOSTS = 'allowed_hosts'
+    CORS_ORIGIN_REGEX_WHITELIST = 'cors_origin_regex_whitelist'
+
+    _LIST = [
+        ENVIRONMENT, SECRET_KEY, CACHE_LOCATION, WRITE_DB_HOST, WRITE_DB_ACCOUNT, WRITE_DB_PASSWORD, READ_DB_HOST, READ_DB_ACCOUNT,
+        READ_DB_PASSWORD, REDIS_HOST, SENTRY_DSN, RIDI_INTERNAL_AUTH_ACCOUNT_TO_STORE, STATE_CRYPTO_KEY, SITE_DOMAIN, STORE_URL,
+        RIDIBOOKS_LOGIN_URL, ALLOWED_HOSTS, CORS_ORIGIN_REGEX_WHITELIST
+    ]

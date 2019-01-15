@@ -1,25 +1,8 @@
-from lib.log.setup import setup_logging
-
 # noinspection PyUnresolvedReferences
 from .base import *  # flake8: noqa: F403  # pylint:disable=wildcard-import
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-setup_logging(Secret().get(SecretKeyName.SENTRY_DSN))
-
-SITE_DOMAIN = 'account.dev.ridi.io'
-ALLOWED_HOSTS = [
-    SITE_DOMAIN,
-    'account.local.ridi.io'
-]
-
-CORS_ORIGIN_REGEX_WHITELIST = (
-    r'^(https?:\/\/)?(.+\.)?ridi\.io$',
-)
-
-STORE_URL = 'https://dev.ridi.io'
-RIDIBOOKS_LOGIN_URL = 'https://dev.ridi.io/account/login'
 
 # django-debug-toolbar
 DEBUG_TOOLBAR_CONFIG = {
@@ -30,6 +13,4 @@ INSTALLED_APPS = INSTALLED_APPS + [
     'debug_toolbar',
 ]
 
-MIDDLEWARE = [
-     'debug_toolbar.middleware.DebugToolbarMiddleware',
-] + MIDDLEWARE
+MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware', ] + MIDDLEWARE

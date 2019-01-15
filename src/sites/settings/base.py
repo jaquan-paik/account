@@ -4,6 +4,7 @@ from infra.configure.constants import SecretKeyName
 from infra.storage.redis.constants import RedisDatabase
 from lib.ridibooks.internal_server_auth.helpers.config_helper import AuthList, ConfigHelper as InternalServerAuthConfigHelper
 from lib.secret.secret import Secret
+from lib.log.setup import setup_logging
 
 # PATH
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # src dir
@@ -12,6 +13,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 SECRET_KEY = Secret().get(SecretKeyName.SECRET_KEY)
 
 ENVIRONMENT = Secret().get(SecretKeyName.ENVIRONMENT)
+
+setup_logging(Secret().get(SecretKeyName.SENTRY_DSN))
+
+SITE_DOMAIN = Secret().get(SecretKeyName.SITE_DOMAIN)
+
+ALLOWED_HOSTS = Secret().get(SecretKeyName.ALLOWED_HOSTS).split()
+
+STORE_URL = Secret().get(SecretKeyName.STORE_URL)
+
+RIDIBOOKS_LOGIN_URL = Secret().get(SecretKeyName.RIDIBOOKS_LOGIN_URL)
+
+CORS_ORIGIN_REGEX_WHITELIST = (rf"{Secret().get(SecretKeyName.CORS_ORIGIN_REGEX_WHITELIST)}",)
 
 # Application definition
 INSTALLED_APPS = [
@@ -207,8 +220,6 @@ CSRF_COOKIE_SECURE = True
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_URLS_REGEX = r'^/(ridi|oauth2|health|accounts)/.*$'
-
-ALLOWED_HOSTS = []
 
 # Sentry
 RAVEN_CONFIG = {
