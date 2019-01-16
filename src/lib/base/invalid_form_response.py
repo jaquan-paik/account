@@ -1,13 +1,12 @@
 from django.forms import Form
-from django.http import HttpResponse
-import json
-
+from django.shortcuts import render
 from infra.network.constants.http_status_code import HttpStatusCodes
 
+import json
 
-class InvalidFormResponse(HttpResponse):
 
-    def __init__(self, form: Form, **kwargs):
-        kwargs.setdefault('content_type', 'application/json; charset=utf-8')
-        data = json.dumps(form.errors, ensure_ascii=False)
-        super().__init__(content=data, status=HttpStatusCodes.C_400_BAD_REQUEST, **kwargs)
+def invalid_form_response(request, form: Form):
+    data = json.dumps(form.errors, ensure_ascii=False)
+    response = render(request, 'www/error/invalid_form.html', {'message': data})
+    response.status_code = HttpStatusCodes.C_400_BAD_REQUEST
+    return response
