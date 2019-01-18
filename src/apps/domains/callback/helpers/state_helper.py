@@ -3,6 +3,7 @@ from datetime import datetime
 from django.core.exceptions import PermissionDenied
 from django.conf import settings
 from lib.crypto.encrypt import CryptoHelper
+from lib.log import sentry
 from lib.log.logger import logger
 import json
 
@@ -30,7 +31,13 @@ class StateHelper:
 
     @classmethod
     def validate_state(cls, state: str, u_idx: int):
-        decrypted_data = cls._decrypt_state(state)
+        # TODO: :deprecated: 해당 로깅은 state 모니터링 이후에 지워야한다. 로직과 관련이 없음.
+        try:
+            decrypted_data = cls._decrypt_state(state)
+        except PermissionDenied as e:
+            sentry.exception()
+            raise e
+
         if decrypted_data['u_idx'] != u_idx:
             raise PermissionDenied()
         if decrypted_data['time'] + EXPIRE_TIME < datetime.now().timestamp():
