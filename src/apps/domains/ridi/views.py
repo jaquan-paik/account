@@ -34,7 +34,7 @@ class AuthorizeView(LoginRequiredMixin, View):
 
 
 class CallbackView(View):
-    @http_error_exception_handler
+    @http_error_exception_handler(template_response=True)
     def get(self, request):
         if request.user.is_anonymous:  # TODO: phpsession 이 없어지는 요청에 대해 기록한다. 후에 추이를 보며 방향을 결정
             message('callback:AnonymousUser', extra=request.GET)
@@ -64,7 +64,7 @@ class CompleteView(View):
 class TokenView(APIView):
     @swagger_auto_schema(**TokenGetSchema.to_swagger_schema())
     @permission_denied_exception_handler
-    @http_error_exception_handler
+    @http_error_exception_handler()
     def post(self, request):
         token_form = TokenForm(TokenHelper.get_token_data_from_cookie(request.COOKIES))
         if not token_form.is_valid():
