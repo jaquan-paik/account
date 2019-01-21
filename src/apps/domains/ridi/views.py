@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views import View
 from drf_yasg.utils import swagger_auto_schema
@@ -35,9 +36,9 @@ class AuthorizeView(LoginRequiredMixin, View):
 class CallbackView(View):
     @http_error_exception_handler
     def get(self, request):
-        if request.user.is_anonymous:
+        if request.user.is_anonymous:  # TODO: phpsession 이 없어지는 요청에 대해 기록한다. 후에 추이를 보며 방향을 결정
             message('callback:AnonymousUser', extra=request.GET)
-            return JsonResponse(data={}, status=HttpStatusCodes.C_401_UNAUTHORIZED)
+            raise PermissionDenied()
 
         callback_form = CallbackForm(request.GET)
         if not callback_form.is_valid():
