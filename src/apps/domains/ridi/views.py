@@ -9,7 +9,7 @@ from apps.domains.ridi.helpers.response_cookie_helper import ResponseCookieHelpe
 from apps.domains.ridi.helpers.state_helper import StateHelper
 from apps.domains.ridi.helpers.token_helper import TokenHelper
 from apps.domains.ridi.helpers.url_helper import UrlHelper
-from apps.domains.ridi.response import InHouseHttpResponseRedirect
+from apps.domains.ridi.response import InHouseHttpResponseRedirect, get_invalid_form_template_response
 from apps.domains.ridi.schemas import TokenGetSchema
 from apps.domains.ridi.services.token_refresh_service import TokenRefreshService
 from apps.domains.ridi.services.authorization_code_service import AuthorizationCodeService
@@ -17,7 +17,6 @@ from apps.domains.oauth2.token import JwtHandler
 from apps.domains.ridi.forms import AuthorizeForm, CallbackForm, TokenForm
 
 from infra.network.constants.http_status_code import HttpStatusCodes
-from lib.base.invalid_form_response import invalid_form_response
 from lib.decorators.cookie_handler import clear_tokens_in_cookie
 from lib.decorators.exception_handler import http_error_exception_handler, permission_denied_exception_handler
 from lib.log.logger import logger
@@ -27,7 +26,7 @@ class AuthorizeView(LoginRequiredMixin, View):
     def get(self, request):
         authorize_form = AuthorizeForm(request.GET)
         if not authorize_form.is_valid():
-            return invalid_form_response(request, authorize_form)
+            return get_invalid_form_template_response(request, authorize_form)
         cleaned_data = authorize_form.clean()
         url = AuthorizationCodeService.get_oauth2_authorize_url(cleaned_data['client_id'], cleaned_data['redirect_uri'], request.user.idx)
         return HttpResponseRedirect(url)
@@ -42,7 +41,7 @@ class CallbackView(View):
 
         callback_form = CallbackForm(request.GET)
         if not callback_form.is_valid():
-            return invalid_form_response(request, callback_form)
+            return get_invalid_form_template_response(request, callback_form)
         cleaned_data = callback_form.clean()
 
         StateHelper.validate_state(cleaned_data.get('state'), request.user.idx)
@@ -68,7 +67,7 @@ class TokenView(APIView):
     def post(self, request):
         token_form = TokenForm(TokenHelper.get_token_data_from_cookie(request.COOKIES))
         if not token_form.is_valid():
-            return invalid_form_response(request, token_form)
+            return get_invalid_form_template_response(request, token_form)
         cleaned_data = token_form.clean()
         root_domain = UrlHelper.get_root_domain(self.request)
 
