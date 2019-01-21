@@ -2,10 +2,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views import View
+
 from drf_yasg.utils import swagger_auto_schema
+
 from rest_framework.views import APIView
 
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
+from apps.domains.oauth2.token import JwtHandler
 from apps.domains.ridi.helpers.response_cookie_helper import ResponseCookieHelper
 from apps.domains.ridi.helpers.state_helper import StateHelper
 from apps.domains.ridi.helpers.token_helper import TokenHelper
@@ -14,12 +17,12 @@ from apps.domains.ridi.response import InHouseHttpResponseRedirect, get_invalid_
 from apps.domains.ridi.schemas import TokenGetSchema
 from apps.domains.ridi.services.token_refresh_service import TokenRefreshService
 from apps.domains.ridi.services.authorization_code_service import AuthorizationCodeService
-from apps.domains.oauth2.token import JwtHandler
 from apps.domains.ridi.forms import AuthorizeForm, CallbackForm, TokenForm
+from apps.domains.ridi.exception_handler import http_error_exception_handler, clear_tokens_if_permission_denied_raised
 
 from infra.network.constants.http_status_code import HttpStatusCodes
+
 from lib.decorators.cookie_handler import clear_tokens_in_cookie
-from lib.decorators.exception_handler import http_error_exception_handler, permission_denied_exception_handler
 from lib.log.sentry import message
 
 
@@ -34,7 +37,6 @@ class AuthorizeView(LoginRequiredMixin, View):
 
 
 class CallbackView(View):
-    @http_error_exception_handler(template_response=True)
     def get(self, request):
         if request.user.is_anonymous:  # TODO: phpsession 이 없어지는 요청에 대해 기록한다. 후에 추이를 보며 방향을 결정
             message('callback:AnonymousUser', extra=request.GET)
@@ -63,8 +65,8 @@ class CompleteView(View):
 
 class TokenView(APIView):
     @swagger_auto_schema(**TokenGetSchema.to_swagger_schema())
-    @permission_denied_exception_handler
-    @http_error_exception_handler()
+    @clear_tokens_if_permission_denied_raised
+    @http_error_exception_handler
     def post(self, request):
         token_form = TokenForm(TokenHelper.get_token_data_from_cookie(request.COOKIES))
         if not token_form.is_valid():
