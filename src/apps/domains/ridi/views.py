@@ -67,7 +67,7 @@ class TokenView(APIView):
     def post(self, request):
         token_form = TokenForm(TokenHelper.get_token_data_from_cookie(request.COOKIES))
         if not token_form.is_valid():
-            return get_invalid_form_template_response(request, token_form)
+            return JsonResponse(data=token_form.errors, status=HttpStatusCodes.C_400_BAD_REQUEST)
         cleaned_data = token_form.clean()
         root_domain = UrlHelper.get_root_domain(self.request)
 
