@@ -19,7 +19,7 @@ from apps.domains.ridi.forms import AuthorizeForm, CallbackForm, TokenForm
 from infra.network.constants.http_status_code import HttpStatusCodes
 from lib.decorators.cookie_handler import clear_tokens_in_cookie
 from lib.decorators.exception_handler import http_error_exception_handler, permission_denied_exception_handler
-from lib.log.logger import logger
+from lib.log.sentry import message
 
 
 class AuthorizeView(LoginRequiredMixin, View):
@@ -36,7 +36,7 @@ class CallbackView(View):
     @http_error_exception_handler
     def get(self, request):
         if request.user.is_anonymous:
-            logger.info('callback:AnonymousUser', extra=request.GET)
+            message('callback:AnonymousUser', extra=request.GET)
             return JsonResponse(data={}, status=HttpStatusCodes.C_401_UNAUTHORIZED)
 
         callback_form = CallbackForm(request.GET)
