@@ -9,12 +9,20 @@ from apps.domains.ridi.helpers.url_helper import UrlHelper
 from lib.django.http.response import HttpResponseUnauthorized
 
 
-def exception_handler(func: Callable):
+def http_error_exception_handler(func: Callable):
     def wrapper(self, request, *args, **kwargs):
         try:
             return func(self, request, *args, **kwargs)
         except HTTPError as e:
             return JsonResponse(data=e.response.json(), status=e.response.status_code)
+
+    return wrapper
+
+
+def permission_denied_exception_handler(func: Callable):
+    def wrapper(self, request, *args, **kwargs):
+        try:
+            return func(self, request, *args, **kwargs)
         except PermissionDenied:
             response = HttpResponseUnauthorized()
             root_domain = UrlHelper.get_root_domain(request)

@@ -19,7 +19,7 @@ from apps.domains.ridi.forms import AuthorizeForm, CallbackForm, TokenForm
 from infra.network.constants.http_status_code import HttpStatusCodes
 from lib.base.invalid_form_response import invalid_form_response
 from lib.decorators.cookie_handler import clear_tokens_in_cookie
-from lib.decorators.exception_handler import exception_handler
+from lib.decorators.exception_handler import http_error_exception_handler, permission_denied_exception_handler
 from lib.log.logger import logger
 
 
@@ -34,7 +34,7 @@ class AuthorizeView(LoginRequiredMixin, View):
 
 
 class CallbackView(View):
-    @exception_handler
+    @http_error_exception_handler
     def get(self, request):
         if request.user.is_anonymous:
             logger.info('callback:AnonymousUser', extra=request.GET)
@@ -63,7 +63,8 @@ class CompleteView(View):
 
 class TokenView(APIView):
     @swagger_auto_schema(**TokenGetSchema.to_swagger_schema())
-    @exception_handler
+    @permission_denied_exception_handler
+    @http_error_exception_handler
     def post(self, request):
         token_form = TokenForm(TokenHelper.get_token_data_from_cookie(request.COOKIES))
         if not token_form.is_valid():
