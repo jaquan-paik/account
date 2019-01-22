@@ -76,16 +76,13 @@ class TokenView(APIView):
 
         try:
             access_token = JwtHandler.get_access_token(cleaned_data['access_token'])
-
-        except JwtTokenErrorException:
-            access_token, refresh_token = TokenRefreshService.get_tokens(cleaned_data['refresh_token'])
-            data = TokenHelper.get_token_data_info(access_token)
-            response = JsonResponse(data)
-            ResponseCookieHelper.add_token_cookie(response, access_token, refresh_token, root_domain)
-
-        else:
             data = TokenHelper.get_token_info(access_token)
             response = JsonResponse(data)
+
+        except JwtTokenErrorException:
+            access_token_data, refresh_token_data = TokenRefreshService.get_tokens(cleaned_data['refresh_token'])
+            response = JsonResponse(TokenHelper.get_token_data_info(access_token_data))
+            ResponseCookieHelper.add_token_cookie(response, access_token_data, refresh_token_data, root_domain)
 
         return response
 
