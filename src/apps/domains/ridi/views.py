@@ -18,7 +18,7 @@ from apps.domains.ridi.schemas import TokenGetSchema
 from apps.domains.ridi.services.token_refresh_service import TokenRefreshService
 from apps.domains.ridi.services.authorization_code_service import AuthorizationCodeService
 from apps.domains.ridi.forms import AuthorizeForm, CallbackForm, TokenForm
-from apps.domains.ridi.exception_handler import http_error_exception_handler, clear_tokens_if_permission_denied_raised
+from apps.domains.ridi.exception_handler import return_json_response_if_http_error_raised, clear_tokens_if_permission_denied_raised
 
 from infra.network.constants.http_status_code import HttpStatusCodes
 
@@ -66,7 +66,7 @@ class CompleteView(View):
 class TokenView(APIView):
     @swagger_auto_schema(**TokenGetSchema.to_swagger_schema())
     @clear_tokens_if_permission_denied_raised
-    @http_error_exception_handler
+    @return_json_response_if_http_error_raised
     def post(self, request):
         token_form = TokenForm(TokenHelper.get_token_data_from_cookie(request.COOKIES))
         if not token_form.is_valid():

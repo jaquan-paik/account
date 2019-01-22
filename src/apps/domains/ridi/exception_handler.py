@@ -9,7 +9,7 @@ from apps.domains.ridi.helpers.url_helper import UrlHelper
 from lib.django.http.response import HttpResponseUnauthorized
 
 
-def http_error_exception_handler(func: Callable):
+def return_json_response_if_http_error_raised(func: Callable):
     def _wrapper(self, request, *args, **kwargs):
         try:
             return func(self, request, *args, **kwargs)
