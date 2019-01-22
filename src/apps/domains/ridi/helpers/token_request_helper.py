@@ -1,11 +1,15 @@
 from typing import Tuple
 
 import requests
+from django.core.exceptions import SuspiciousOperation, PermissionDenied
+from django.http import Http404
 
-from apps.domains.callback.dtos import TokenData
-from apps.domains.callback.helpers.url_helper import UrlHelper
+from apps.domains.ridi.dtos import TokenData
+from apps.domains.ridi.helpers.url_helper import UrlHelper
 from apps.domains.oauth2.models import Application
+
 from infra.configure.config import GeneralConfig
+from infra.network.constants.http_status_code import HttpStatusCodes
 
 
 class TokenRequestHelper:
@@ -25,6 +29,13 @@ class TokenRequestHelper:
         req = requests.post(
             UrlHelper.get_oauth2_token_url(), data=cls._get_request_data(data, grant_type, client), verify=verify,
         )
+        if req.status_code == HttpStatusCodes.C_400_BAD_REQUEST:
+            raise SuspiciousOperation
+        if req.status_code == HttpStatusCodes.C_403_FORBIDDEN:
+            raise PermissionDenied
+        if req.status_code == HttpStatusCodes.C_404_NOT_FOUND:
+            raise Http404
+
         req.raise_for_status()
 
         json = req.json()
