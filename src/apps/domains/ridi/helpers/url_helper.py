@@ -1,6 +1,6 @@
+from django.conf import settings
 from django.urls import reverse
 
-from apps.domains.ridi.constants import CookieRootDomains
 from apps.domains.ridi.exceptions import NotAllowedRootDomainException
 from infra.configure.config import GeneralConfig
 from lib.cache.memorize import memorize
@@ -29,12 +29,11 @@ class UrlHelper:
         return GeneralConfig.get_store_url()
 
     @staticmethod
-    def get_root_domain(request) -> str:
+    def get_allowed_cookie_root_domain(request) -> str:
         host = request.get_host()
-        root_domains = CookieRootDomains.get_root_whitelist(debug=GeneralConfig.is_dev())
 
-        for root_domain in root_domains:
-            if root_domain in host:
-                return root_domain
+        for allowed_cookie_root_domain in settings.ALLOWED_COOKIE_ROOT_DOMAINS:
+            if allowed_cookie_root_domain in host:
+                return allowed_cookie_root_domain
 
         raise NotAllowedRootDomainException('허용하지 않는 루트도메인입니다.')
