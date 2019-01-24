@@ -33,9 +33,7 @@ class UrlHelperTestCase(TestCase):
         factory = RequestFactory()
         request = factory.get('/', HTTP_HOST=GeneralConfig.get_site_domain())
 
-        self.assertIn(
-            UrlHelper.get_allowed_cookie_root_domain(request=request), settings.ALLOWED_COOKIE_ROOT_DOMAINS
-        )
+        self.assertEqual(UrlHelper.get_allowed_cookie_root_domain(request=request), settings.COOKIE_ROOT_DOMAIN)
 
     def test_raise_not_allow_host(self):
         factory = RequestFactory()

@@ -30,10 +30,7 @@ class UrlHelper:
 
     @staticmethod
     def get_allowed_cookie_root_domain(request) -> str:
-        host = request.get_host()
-
-        for allowed_cookie_root_domain in settings.ALLOWED_COOKIE_ROOT_DOMAINS:
-            if allowed_cookie_root_domain in host:
-                return allowed_cookie_root_domain
+        if settings.COOKIE_ROOT_DOMAIN in request.get_host():
+            return settings.COOKIE_ROOT_DOMAIN
 
         raise NotAllowedRootDomainException('허용하지 않는 루트도메인입니다.')

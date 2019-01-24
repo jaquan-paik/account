@@ -29,4 +29,4 @@ ALLOWED_HOSTS = [SITE_DOMAIN, 'dev.ridi.com', ]
 
 STORE_URL = 'http://login.dev.ridi.com'
 RIDIBOOKS_LOGIN_URL = 'http://login.dev.ridi.com/account/login'
-ALLOWED_COOKIE_ROOT_DOMAINS = ['account.ridibooks.com']
+COOKIE_ROOT_DOMAIN = '.ridibooks.com'

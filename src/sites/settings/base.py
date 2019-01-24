@@ -26,7 +26,7 @@ RIDIBOOKS_LOGIN_URL = Secret().get(SecretKeyName.RIDIBOOKS_LOGIN_URL)
 
 CORS_ORIGIN_REGEX_WHITELIST = (rf"{Secret().get(SecretKeyName.CORS_ORIGIN_REGEX_WHITELIST)}",)
 
-ALLOWED_COOKIE_ROOT_DOMAINS = Secret().get(SecretKeyName.ALLOWED_COOKIE_ROOT_DOMAINS).split()
+COOKIE_ROOT_DOMAIN = Secret().get(SecretKeyName.COOKIE_ROOT_DOMAIN)
 
 # Application definition
 INSTALLED_APPS = [
