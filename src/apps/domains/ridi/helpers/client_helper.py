@@ -4,7 +4,6 @@ from oauth2_provider.models import AbstractApplication
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
 from django.conf import settings
 from apps.domains.oauth2.models import Application
-from lib.utils.url import get_url_until_path
 
 
 class ClientHelper:
@@ -30,12 +29,7 @@ class ClientHelper:
         return client
 
     @staticmethod
-    def assert_redirect_uri(client: Application, redirect_uri: str):
+    def assert_in_house_client_redirect_uri(client: Application, redirect_uri: str):
         if client.is_in_house and re.search(rf'{settings.IN_HOUSE_CLIENT_REDIRECT_URI_REGEX}', redirect_uri) is not None:
             return
-
-        for allowed_uri in client.redirect_uris.split():
-            if get_url_until_path(redirect_uri) == get_url_until_path(allowed_uri):
-                return
-
         raise PermissionDenied()
