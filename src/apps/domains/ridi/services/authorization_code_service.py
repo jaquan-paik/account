@@ -15,7 +15,7 @@ class AuthorizationCodeService:
     @staticmethod
     def _validate_client_and_redirect_uri(client_id: str, redirect_uri: str):
         client = ClientHelper.get_in_house_client(client_id)
-        ClientHelper.assert_redirect_uri(client, redirect_uri)
+        ClientHelper.assert_in_house_client_redirect_uri(client, redirect_uri)
 
     @staticmethod
     def get_tokens(code: str, client_id: str, in_house_redirect_uri: str) -> Tuple[TokenData, TokenData]:
