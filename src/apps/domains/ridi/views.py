@@ -19,11 +19,11 @@ from apps.domains.ridi.services.token_refresh_service import TokenRefreshService
 from apps.domains.ridi.services.authorization_code_service import AuthorizationCodeService
 from apps.domains.ridi.forms import AuthorizeForm, CallbackForm, TokenForm
 from apps.domains.ridi.exception_handler import return_json_response_if_http_error_raised, clear_tokens_if_permission_denied_raised
+from infra.configure.config import GeneralConfig
 
 from infra.network.constants.http_status_code import HttpStatusCodes
 
 from lib.decorators.cookie_handler import clear_tokens_in_cookie
-from lib.log.sentry import message
 
 
 class AuthorizeView(LoginRequiredMixin, View):
@@ -38,16 +38,17 @@ class AuthorizeView(LoginRequiredMixin, View):
 
 class CallbackView(View):
     def get(self, request):
-        if request.user.is_anonymous:  # TODO: phpsession 이 없어지는 요청에 대해 기록한다. 후에 추이를 보며 방향을 결정
-            message('callback:AnonymousUser', extra=request.GET)
-            raise PermissionDenied()
+        if request.user.is_anonymous:
+            return HttpResponseRedirect(GeneralConfig.get_ridibooks_login_url())
 
         callback_form = CallbackForm(request.GET)
         if not callback_form.is_valid():
             return get_invalid_form_template_response(request, callback_form)
         cleaned_data = callback_form.clean()
-
-        StateHelper.validate_state(cleaned_data.get('state'), request.user.idx)
+        try:
+            StateHelper.validate_state(cleaned_data.get('state'), request.user.idx)
+        except PermissionDenied:
+            return HttpResponseRedirect(GeneralConfig.get_store_url())
 
         access_token, refresh_token = AuthorizationCodeService.get_tokens(
             cleaned_data['code'], cleaned_data['client_id'], cleaned_data['in_house_redirect_uri']

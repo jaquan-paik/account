@@ -31,12 +31,7 @@ class StateHelper:
 
     @classmethod
     def validate_state(cls, state: str, u_idx: int):
-        # TODO: :deprecated: 해당 로깅은 state 모니터링 이후에 지워야한다. 로직과 관련이 없음.
-        try:
-            decrypted_data = cls._decrypt_state(state)
-        except PermissionDenied as e:
-            sentry.exception()
-            raise e
+        decrypted_data = cls._decrypt_state(state)
 
         if decrypted_data['u_idx'] != u_idx:
             raise PermissionDenied()
