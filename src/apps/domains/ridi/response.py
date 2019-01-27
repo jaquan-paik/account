@@ -9,6 +9,9 @@ class InHouseHttpResponseRedirect(HttpResponseRedirect):
 
 
 def get_invalid_form_template_response(request, form: Form):
-    response = render(request, 'www/error/invalid_form.html', {'message': form.errors})
+    message = ''
+    for key, value in form.errors.items():
+        message += f"{key}: {', '.join(value)}\n"
+    response = render(request, 'www/error/400.html', {'message': message})
     response.status_code = HttpStatusCodes.C_400_BAD_REQUEST
     return response
