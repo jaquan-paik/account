@@ -36,11 +36,8 @@ class AuthorizeView(LoginRequiredMixin, View):
         return HttpResponseRedirect(url)
 
 
-class CallbackView(View):
+class CallbackView(LoginRequiredMixin, View):
     def get(self, request):
-        if request.user.is_anonymous:
-            return HttpResponseRedirect(GeneralConfig.get_ridibooks_login_url())
-
         callback_form = CallbackForm(request.GET)
         if not callback_form.is_valid():
             return get_invalid_form_template_response(request, callback_form)
