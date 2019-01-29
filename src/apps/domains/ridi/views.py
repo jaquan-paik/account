@@ -52,9 +52,8 @@ class CallbackView(View):
         access_token, refresh_token = AuthorizationCodeService.get_tokens(
             cleaned_data['code'], cleaned_data['client_id'], cleaned_data['in_house_redirect_uri']
         )
-        root_domain = UrlHelper.get_allowed_cookie_root_domain(self.request)
         response = InHouseHttpResponseRedirect(cleaned_data['in_house_redirect_uri'])
-        ResponseCookieHelper.add_token_cookie(response, access_token, refresh_token, root_domain)
+        ResponseCookieHelper.add_token_cookie(response, access_token, refresh_token)
         return response
 
 
@@ -72,7 +71,6 @@ class TokenView(APIView):
         if not token_form.is_valid():
             return JsonResponse(data=token_form.errors, status=HttpStatusCodes.C_400_BAD_REQUEST)
         cleaned_data = token_form.clean()
-        root_domain = UrlHelper.get_allowed_cookie_root_domain(self.request)
 
         try:
             access_token = JwtHandler.get_access_token(cleaned_data['access_token'])
@@ -82,7 +80,7 @@ class TokenView(APIView):
         except JwtTokenErrorException:
             access_token_data, refresh_token_data = TokenRefreshService.get_tokens(cleaned_data['refresh_token'])
             response = JsonResponse(TokenHelper.get_token_data_info(access_token_data))
-            ResponseCookieHelper.add_token_cookie(response, access_token_data, refresh_token_data, root_domain)
+            ResponseCookieHelper.add_token_cookie(response, access_token_data, refresh_token_data)
 
         return response
 

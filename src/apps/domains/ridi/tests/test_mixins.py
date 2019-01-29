@@ -16,19 +16,19 @@ class TokenCookieMixinTestCase(TestCase):
     def test_set_and_clear_cookie(self):
         response = HttpResponse()
 
-        self.helper.add_token_cookie(response=response, access_token=self.at, refresh_token=self.rt, root_domain='test.com')
+        self.helper.add_token_cookie(response=response, access_token=self.at, refresh_token=self.rt)
         self.assertIn(ACCESS_TOKEN_COOKIE_KEY, response.cookies)
         self.assertIn(REFRESH_TOKEN_COOKIE_KEY, response.cookies)
         self.assertEqual(self.at.expires_in, response.cookies[ACCESS_TOKEN_COOKIE_KEY]['max-age'])
         self.assertEqual(self.rt.expires_in, response.cookies[REFRESH_TOKEN_COOKIE_KEY]['max-age'])
 
-        self.helper.clear_token_cookie(response=response, root_domain='test.com')
+        self.helper.clear_token_cookie(response=response)
         self.assertEqual(0, response.cookies[ACCESS_TOKEN_COOKIE_KEY]['max-age'])
         self.assertEqual(0, response.cookies[REFRESH_TOKEN_COOKIE_KEY]['max-age'])
 
     def test_only_clear(self):
         response = HttpResponse()
-        self.helper.clear_token_cookie(response=response, root_domain='test.com')
+        self.helper.clear_token_cookie(response=response)
 
         self.assertIn(ACCESS_TOKEN_COOKIE_KEY, response.cookies)
         self.assertIn(REFRESH_TOKEN_COOKIE_KEY, response.cookies)
