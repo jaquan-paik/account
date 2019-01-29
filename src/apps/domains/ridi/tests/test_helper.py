@@ -29,19 +29,6 @@ class UrlHelperTestCase(TestCase):
         self.assertIn(GeneralConfig.get_site_domain(), token_url)
         self.assertIn(reverse("oauth2_provider:token"), token_url)
 
-    def test_get_root_domain(self):
-        factory = RequestFactory()
-        request = factory.get('/', HTTP_HOST=GeneralConfig.get_site_domain())
-
-        self.assertEqual(UrlHelper.get_allowed_cookie_root_domain(request=request), settings.COOKIE_ROOT_DOMAIN)
-
-    def test_raise_not_allow_host(self):
-        factory = RequestFactory()
-        request = factory.get('/', HTTP_HOST='dev.ridi.com')
-
-        with self.assertRaises(NotAllowedRootDomainException):
-            UrlHelper.get_allowed_cookie_root_domain(request)
-
 
 class ClientHelperTestCase(TestCase):
     def setUp(self):

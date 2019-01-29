@@ -27,10 +27,3 @@ class UrlHelper:
     @memorize
     def get_root_uri() -> str:
         return GeneralConfig.get_store_url()
-
-    @staticmethod
-    def get_allowed_cookie_root_domain(request) -> str:
-        if request.get_host()[::-1].find(settings.COOKIE_ROOT_DOMAIN[::-1]) == 0:  # host의 끝이 cookie_rood_domain으로 끝나는지 확인한다.
-            return settings.COOKIE_ROOT_DOMAIN
-
-        raise NotAllowedRootDomainException('허용하지 않는 루트도메인입니다.')

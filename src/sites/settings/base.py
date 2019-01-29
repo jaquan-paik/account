@@ -2,11 +2,14 @@ import os
 
 from infra.configure.constants import SecretKeyName
 from infra.storage.redis.constants import RedisDatabase
+
 from lib.ridibooks.internal_server_auth.helpers.config_helper import AuthList, ConfigHelper as InternalServerAuthConfigHelper
 from lib.secret.secret import Secret
 from lib.log.setup import setup_logging
+from lib.settings.asserts import assert_allowed_hosts_with_cookie_root_domain
 
 # PATH
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # src dir
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -27,6 +30,9 @@ RIDIBOOKS_LOGIN_URL = Secret().get(SecretKeyName.RIDIBOOKS_LOGIN_URL)
 CORS_ORIGIN_REGEX_WHITELIST = (rf"{Secret().get(SecretKeyName.CORS_ORIGIN_REGEX_WHITELIST)}",)
 
 COOKIE_ROOT_DOMAIN = Secret().get(SecretKeyName.COOKIE_ROOT_DOMAIN)
+
+# allowed hosts 안에 있는 호스트 들은 쿠키 루트 도메인으로 이루어져있음을 보장해야한다.
+assert_allowed_hosts_with_cookie_root_domain(ALLOWED_HOSTS, COOKIE_ROOT_DOMAIN)
 
 # Application definition
 INSTALLED_APPS = [

@@ -88,10 +88,9 @@ class TokenView(APIView):
 class LogoutView(View):
     @clear_tokens_in_cookie
     def get(self, request):
-        root_domain = UrlHelper.get_allowed_cookie_root_domain(self.request)
         return_url = request.GET.get('return_url', None)
         if not return_url:
-            return_url = f'https://{root_domain}'
+            return_url = f'https://{UrlHelper.get_root_uri()}'
 
         response = HttpResponseRedirect(return_url)
         return response
