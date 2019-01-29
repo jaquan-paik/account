@@ -1,6 +1,8 @@
+import re
+
 from oauth2_provider.models import AbstractApplication
-from urllib.parse import urlparse
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
+from django.conf import settings
 from apps.domains.oauth2.models import Application
 
 
@@ -27,11 +29,7 @@ class ClientHelper:
         return client
 
     @staticmethod
-    def validate_redirect_uri(client: Application, redirect_uri: str):
-        parsed_uri = urlparse(redirect_uri)
-        for allowed_uri in client.redirect_uris.split():
-            parsed_allowed_uri = urlparse(allowed_uri)
-
-            if parsed_allowed_uri.scheme == parsed_uri.scheme and parsed_allowed_uri.netloc == parsed_uri.netloc:
-                return True
+    def assert_in_house_client_redirect_uri(client: Application, redirect_uri: str):
+        if client.is_in_house and re.search(rf'{settings.IN_HOUSE_CLIENT_REDIRECT_URI_REGEX}', redirect_uri) is not None:
+            return
         raise PermissionDenied()

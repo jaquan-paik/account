@@ -26,6 +26,8 @@ RIDIBOOKS_LOGIN_URL = Secret().get(SecretKeyName.RIDIBOOKS_LOGIN_URL)
 
 CORS_ORIGIN_REGEX_WHITELIST = (rf"{Secret().get(SecretKeyName.CORS_ORIGIN_REGEX_WHITELIST)}",)
 
+IN_HOUSE_CLIENT_REDIRECT_URI_REGEX = Secret().get(SecretKeyName.IN_HOUSE_CLIENT_REDIRECT_URI_REGEX)
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.auth',
