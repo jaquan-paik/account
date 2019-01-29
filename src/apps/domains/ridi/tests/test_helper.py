@@ -1,10 +1,10 @@
 import requests_mock
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django_dynamic_fixture import G
 
-from apps.domains.ridi.constants import CookieRootDomains
 from apps.domains.ridi.dtos import TokenData
 from apps.domains.ridi.exceptions import NotAllowedRootDomainException
 from apps.domains.ridi.helpers.client_helper import ClientHelper
@@ -28,19 +28,6 @@ class UrlHelperTestCase(TestCase):
         self.assertIn('https://', token_url)
         self.assertIn(GeneralConfig.get_site_domain(), token_url)
         self.assertIn(reverse("oauth2_provider:token"), token_url)
-
-    def test_get_root_domain(self):
-        factory = RequestFactory()
-        request = factory.get('/', HTTP_HOST=GeneralConfig.get_site_domain())
-
-        self.assertEqual(UrlHelper.get_root_domain(request=request), CookieRootDomains.to_string(CookieRootDomains.PROD_RIDI_COM))
-
-    def test_raise_not_allow_host(self):
-        factory = RequestFactory()
-        request = factory.get('/', HTTP_HOST='dev.ridi.com')
-
-        with self.assertRaises(NotAllowedRootDomainException):
-            UrlHelper.get_root_domain(request)
 
 
 class ClientHelperTestCase(TestCase):
