@@ -1,5 +1,4 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views import View
 
@@ -38,14 +37,15 @@ class AuthorizeView(LoginRequiredMixin, View):
 
 class CallbackView(LoginRequiredMixin, View):
     def get(self, request):
+        if request.GET.get('deprecated', None) or len(request.GET.get('state', '')) == 10:  # 현재 지원되지 않는 state의 길이가 10이다.
+            return HttpResponseRedirect(GeneralConfig.get_store_url())
+
         callback_form = CallbackForm(request.GET)
         if not callback_form.is_valid():
             return get_invalid_form_template_response(request, callback_form)
         cleaned_data = callback_form.clean()
-        try:
-            StateHelper.validate_state(cleaned_data.get('state'), request.user.idx)
-        except PermissionDenied:
-            return HttpResponseRedirect(GeneralConfig.get_store_url())
+
+        StateHelper.validate_state(cleaned_data.get('state'), request.user.idx)
 
         access_token, refresh_token = AuthorizationCodeService.get_tokens(
             cleaned_data['code'], cleaned_data['client_id'], cleaned_data['in_house_redirect_uri']
