@@ -25,8 +25,7 @@ def clear_tokens_if_permission_denied_raised(func: Callable):
             return func(self, request, *args, **kwargs)
         except PermissionDenied:
             response = HttpResponseUnauthorized()
-            root_domain = UrlHelper.get_root_domain(request)
-            ResponseCookieHelper.clear_token_cookie(response, root_domain)
+            ResponseCookieHelper.clear_token_cookie(response)
             return response
 
     return wrapper
