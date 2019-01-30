@@ -53,6 +53,9 @@ check-deprecated:
 test:
 	@python3.6 src/manage.py test src --noinput --settings=sites.settings.test
 
+local-test:
+	@python3.6 src/manage.py test src --settings=sites.settings.local_test
+
 # pm-test
 pm-test: pm-test-up pm-test-run pm-test-down
 
