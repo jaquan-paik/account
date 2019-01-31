@@ -1,7 +1,6 @@
 # noinspection PyUnresolvedReferences
 from sites.settings.test import *  # flake8: noqa: F403  # pylint:disable=wildcard-import
 
-DATABASE_ROUTERS = []
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
