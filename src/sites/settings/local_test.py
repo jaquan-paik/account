@@ -1,5 +1,5 @@
 # noinspection PyUnresolvedReferences
-from sites.settings.base import *  # flake8: noqa: F403  # pylint:disable=wildcard-import
+from sites.settings.test import *  # flake8: noqa: F403  # pylint:disable=wildcard-import
 
 DATABASE_ROUTERS = []
 DATABASES = {
@@ -21,15 +21,3 @@ DATABASES = {
         }
     },
 }
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    }
-}
-
-SITE_DOMAIN = 'account.ridibooks.com'
-ALLOWED_HOSTS = [SITE_DOMAIN, 'dev.ridi.com', ]
-
-STORE_URL = 'http://login.dev.ridi.com'
-RIDIBOOKS_LOGIN_URL = 'http://login.dev.ridi.com/account/login'
