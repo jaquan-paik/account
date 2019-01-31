@@ -25,8 +25,4 @@ CACHES = {
 }
 
 SITE_DOMAIN = 'account.ridibooks.com'
-ALLOWED_HOSTS = [SITE_DOMAIN, 'dev.ridi.com', ]
-
-STORE_URL = 'http://login.dev.ridi.com'
-RIDIBOOKS_LOGIN_URL = 'http://login.dev.ridi.com/account/login'
-COOKIE_ROOT_DOMAIN = '.ridibooks.com'
+ALLOWED_HOSTS = [SITE_DOMAIN]

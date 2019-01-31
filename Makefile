@@ -53,6 +53,17 @@ check-deprecated:
 test:
 	@python3.6 src/manage.py test src --noinput --settings=sites.settings.test
 
+up-local-db:
+	@mysql.server start
+
+down-local-db:
+	@mysql.server stop
+
+local-test-without-db:
+	@python3.6 src/manage.py test src --settings=sites.settings.local_test
+
+local-test: up-local-db local-test-without-db down-local-db
+
 # pm-test
 pm-test: pm-test-up pm-test-run pm-test-down
 
