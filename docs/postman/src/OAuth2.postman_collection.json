@@ -302,7 +302,7 @@
 										"exec": [
 											"const h = eval(globals.loadHelpers);",
 											"h.printResponseBody();",
-											"h.testStatus(403);",
+											"h.testStatus(400);",
 											"",
 											"pm.test(\"invalid client_id error exists\", function () {",
 											"    pm.expect(pm.response.text()).to.include(\"invalid_request\");",
@@ -414,14 +414,14 @@
 										"exec": [
 											"const h = eval(globals.loadHelpers);",
 											"h.printResponseBody();",
-											"h.testStatus(403);",
+											"h.testStatus(400);",
 											"",
 											"pm.test(\"invalid redirect_uri error exists\", function () {",
 											"    pm.expect(pm.response.text()).to.include(\"invalid_request\");",
 											"});",
 											"",
 											"pm.test(\"invalid redirect_uri error_description exists\", function () { ",
-											"    pm.expect(pm.response.text()).to.include(\"Invalid redirect URI.\");",
+											"    pm.expect(pm.response.text()).to.include(\"Mismatching redirect URI.\");",
 											"});",
 											""
 										],
@@ -1260,7 +1260,7 @@
 					"response": []
 				},
 				{
-					"name": "[403] 잘못된 refresh token 사용",
+					"name": "[400] 잘못된 refresh token 사용",
 					"event": [
 						{
 							"listen": "test",
@@ -1269,10 +1269,10 @@
 								"exec": [
 									"const h = eval(globals.loadHelpers);",
 									"h.printResponseBody();",
-									"h.testStatus(403);",
+									"h.testStatus(400);",
 									"",
 									"const jsonData = JSON.parse(responseBody);",
-									"tests[\"error exists\"] = jsonData.error === 'invalid_request';",
+									"tests[\"error exists\"] = jsonData.error === 'invalid_grant';",
 									""
 								],
 								"type": "text/javascript"

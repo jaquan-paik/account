@@ -335,7 +335,7 @@
 					"response": []
 				},
 				{
-					"name": "[401] 잘못된 state 확인",
+					"name": "[302] 잘못된 state 확인",
 					"event": [
 						{
 							"listen": "test",
@@ -344,7 +344,7 @@
 								"exec": [
 									"const h = eval(globals.loadHelpers);",
 									"h.printResponseBody();",
-									"h.testStatus(403);"
+									"h.testStatus(302);"
 								],
 								"type": "text/javascript"
 							}
