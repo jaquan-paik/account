@@ -29,7 +29,16 @@ def is_url(url: str) -> bool:
 
 
 def is_same_path(first_path: str, second_path: str) -> bool:
-    return re.match('(/([^/])+)+', first_path).group(0) == re.match('(/([^/])+)+', second_path).group(0)  # path의 마지막에 '/'를 제외하고 비교한다.
+    if first_path == second_path:
+        return True
+
+    if first_path and first_path[-1] == '/' and first_path[:-1] == second_path:
+        return True
+
+    if second_path and second_path[-1] == '/' and second_path[:-1] == first_path:
+        return True
+
+    return False
 
 
 def is_same_query(first_query: dict, second_query: dict) -> bool:
