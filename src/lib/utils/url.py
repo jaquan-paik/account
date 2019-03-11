@@ -1,5 +1,5 @@
 from urllib import parse
-from os.path import normpath
+import re
 
 SCHEME = 0
 NETLOC = 1
@@ -29,7 +29,7 @@ def is_url(url: str) -> bool:
 
 
 def is_same_path(first_path: str, second_path: str) -> bool:
-    return normpath(first_path) == normpath(second_path)
+    return re.match('(/([^/])+)+', first_path).group(0) == re.match('(/([^/])+)+', second_path).group(0)
 
 
 def is_same_query(first_query: dict, second_query: dict) -> bool:
