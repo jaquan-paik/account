@@ -52,6 +52,7 @@ class Application(AbstractApplication):
             return self._redirect_uris
 
         redirect_uris = []
+        # pylint: disable=no-member
         for redirect_uri in self._redirect_uris.split():
             if not is_absolute_uri(redirect_uri):
                 redirect_uris.append(f"https://{GeneralConfig.get_site_domain()}{redirect_uri}")
