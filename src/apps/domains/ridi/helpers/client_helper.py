@@ -2,6 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from oauth2_provider.models import AbstractApplication
 
 from apps.domains.oauth2.models import Application
+from lib.utils.url import is_same_url
 
 
 class ClientHelper:
@@ -32,7 +33,7 @@ class ClientHelper:
             raise PermissionDenied()
 
         for client_redirect_uri in client.redirect_uris.split():
-            if redirect_uri == client_redirect_uri:
+            if is_same_url(redirect_uri, client_redirect_uri):
                 return
 
         raise PermissionDenied()

@@ -1,4 +1,5 @@
 from urllib import parse
+from os.path import normpath
 
 SCHEME = 0
 NETLOC = 1
@@ -25,6 +26,10 @@ def get_url_until_path(url: str):
 def is_url(url: str) -> bool:
     parsed_url = parse.urlsplit(url)
     return parsed_url[SCHEME] and parsed_url[NETLOC]
+
+
+def is_same_path(first_path: str, second_path: str) -> bool:
+    return normpath(first_path) == normpath(second_path)
 
 
 def is_same_query(first_query: dict, second_query: dict) -> bool:
@@ -57,7 +62,9 @@ def is_same_url(first_url: str, second_url: str) -> bool:
     first_parsed_url = parse.urlsplit(first_url)
     second_parsed_url = parse.urlsplit(second_url)
 
-    if not first_parsed_url[:QUERY] == second_parsed_url[:QUERY]:
+    if not first_parsed_url[:NETLOC] == second_parsed_url[:NETLOC]:
+        return False
+    if not is_same_path(first_parsed_url[PATH], second_parsed_url[PATH]):
         return False
 
     if not first_parsed_url[FRAGMENT] == second_parsed_url[FRAGMENT]:
