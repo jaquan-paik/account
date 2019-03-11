@@ -54,6 +54,9 @@ class ClientHelperTestCase(TestCase):
         with self.assertRaises(PermissionDenied):
             ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://ridi.io/ridi/complete')
 
+        with self.assertRaises(PermissionDenied):
+            ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://ridibooks.com/ridi/dummy')
+
         self.assertEqual(None, ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://ridibooks.com'))
         self.assertEqual(None, ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://ridibooks.com/'))
         self.assertEqual(None, ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://ridibooks.com/ridi/complete'))
