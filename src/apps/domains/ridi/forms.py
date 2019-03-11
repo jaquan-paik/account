@@ -3,14 +3,14 @@ from django import forms
 
 class AuthorizeForm(forms.Form):
     client_id = forms.CharField()
-    redirect_uri = forms.URLField()
+    redirect_uri = forms.CharField()
 
 
 class CallbackForm(forms.Form):
     code = forms.CharField()
     state = forms.CharField()
     client_id = forms.CharField()
-    in_house_redirect_uri = forms.URLField()
+    in_house_redirect_uri = forms.CharField()
 
 
 class TokenForm(forms.Form):
