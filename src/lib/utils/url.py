@@ -1,5 +1,4 @@
 from urllib import parse
-import re
 
 SCHEME = 0
 NETLOC = 1
@@ -71,7 +70,7 @@ def is_same_url(first_url: str, second_url: str) -> bool:
     first_parsed_url = parse.urlsplit(first_url)
     second_parsed_url = parse.urlsplit(second_url)
 
-    if not first_parsed_url[:NETLOC] == second_parsed_url[:NETLOC]:
+    if not first_parsed_url[:PATH] == second_parsed_url[:PATH]:
         return False
     if not is_same_path(first_parsed_url[PATH], second_parsed_url[PATH]):
         return False
