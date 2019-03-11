@@ -8,7 +8,7 @@ from apps.domains.oauth2.managers import ApplicationManager, GrantManager, Refre
 from infra.configure.config import GeneralConfig
 from lib.django.db.mysql import TinyBooleanField
 from lib.utils.string import generate_random_str
-from lib.utils.url import is_same_url
+from lib.utils.url import is_same_url, is_same_url_until_path
 
 JWT_HS_256_SECRET_LEN = 32
 
@@ -61,6 +61,12 @@ class Application(AbstractApplication):
         return ' '.join(redirect_uris)
 
     objects = ApplicationManager()
+
+    def redirect_uri_allowed(self, uri):
+        for allowed_uri in self.redirect_uris.split():
+            if is_same_url_until_path(allowed_uri, uri):
+                return True
+        return False
 
     class Meta(AbstractApplication.Meta):
         swappable = 'OAUTH2_PROVIDER_APPLICATION_MODEL'
