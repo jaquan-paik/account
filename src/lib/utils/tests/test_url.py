@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from lib.utils.string import generate_random_str
-from lib.utils.url import is_same_url, generate_query_url
+from lib.utils.url import is_same_url, generate_query_url, is_same_path
 
 
 class StringTestCase(TestCase):
@@ -43,3 +43,18 @@ class StringTestCase(TestCase):
         )
         self.assertTrue(is_same_url(url, different_order_query_url))
         self.assertFalse(is_same_url(url, different_param_url))
+
+    def test_is_same_path(self):
+        first_path = '/ridi/complete'
+        second_path = '/ridi/complete/'
+
+        wrong_path = '/ridi//complete'
+        wrong_path_1 = '/abcd/complete'
+        wrong_path_2 = '/abcd/test'
+
+        self.assertTrue(is_same_path(first_path, second_path))
+
+        self.assertFalse(is_same_path(first_path, wrong_path))
+        self.assertFalse(is_same_path(second_path, wrong_path))
+        self.assertFalse(is_same_path(first_path, wrong_path_1))
+        self.assertFalse(is_same_path(first_path, wrong_path_2))
