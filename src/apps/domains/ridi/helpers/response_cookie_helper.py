@@ -31,8 +31,8 @@ class ResponseCookieHelper:
         cls._clear_cookie(response, key=REFRESH_TOKEN_COOKIE_KEY)
 
     @classmethod
-    def add_token_cookie(cls, response, access_token: TokenData, refresh_token: TokenData, auto_login: int):
-        if auto_login:
+    def add_token_cookie(cls, response, access_token: TokenData, refresh_token: TokenData, set_expires: bool):
+        if set_expires:
             cls._set_secure_cookie(
                 response, key=ACCESS_TOKEN_COOKIE_KEY, value=access_token.token,
                 max_age=access_token.expires_in, expires=access_token.cookie_expire_time,
