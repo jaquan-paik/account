@@ -53,6 +53,7 @@ class StringTestCase(TestCase):
         wrong_path_2 = '/abcd/test'
 
         self.assertTrue(is_same_path(first_path, second_path))
+        self.assertTrue(is_same_path('/', ''))
 
         self.assertFalse(is_same_path(first_path, wrong_path))
         self.assertFalse(is_same_path(second_path, wrong_path))
