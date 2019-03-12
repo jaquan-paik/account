@@ -71,6 +71,71 @@ class TokenViewTestCase(TestCase):
         self.assertGreater(response.cookies[ACCESS_TOKEN_COOKIE_KEY]['max-age'], 0)
         self.assertGreater(response.cookies[REFRESH_TOKEN_COOKIE_KEY]['max-age'], 0)
 
+    def test_refresh_success_without_auto_login(self):
+        api = StoreApi()
+        with requests_mock.mock() as m:
+            m.get(api._make_url(StoreApi.ACCOUNT_INFO), json={'result': {'idx': 1, 'id': 'testuser'}})
+            m.post(UrlHelper.get_oauth2_token_url(), json={
+                'access_token': 'test-access-token1111',
+                'expires_in': 1111111,
+                'refresh_token': 'test-refresh-token1111',
+                'refresh_token_expires_in': 2222222,
+            })
+
+            response = Client().post(
+                reverse('ridi:token'),
+                HTTP_HOST=GeneralConfig.get_site_domain(),
+                HTTP_COOKIE=SimpleCookie({'ridi-rt': self.refresh_token.token}).output(header='', sep='; '),
+                secure=True
+            )
+
+        self.assertEqual(response.status_code, 200)
+
+        data = json.dumps(response.content.decode('utf8'))
+        self.assertIn('expires_at', data)
+        self.assertIn('expires_in', data)
+
+        self.assertIn(ACCESS_TOKEN_COOKIE_KEY, response.cookies)
+        self.assertIn(REFRESH_TOKEN_COOKIE_KEY, response.cookies)
+
+        self.assertEqual(response.cookies[ACCESS_TOKEN_COOKIE_KEY]['max-age'], '')
+        self.assertEqual(response.cookies[ACCESS_TOKEN_COOKIE_KEY]['expires'], '')
+        self.assertEqual(response.cookies[REFRESH_TOKEN_COOKIE_KEY]['max-age'], '')
+        self.assertEqual(response.cookies[REFRESH_TOKEN_COOKIE_KEY]['expires'], '')
+
+    def test_refresh_success_with_auto_login_is_zero(self):
+        api = StoreApi()
+        with requests_mock.mock() as m:
+            m.get(api._make_url(StoreApi.ACCOUNT_INFO), json={'result': {'idx': 1, 'id': 'testuser'}})
+            m.post(UrlHelper.get_oauth2_token_url(), json={
+                'access_token': 'test-access-token1111',
+                'expires_in': 1111111,
+                'refresh_token': 'test-refresh-token1111',
+                'refresh_token_expires_in': 2222222,
+            })
+
+            response = Client().post(
+                reverse('ridi:token'),
+                HTTP_HOST=GeneralConfig.get_site_domain(),
+                HTTP_COOKIE=SimpleCookie({'ridi-rt': self.refresh_token.token, 'ridi-al': 0}).output(header='', sep='; '),
+                secure=True
+            )
+
+        self.assertEqual(response.status_code, 200)
+
+        data = json.dumps(response.content.decode('utf8'))
+        self.assertIn('expires_at', data)
+        self.assertIn('expires_in', data)
+
+        self.assertIn(ACCESS_TOKEN_COOKIE_KEY, response.cookies)
+        self.assertIn(REFRESH_TOKEN_COOKIE_KEY, response.cookies)
+
+        self.assertEqual(response.cookies[ACCESS_TOKEN_COOKIE_KEY]['max-age'], '')
+        self.assertEqual(response.cookies[ACCESS_TOKEN_COOKIE_KEY]['expires'], '')
+
+        self.assertEqual(response.cookies[REFRESH_TOKEN_COOKIE_KEY]['max-age'], '')
+        self.assertEqual(response.cookies[REFRESH_TOKEN_COOKIE_KEY]['expires'], '')
+
     def test_not_refresh_but_success(self):
         class req:
             user = self.user

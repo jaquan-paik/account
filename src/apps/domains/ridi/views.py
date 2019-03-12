@@ -52,7 +52,7 @@ class CallbackView(LoginRequiredMixin, View):
             cleaned_data['code'], cleaned_data['client_id'], cleaned_data['in_house_redirect_uri']
         )
         response = InHouseHttpResponseRedirect(cleaned_data['in_house_redirect_uri'])
-        ResponseCookieHelper.add_token_cookie(response, access_token, refresh_token, request.COOKIES.get(AUTO_LOGIN_COOKIE_KEY, 0))
+        ResponseCookieHelper.add_token_cookie(response, access_token, refresh_token, int(request.COOKIES.get(AUTO_LOGIN_COOKIE_KEY, 0)))
         return response
 
 
@@ -80,7 +80,7 @@ class TokenView(APIView):
             access_token_data, refresh_token_data = TokenRefreshService.get_tokens(cleaned_data['refresh_token'])
             response = JsonResponse(TokenHelper.get_token_data_info(access_token_data))
             ResponseCookieHelper.add_token_cookie(
-                response, access_token_data, refresh_token_data, request.COOKIES.get(AUTO_LOGIN_COOKIE_KEY, 0)
+                response, access_token_data, refresh_token_data, int(request.COOKIES.get(AUTO_LOGIN_COOKIE_KEY, 0))
             )
 
         return response
