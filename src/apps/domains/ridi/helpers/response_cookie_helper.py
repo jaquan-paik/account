@@ -12,6 +12,10 @@ ROOT_DOMAIN = settings.COOKIE_ROOT_DOMAIN
 
 class ResponseCookieHelper:
     @staticmethod
+    def _set_secure_session_cookie(response, key: str, value: str):
+        response.set_cookie(key, value, domain=ROOT_DOMAIN, secure=True, httponly=True)
+
+    @staticmethod
     def _set_secure_cookie(response, key: str, value: str, max_age: Optional[int] = None, expires: Optional[datetime] = None):
         response.set_cookie(key, value, max_age=max_age, expires=expires, domain=ROOT_DOMAIN, secure=True, httponly=True)
 
@@ -27,12 +31,16 @@ class ResponseCookieHelper:
         cls._clear_cookie(response, key=REFRESH_TOKEN_COOKIE_KEY)
 
     @classmethod
-    def add_token_cookie(cls, response, access_token: TokenData, refresh_token: TokenData):
-        cls._set_secure_cookie(
-            response, key=ACCESS_TOKEN_COOKIE_KEY, value=access_token.token, max_age=access_token.expires_in,
-            expires=access_token.cookie_expire_time,
-        )
-        cls._set_secure_cookie(
-            response, key=REFRESH_TOKEN_COOKIE_KEY, value=refresh_token.token, max_age=refresh_token.expires_in,
-            expires=refresh_token.cookie_expire_time,
-        )
+    def add_token_cookie(cls, response, access_token: TokenData, refresh_token: TokenData, auto_login: int):
+        if auto_login:
+            cls._set_secure_cookie(
+                response, key=ACCESS_TOKEN_COOKIE_KEY, value=access_token.token,
+                max_age=access_token.expires_in, expires=access_token.cookie_expire_time,
+            )
+            cls._set_secure_cookie(
+                response, key=REFRESH_TOKEN_COOKIE_KEY, value=refresh_token.token,
+                max_age=refresh_token.expires_in, expires=refresh_token.cookie_expire_time,
+            )
+        else:
+            cls._set_secure_session_cookie(response, key=ACCESS_TOKEN_COOKIE_KEY, value=access_token.token)
+            cls._set_secure_session_cookie(response, key=REFRESH_TOKEN_COOKIE_KEY, value=refresh_token.token)

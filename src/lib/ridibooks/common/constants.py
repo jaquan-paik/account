@@ -1,9 +1,8 @@
 from lib.base.constants import BaseConstant
 
-
 ACCESS_TOKEN_COOKIE_KEY = 'ridi-at'
 REFRESH_TOKEN_COOKIE_KEY = 'ridi-rt'
-
+AUTO_LOGIN_COOKIE_KEY = 'ridi-al'
 PHP_SESSION_COOKIE_KEY = 'PHPSESSID'
 
 HTTP_AUTHORIZATION_HEADER = 'HTTP_AUTHORIZATION'
