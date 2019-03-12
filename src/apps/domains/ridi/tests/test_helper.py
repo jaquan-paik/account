@@ -98,7 +98,7 @@ class ResponseCookieHelperTestCase(TestCase):
 
     def test_add_token_cookies_with_auto_login(self):
         response = HttpResponseBase()
-        ResponseCookieHelper.add_token_cookie(response, self.access_token, self.refresh_token, 1)
+        ResponseCookieHelper.add_token_cookie(response, self.access_token, self.refresh_token, True)
 
         self.assertIn(ACCESS_TOKEN_COOKIE_KEY, response.cookies)
         self.assertNotEqual(response.cookies[ACCESS_TOKEN_COOKIE_KEY]['expires'], COOKIE_EXPIRE_DEFAULT_TIME)
@@ -110,7 +110,7 @@ class ResponseCookieHelperTestCase(TestCase):
 
     def test_add_token_cookies_without_auto_login(self):
         response = HttpResponseBase()
-        ResponseCookieHelper.add_token_cookie(response, self.access_token, self.refresh_token, 0)
+        ResponseCookieHelper.add_token_cookie(response, self.access_token, self.refresh_token, False)
 
         self.assertIn(ACCESS_TOKEN_COOKIE_KEY, response.cookies)
         self.assertEqual(response.cookies[ACCESS_TOKEN_COOKIE_KEY]['expires'], '')
@@ -122,7 +122,7 @@ class ResponseCookieHelperTestCase(TestCase):
 
     def test_clear_token(self):
         response = HttpResponseBase()
-        ResponseCookieHelper.add_token_cookie(response, self.access_token, self.refresh_token, 0)
+        ResponseCookieHelper.add_token_cookie(response, self.access_token, self.refresh_token, False)
 
         ResponseCookieHelper.clear_token_cookie(response)
         self.assertEqual(response.cookies[ACCESS_TOKEN_COOKIE_KEY].value, '')

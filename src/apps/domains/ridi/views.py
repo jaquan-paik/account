@@ -53,7 +53,7 @@ class CallbackView(LoginRequiredMixin, View):
         )
         response = InHouseHttpResponseRedirect(cleaned_data['in_house_redirect_uri'])
 
-        set_expires_to_tokens = request.COOKIES.get(AUTO_LOGIN_COOKIE_KEY, '0') == AUTO_LOGIN_COOKIE_KEY
+        set_expires_to_tokens = request.COOKIES.get(AUTO_LOGIN_COOKIE_KEY, '0') == AUTO_LOGIN_ON_COOKIE_VALUE
         ResponseCookieHelper.add_token_cookie(response, access_token, refresh_token, set_expires_to_tokens)
         return response
 
@@ -81,7 +81,7 @@ class TokenView(APIView):
         except JwtTokenErrorException:
             access_token_data, refresh_token_data = TokenRefreshService.get_tokens(cleaned_data['refresh_token'])
             response = JsonResponse(TokenHelper.get_token_data_info(access_token_data))
-            set_expires_to_tokens = request.COOKIES.get(AUTO_LOGIN_COOKIE_KEY, '0') == AUTO_LOGIN_COOKIE_KEY
+            set_expires_to_tokens = request.COOKIES.get(AUTO_LOGIN_COOKIE_KEY, '0') == AUTO_LOGIN_ON_COOKIE_VALUE
             ResponseCookieHelper.add_token_cookie(response, access_token_data, refresh_token_data, set_expires_to_tokens)
 
         return response
