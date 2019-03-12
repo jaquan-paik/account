@@ -27,17 +27,14 @@ def is_url(url: str) -> bool:
     return parsed_url[SCHEME] and parsed_url[NETLOC]
 
 
-def is_same_path(first_path: str, second_path: str) -> bool:
-    if first_path == second_path:
-        return True
+def is_same_path(first_path: str, second_path: str, set_url_trailing_slash=True) -> bool:
+    if set_url_trailing_slash:
+        if (first_path and first_path[-1] != '/') or first_path == '':
+            first_path += '/'
+        if (second_path and second_path[-1] != '/') or second_path == '':
+            second_path += '/'
 
-    if first_path and first_path[-1] == '/' and first_path[:-1] == second_path:
-        return True
-
-    if second_path and second_path[-1] == '/' and second_path[:-1] == first_path:
-        return True
-
-    return False
+    return first_path == second_path
 
 
 def is_same_query(first_query: dict, second_query: dict) -> bool:
