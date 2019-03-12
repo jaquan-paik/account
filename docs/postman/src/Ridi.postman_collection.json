@@ -59,7 +59,7 @@
 					"response": []
 				},
 				{
-					"name": "# 로그인",
+					"name": "# 로그인 (auto_login 1)",
 					"event": [
 						{
 							"listen": "test",
@@ -78,7 +78,13 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "",
+								"value": "ridi-al=1;",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
@@ -90,6 +96,11 @@
 								{
 									"key": "password",
 									"value": "{{password}}",
+									"type": "text"
+								},
+								{
+									"key": "auto_login",
+									"value": "1",
 									"type": "text"
 								}
 							]
@@ -299,13 +310,12 @@
 					"response": []
 				},
 				{
-					"name": "[302] code 발급 완료 및 토큰 쿠키셋팅",
+					"name": "[302] code 발급 완료 및 토큰 쿠키셋팅 (auto-login)",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"id": "f778f6ba-5aab-4c0b-8c54-84c001c6ee38",
-								"type": "text/javascript",
 								"exec": [
 									"const h = eval(globals.loadHelpers);",
 									"h.printResponseBody();",
@@ -313,8 +323,123 @@
 									"",
 									"tests[\"Redirect to redirect_uri\"] = postman.getResponseHeader(\"Location\").has(\"https://account.dev.ridi.io/ridi/callback/\");",
 									"tests[\"Set access token to cookie\"] = postman.getResponseCookie(\"ridi-at\");",
-									"tests[\"Set refresh token to cookie\"] = postman.getResponseCookie(\"ridi-rt\");"
-								]
+									"tests[\"Set refresh token to cookie\"] = postman.getResponseCookie(\"ridi-rt\");",
+									"",
+									"",
+									"",
+									"const headers = pm.response.headers.all();",
+									"for (i=0;i<headers.length;i++){",
+									"    if(headers[i].key=='Set-Cookie'){",
+									"        const cookie = headers[i].value;",
+									"        const maxAgeIndex = cookie.indexOf('Max-Age')",
+									"        const nextSemicolonIndex = cookie.indexOf(';',maxAgeIndex)",
+									"        const maxAge = parseInt(cookie.slice(maxAgeIndex+8,nextSemicolonIndex))",
+									"        if(cookie.includes('ridi-at')) {",
+									"            tests['access token maxAge bigger than 0'] = maxAge > 0    ",
+									"        }",
+									"        else {",
+									"            tests['refresh token maxAge bigger than 0'] = maxAge > 0    ",
+									"        }",
+									"        ",
+									"    }",
+									"}",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{callback_code_uri}}",
+							"host": [
+								"{{callback_code_uri}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "# 로그인 (auto_login 0)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "783c968e-68e0-4cb1-a63b-cd3532484ccb",
+								"exec": [
+									"const h = eval(globals.loadHelpers);",
+									"h.printResponseBody();",
+									"h.testStatus(200);",
+									"tests[\"Check login session\"] = postman.getResponseCookie('PHPSESSID').value;",
+									"                        "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_id",
+									"value": "{{user_id}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{login_url}}",
+							"host": [
+								"{{login_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[302] code 발급 완료 및 토큰 쿠키셋팅 (auto-login off)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f778f6ba-5aab-4c0b-8c54-84c001c6ee38",
+								"exec": [
+									"const h = eval(globals.loadHelpers);",
+									"h.printResponseBody();",
+									"h.testStatus(302);",
+									"",
+									"tests[\"Redirect to redirect_uri\"] = postman.getResponseHeader(\"Location\").has(\"https://account.dev.ridi.io/ridi/callback/\");",
+									"tests[\"Set access token to cookie\"] = postman.getResponseCookie(\"ridi-at\");",
+									"tests[\"Set refresh token to cookie\"] = postman.getResponseCookie(\"ridi-rt\");",
+									"const headers = pm.response.headers.all();",
+									"for (i=0;i<headers.length;i++){",
+									"    if(headers[i].key=='Set-Cookie'){",
+									"        const cookie = headers[i].value;",
+									"        if(cookie.includes('ridi-at')){",
+									"            tests['access token session cookie'] = !cookie.includes('Max-Age')&&!cookie.includes('expires')",
+									"        }",
+									"        if(cookie.includes('ridi-rt')){",
+									"            tests['access token session cookie'] = !cookie.includes('Max-Age')&&!cookie.includes('expires')",
+									"        }",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
