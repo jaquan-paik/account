@@ -56,7 +56,7 @@ class TokenViewTestCase(TestCase):
             response = Client().post(
                 reverse('ridi:token'),
                 HTTP_HOST=GeneralConfig.get_site_domain(),
-                HTTP_COOKIE=SimpleCookie({'ridi-rt': self.refresh_token.token}).output(header='', sep='; '),
+                HTTP_COOKIE=SimpleCookie({'ridi-rt': self.refresh_token.token, 'ridi-al': 1}).output(header='', sep='; '),
                 secure=True
             )
 
@@ -76,6 +76,7 @@ class TokenViewTestCase(TestCase):
             user = self.user
             client = self.client
             scopes = ['all']
+
         at = JwtHandler.generate(req)
 
         response = Client().post(
