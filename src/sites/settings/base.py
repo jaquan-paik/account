@@ -31,8 +31,6 @@ CORS_ORIGIN_REGEX_WHITELIST = (rf"{Secret().get(SecretKeyName.CORS_ORIGIN_REGEX_
 
 COOKIE_ROOT_DOMAIN = Secret().get(SecretKeyName.COOKIE_ROOT_DOMAIN)
 
-IN_HOUSE_CLIENT_REDIRECT_URI_REGEX = Secret().get(SecretKeyName.IN_HOUSE_CLIENT_REDIRECT_URI_REGEX)
-
 
 # allowed hosts 안에 있는 호스트 들은 쿠키 루트 도메인으로 이루어져있음을 보장해야한다.
 assert_allowed_hosts_with_cookie_root_domain(ALLOWED_HOSTS, COOKIE_ROOT_DOMAIN)

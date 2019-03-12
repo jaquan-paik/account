@@ -27,6 +27,16 @@ def is_url(url: str) -> bool:
     return parsed_url[SCHEME] and parsed_url[NETLOC]
 
 
+def is_same_path(first_path: str, second_path: str, set_url_trailing_slash=True) -> bool:
+    if set_url_trailing_slash:
+        if (first_path and first_path[-1] != '/') or first_path == '':
+            first_path += '/'
+        if (second_path and second_path[-1] != '/') or second_path == '':
+            second_path += '/'
+
+    return first_path == second_path
+
+
 def is_same_query(first_query: dict, second_query: dict) -> bool:
     first_query_keys = first_query.keys()
     second_query_keys = second_query.keys()
@@ -57,7 +67,9 @@ def is_same_url(first_url: str, second_url: str) -> bool:
     first_parsed_url = parse.urlsplit(first_url)
     second_parsed_url = parse.urlsplit(second_url)
 
-    if not first_parsed_url[:QUERY] == second_parsed_url[:QUERY]:
+    if not first_parsed_url[:PATH] == second_parsed_url[:PATH]:
+        return False
+    if not is_same_path(first_parsed_url[PATH], second_parsed_url[PATH]):
         return False
 
     if not first_parsed_url[FRAGMENT] == second_parsed_url[FRAGMENT]:
@@ -66,6 +78,22 @@ def is_same_url(first_url: str, second_url: str) -> bool:
     first_url_query = dict(parse.parse_qsl(first_parsed_url[QUERY]))
     second_url_query = dict(parse.parse_qsl(second_parsed_url[QUERY]))
     if not is_same_query(first_url_query, second_url_query):
+        return False
+
+    return True
+
+
+def is_same_url_until_path(first_url: str, second_url: str) -> bool:
+    if not is_url(first_url) or not is_url(second_url):
+        return False
+
+    first_parsed_url = parse.urlsplit(first_url)
+    second_parsed_url = parse.urlsplit(second_url)
+
+    if not first_parsed_url[:PATH] == second_parsed_url[:PATH]:
+        return False
+
+    if not is_same_path(first_parsed_url[PATH], second_parsed_url[PATH]):
         return False
 
     return True

@@ -32,7 +32,10 @@ class UrlHelperTestCase(TestCase):
 
 class ClientHelperTestCase(TestCase):
     def setUp(self):
-        self.client = G(Application, skip_authorization=True, user=None)
+        self.client = G(
+            Application, skip_authorization=True, user=None, is_in_house=True,
+            _redirect_uris='https://ridibooks.com app://authorized https://ridibooks.com/ridi/complete'
+        )
         self.not_implement_client = G(Application, skip_authorization=True, user=None, authorization_grant_type="implicit")
 
     def test_get_client(self):
@@ -46,6 +49,19 @@ class ClientHelperTestCase(TestCase):
     def test_not_implemented(self):
         with self.assertRaises(NotImplementedError):
             ClientHelper.get_client(client_id=self.not_implement_client.client_id)
+
+    def test_assert_redirect_uris(self):
+        with self.assertRaises(PermissionDenied):
+            ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://ridi.io/ridi/complete')
+
+        with self.assertRaises(PermissionDenied):
+            ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://ridibooks.com/ridi/dummy')
+
+        self.assertEqual(None, ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://ridibooks.com'))
+        self.assertEqual(None, ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://ridibooks.com/'))
+        self.assertEqual(None, ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://ridibooks.com/ridi/complete'))
+        self.assertEqual(None, ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://ridibooks.com/ridi/complete/'))
+        self.assertEqual(None, ClientHelper.assert_in_house_client_redirect_uri(self.client, 'app://authorized'))
 
 
 class TokenHelperTestCase(TestCase):
