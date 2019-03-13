@@ -1,3 +1,5 @@
+# pylint: disable=line-too-long
+# flake8: noqa
 import requests_mock
 from django.core.exceptions import PermissionDenied
 from django.test import TestCase
@@ -51,7 +53,6 @@ class ClientHelperTestCase(TestCase):
     def test_assert_redirect_uris(self):
         with self.assertRaises(PermissionDenied):
             ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://ridi.io/ridi/complete')
-
         self.assertEqual(None, ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://ridibooks.com/account/oauth-authorize-callback?return_url=https%3A%2F%2Fridibooks.com%3Futm_source%3Dridibooks_app%26utm_medium%3Dandroid%26utm_campaign%3Dtabbar_home%26utm_term%3D8.10.2'))
         self.assertEqual(None, ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://account.ridibooks.com/ridi/complete'))
         self.assertEqual(None, ClientHelper.assert_in_house_client_redirect_uri(self.client, 'https://view.ridibooks.com/books/3049001683&scope=&response_type=code'))
