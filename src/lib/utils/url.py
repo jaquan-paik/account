@@ -92,3 +92,13 @@ def is_same_url_until_path(first_url: str, second_url: str) -> bool:
         return False
 
     return True
+
+
+def is_same_url_until_domain(first_url: str, second_url: str) -> bool:
+    if not is_url(first_url) or not is_url(second_url):
+        return False
+
+    first_parsed_url = parse.urlsplit(first_url)
+    second_parsed_url = parse.urlsplit(second_url)
+
+    return first_parsed_url[:PATH] == second_parsed_url[:PATH]
