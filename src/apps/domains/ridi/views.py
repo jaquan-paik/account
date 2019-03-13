@@ -26,6 +26,10 @@ from lib.decorators.cookie_handler import clear_tokens_in_cookie
 from lib.ridibooks.common.constants import AUTO_LOGIN_COOKIE_KEY, AUTO_LOGIN_ON_COOKIE_VALUE
 
 
+def is_auto_login_request(request) -> bool:
+    return request.COOKIES.get(AUTO_LOGIN_COOKIE_KEY, '0') == AUTO_LOGIN_ON_COOKIE_VALUE
+
+
 class AuthorizeView(LoginRequiredMixin, View):
     def get(self, request):
         authorize_form = AuthorizeForm(request.GET)
@@ -52,9 +56,7 @@ class CallbackView(LoginRequiredMixin, View):
             cleaned_data['code'], cleaned_data['client_id'], cleaned_data['in_house_redirect_uri']
         )
         response = InHouseHttpResponseRedirect(cleaned_data['in_house_redirect_uri'])
-
-        is_auto_login = request.COOKIES.get(AUTO_LOGIN_COOKIE_KEY, '0') == AUTO_LOGIN_ON_COOKIE_VALUE
-        ResponseCookieHelper.add_token_cookie(response, access_token, refresh_token, is_auto_login)
+        ResponseCookieHelper.add_token_cookie(response, access_token, refresh_token, is_auto_login_request(request))
         return response
 
 
@@ -81,8 +83,7 @@ class TokenView(APIView):
         except JwtTokenErrorException:
             access_token_data, refresh_token_data = TokenRefreshService.get_tokens(cleaned_data['refresh_token'])
             response = JsonResponse(TokenHelper.get_token_data_info(access_token_data))
-            is_auto_login = request.COOKIES.get(AUTO_LOGIN_COOKIE_KEY, '0') == AUTO_LOGIN_ON_COOKIE_VALUE
-            ResponseCookieHelper.add_token_cookie(response, access_token_data, refresh_token_data, is_auto_login)
+            ResponseCookieHelper.add_token_cookie(response, access_token_data, refresh_token_data, is_auto_login_request(request))
 
         return response
 
