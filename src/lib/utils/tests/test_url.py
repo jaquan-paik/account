@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from lib.utils.string import generate_random_str
-from lib.utils.url import is_same_url, generate_query_url, is_same_path
+from lib.utils.url import is_same_url, generate_query_url, is_same_path, is_same_url_until_domain
 
 
 class StringTestCase(TestCase):
@@ -59,3 +59,20 @@ class StringTestCase(TestCase):
         self.assertFalse(is_same_path(second_path, wrong_path))
         self.assertFalse(is_same_path(first_path, wrong_path_1))
         self.assertFalse(is_same_path(first_path, wrong_path_2))
+
+    def test_is_same_url_until_domain(self):
+        url = 'https://ridibooks.com'
+
+        same_domain_url = 'https://ridibooks.com/a/b'
+        same_domain_url1 = 'https://ridibooks.com/ridi/complete'
+        same_domain_url2 = 'https://ridibooks.com/ridi/callback/'
+
+        different_domain_url = 'https://view.ridibooks.com'
+        different_domain_url1 = 'https://wrong.com'
+
+        self.assertTrue(is_same_url_until_domain(url, same_domain_url))
+        self.assertTrue(is_same_url_until_domain(url, same_domain_url1))
+        self.assertTrue(is_same_url_until_domain(url, same_domain_url2))
+
+        self.assertFalse(is_same_url_until_domain(url, different_domain_url))
+        self.assertFalse(is_same_url_until_domain(url, different_domain_url1))

@@ -17,11 +17,6 @@ def generate_query_url(url: str, params: dict):
     return parse.urlunsplit(url_parts)
 
 
-def get_url_until_path(url: str):
-    split_url = parse.urlsplit(url)
-    return f"{split_url[SCHEME]}/{split_url[NETLOC]}{split_url[PATH]}"
-
-
 def is_url(url: str) -> bool:
     parsed_url = parse.urlsplit(url)
     return parsed_url[SCHEME] and parsed_url[NETLOC]
@@ -97,3 +92,13 @@ def is_same_url_until_path(first_url: str, second_url: str) -> bool:
         return False
 
     return True
+
+
+def is_same_url_until_domain(first_url: str, second_url: str) -> bool:
+    if not is_url(first_url) or not is_url(second_url):
+        return False
+
+    first_parsed_url = parse.urlsplit(first_url)
+    second_parsed_url = parse.urlsplit(second_url)
+
+    return first_parsed_url[:PATH] == second_parsed_url[:PATH]
