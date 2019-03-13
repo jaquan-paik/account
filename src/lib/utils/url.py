@@ -17,11 +17,6 @@ def generate_query_url(url: str, params: dict):
     return parse.urlunsplit(url_parts)
 
 
-def get_url_until_path(url: str):
-    split_url = parse.urlsplit(url)
-    return f"{split_url[SCHEME]}/{split_url[NETLOC]}{split_url[PATH]}"
-
-
 def is_url(url: str) -> bool:
     parsed_url = parse.urlsplit(url)
     return parsed_url[SCHEME] and parsed_url[NETLOC]
