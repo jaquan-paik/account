@@ -1,12 +1,14 @@
 from django.db import models
 from oauth2_provider.models import AbstractAccessToken, AbstractApplication, AbstractGrant, AbstractRefreshToken
+from oauthlib.uri_validate import is_absolute_uri
 
 from apps.domains.account.models import OAuth2User, User
 from apps.domains.oauth2.constants import JwtAlg
 from apps.domains.oauth2.managers import ApplicationManager, GrantManager, RefreshTokenManager
+from infra.configure.config import GeneralConfig
 from lib.django.db.mysql import TinyBooleanField
 from lib.utils.string import generate_random_str
-from lib.utils.url import is_same_url
+from lib.utils.url import is_same_url, is_same_url_until_path
 
 JWT_HS_256_SECRET_LEN = 32
 
@@ -42,8 +44,29 @@ class Application(AbstractApplication):
     updated = None
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
     last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
+    _redirect_uris = models.TextField(db_column='redirect_uris')
+
+    @property
+    def redirect_uris(self):
+        if not self.is_in_house:
+            return self._redirect_uris
+
+        redirect_uris = []
+        # pylint: disable=no-member
+        for redirect_uri in self._redirect_uris.split():
+            if not is_absolute_uri(redirect_uri):
+                redirect_uris.append(f"https://{GeneralConfig.get_site_domain()}{redirect_uri}")
+            else:
+                redirect_uris.append(redirect_uri)
+        return ' '.join(redirect_uris)
 
     objects = ApplicationManager()
+
+    def redirect_uri_allowed(self, uri):
+        for allowed_uri in self.redirect_uris.split():
+            if is_same_url_until_path(allowed_uri, uri):
+                return True
+        return False
 
     class Meta(AbstractApplication.Meta):
         swappable = 'OAUTH2_PROVIDER_APPLICATION_MODEL'

@@ -1,10 +1,8 @@
-import re
-
-from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from oauth2_provider.models import AbstractApplication
 
 from apps.domains.oauth2.models import Application
+from lib.utils.url import is_same_url_until_domain
 
 
 class ClientHelper:
@@ -31,9 +29,11 @@ class ClientHelper:
 
     @staticmethod
     def assert_in_house_client_redirect_uri(client: Application, redirect_uri: str):
-        if client.is_in_house and re.search(rf'{settings.IN_HOUSE_CLIENT_REDIRECT_URI_REGEX}', redirect_uri) is not None:
-            return
-        if client.is_in_house and redirect_uri == 'app://authorized':
-            return
+        if not client.is_in_house:
+            raise PermissionDenied()
+
+        for client_redirect_uri in client.redirect_uris.split():
+            if is_same_url_until_domain(redirect_uri, client_redirect_uri):
+                return
 
         raise PermissionDenied()
