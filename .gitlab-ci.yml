@@ -91,6 +91,7 @@ production:
   when: manual
   only:
   - master
+  allow_failure: false
   variables:
     ENVIRONMENT: "production"
     ECR_REPO_URL: $PROD_ACCOUNT_ECR
@@ -101,7 +102,7 @@ push-dev-image-to-docker-hub:
   <<: *deployment
   stage: push-dev-image-to-docker-hub
   only:
-  - feature/docker_push
+  - master
   when: on_success
   variables:
     DOCKER_DEV_ID: $DOCKER_DEV_ID
@@ -113,7 +114,6 @@ development-manual:
   <<: *deployment
   stage: manual-deploy
   when: manual
-  allow_failure: false
   except:
   - master
   variables:
