@@ -98,7 +98,7 @@ production:
     AWS_SECRET_ACCESS_KEY: $PROD_AWS_SECRET_ACCESS_KEY
 
 push-to-docker-hub:
-   <<: *deployment
+  <<: *deployment
   stage: push-to-docker-hub
   only:
   - docker-push
