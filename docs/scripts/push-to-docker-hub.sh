@@ -18,7 +18,7 @@ run_and_check_exit_code() {
     done
 }
 
-run_and_check_exit_code "docker login -u $DOCKER_ID -p $DOCKER_PASSWORD"
+run_and_check_exit_code "docker login -u $DOCKER_DEV_ID -p $DOCKER_DEV_PASSWORD"
 run_and_check_exit_code "docker tag development/account/uwsgi:$TAG ridibooks/account-dev"
 run_and_check_exit_code "docker push ridibooks/account-dev"
 if [ $? -ne 0 ]; then

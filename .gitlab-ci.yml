@@ -103,9 +103,8 @@ push-to-docker-hub:
   only:
   - master
   variables:
-    DOCKER_ID: $DOCKER_ID
-    DOCKER_PASSWORD: $DOCKER_PASSWORD
-    DOCKER_REPO_URL: $DOCKER_REPO_URL
+    DOCKER_DEV_ID: $DOCKER_DEV_ID
+    DOCKER_DEV_PASSWORD: $DOCKER_DEV_PASSWORD
   script:
      - sh docs/scripts/push-to-docker-hub.sh
 
