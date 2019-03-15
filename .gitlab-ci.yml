@@ -6,6 +6,7 @@ stages:
 - deploy-development
 - deploy-staging
 - deploy-productiuon
+- push-to-docker-hub
 
 pytest:
   stage: build
@@ -96,6 +97,18 @@ production:
     AWS_ACCESS_KEY_ID: $PROD_AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $PROD_AWS_SECRET_ACCESS_KEY
 
+push-to-docker-hub:
+   <<: *deployment
+  stage: push-to-docker-hub
+  only:
+  - docker-push
+  variables:
+    ENVIRONMENT: "development"
+    DOCKER_ID: $DOCKER_ID
+    DOCKER_PASSWORD: $DOCKER_PASSWORD
+    DOCKER_REPO_URL: $DOCKER_REPO_URL
+   script:
+     - sh docs/scripts/push-to-docker-hub.sh
 
 development-manual:
   <<: *deployment
