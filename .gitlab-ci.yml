@@ -36,7 +36,7 @@ build:
   image: ridibooks/python:gitlab-ci-2018.11.12.1
   stage: build
   only:
-  - docker_push
+  - feature/docker_push
 
   before_script:
   - export TAG=${CI_COMMIT_SHA::8}
@@ -101,7 +101,7 @@ push-to-docker-hub:
   <<: *deployment
   stage: push-to-docker-hub
   only:
-  - docker_push
+  - feature/docker_push
   variables:
     ENVIRONMENT: "development"
     DOCKER_ID: $DOCKER_ID
