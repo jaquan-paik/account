@@ -88,23 +88,29 @@ pipenv run make pm-test
 ```
 
 # 4. ridibooks/account-dev 이미지 이용 가이드
-- 계정 서버에 변경이 가능한 값들과 설명
-    - site_domain
-        - 이미지의 도메인
-        - default : `account.dev.ridi.io`
-    - allowed_hosts
-        - django site가 서빙할 수 있는 호스트의 목록
-        - white space delimiter 구분을 한다.
-        - default : `account.dev.ridi.io account.test.ridi.io`
-    - cookie_root_domain
-        - 쿠키의 도메인
-        - default : `.ridi.io`
-    - store_url
-        - store 주소
-        - default : `https://master.test.ridi.io`
-    - ridibooks_login_url
-        - 리디북스의 로그인 페이지 주소
-        - default : `https://master.test.ridi.io/account/login`
+- 변경이 가능한 설정 값들과 설정 방법
+    - 변경 가능한 설정 값
+        - site_domain
+            - 사이트 도메인
+            - default : `account.dev.ridi.io`
+        - allowed_hosts
+            - django site가 서빙할 수 있는 호스트의 목록
+            - white space delimiter 구분을 한다
+            - 특별한 경우가 아니라면 `site_domain`과 같아야 한다
+            - default : `account.dev.ridi.io account.test.ridi.io`
+        - cookie_root_domain
+            - 쿠키의 도메인
+            - default : `.ridi.io`
+        - store_url
+            - store 주소
+            - default : `https://master.test.ridi.io`
+        - ridibooks_login_url
+            - 리디북스의 로그인 페이지 주소
+            - default : `https://master.test.ridi.io/account/login`
+
+    - 설정 방법
+        - 도커 실행시 지정된 키를 환경변수에 원하는 값으로 설정하면 변경 됨
+        - 아래의 예시에서 확인 할 수 있음
 
 - docker-compose.yml 예시 및 주의 사항
     - 예시
@@ -125,9 +131,9 @@ pipenv run make pm-test
         environment:
           - site_domain=account.test.ridi.io
           - allowed_hosts=account.test.ridi.io
-          - sentry_dsn= # 실제 dev에서 오는 에러만 받기 위해서 꼭 sentry_dsn을 빈값으로 설정해야 합니다.
+          - sentry_dsn= # sentry_dsn을 빈값으로 설정해야 함
 
-        account.test.ridi.io: # 위에 설정한 site_domain 과 이름이 같아야 합니다.
+        account.test.ridi.io: # nginx의 서비스 이름은 반드시 설정한 site_domain 과 이름이 같아야 함
           image: nginx:stable
           restart: always
           volumes:
@@ -141,8 +147,9 @@ pipenv run make pm-test
             - account-www
     ```
     - 주의 사항
-        - nginx의 서비스 이름은 지정한 `site_domain`과 같아야 합니다.
-        - `sentry_dsn`은 반드시 빈값으로 설정해야합니다.
+        - nginx의 서비스 이름은 반드시 지정한 `site_domain`과 같아야 함
+        - `sentry_dsn`은 반드시 빈값으로 설정해야 함
+
 - nignx 필수 설정 값
     ```
     server {
@@ -171,8 +178,8 @@ pipenv run make pm-test
 
 - 동작 하지 않을때 확인 할 것들
     - docker-compose 에서 nginx의 서비스의 이름이 `site_domain`과 동일한지
-        - ridi/callback에서 ridi/oauth2로 request를 보내는데, 이때 container는 pc의 hosts를 가지고 있지 않기 때문에 해당 설정은 필수임.
+        - ridi/callback 요청을 받으면 해당 요청의 값을 가지고 ridi/oauth2로 self request를 보내는데, 이때 container는 pc의 hosts를 가지고 있지 않기 때문에 해당 설정은 필수임
     - vpn 혹은 사내에서 요청을 보내고 있는지
-        - `ridibooks/account-dev` 이미지는 `account.dev.ridi.io` 와 동일한 인프라를 사용하고 있기 때문
-    - 요청을 지정한 `site_domain`으로 보내는지 
-        - matser.test.ridi.io 에서는 account.dev.ridi.io로 보내고 있음. 사용할때마다 적절히 변경이 필요함
+        - ridibooks/account-dev 이미지는 `account.dev.ridi.io` 와 동일한 인프라를 사용하고 있기 때문에 보안 옵션이 dev와 동일함
+
+    - 위에 것들을 모두 확인 한 후에도 정삭 작동하지 않는다면 계정팀에게 문의해주시기 바랍니다.
