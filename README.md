@@ -93,8 +93,8 @@ pipenv run make pm-test
         - site_domain
             - 사이트 도메인
             - default : `account.dev.ridi.io`
-        - allowed_hosts
-            - django site가 서빙할 수 있는 호스트의 목록
+        - [allowed_hosts](https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-ALLOWED_HOSTS)
+            - request의 host header로  허용되는 도메인 목록
             - white space delimiter 구분을 한다
             - 특별한 경우가 아니라면 `site_domain`과 같아야 한다
             - default : `account.dev.ridi.io account.test.ridi.io`
@@ -112,69 +112,25 @@ pipenv run make pm-test
         - 도커 실행시 지정된 키를 환경변수에 원하는 값으로 설정하면 변경 됨
         - 아래의 예시에서 확인 할 수 있음
 
-- docker-compose.yml 예시 및 주의 사항
-    - 예시
-    ```
-    # 원하는 설정이 다음과 같다면 
-    # site_domain : account.test.ridi.io
-    # allowed_hosts : account.test.ridi.io
-    # store_url: https://master.test.ridi.io (default)
-    # ridibooks_login_url : https://master.test.ridi.io/account/login (default)
-    # cookie_root_domain : .ridi.io (default)
+- docker-compose 구성시 주의 사항
+    - nginx의 서비스 이름은 반드시 지정한 `site_domain`과 같아야 함
+    - `sentry_dsn`은 반드시 빈값으로 설정해야 함
+    - [예시 account-dev-docker-compose.yml](https://github.com/ridi/account/blob/master/accoutn-dev-docker-compose.yml)
 
-    version: '3.4'
-    services:
-      account-www:
-        image: ridibooks/account-dev
-        command: ["/usr/local/bin/uwsgi", "--ini", "/etc/uwsgi/account.ini"]
-        container_name: account-www
-        environment:
-          - site_domain=account.test.ridi.io
-          - allowed_hosts=account.test.ridi.io
-          - sentry_dsn= # sentry_dsn을 빈값으로 설정해야 함
-
-        account.test.ridi.io: # nginx의 서비스 이름은 반드시 설정한 site_domain 과 이름이 같아야 함
-          image: nginx:stable
-          restart: always
-          volumes:
-            - ./docs/dev/nginx:/etc/nginx/conf.d:ro
-            - ./docs/dev/cert:/etc/nginx/cert/:ro
-          ports:
-            - 443:443
-          depends_on:
-            - account-www
-          links:
-            - account-www
-    ```
-    - 주의 사항
-        - nginx의 서비스 이름은 반드시 지정한 `site_domain`과 같아야 함
-        - `sentry_dsn`은 반드시 빈값으로 설정해야 함
-
-- nignx 필수 설정 값
-    ```
-    server {
-        listen 443 ssl http2;
-
-        ssl on;
-        ssl_certificate /etc/nginx/cert/dev.crt;
-        ssl_certificate_key /etc/nginx/cert/dev.key;
-
-        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-        ssl_ciphers AESGCM:HIGH:!aNULL:!MD5;
-        ssl_session_cache shared:SSL:30m;
-        ssl_session_timeout 5m;
-        ssl_prefer_server_ciphers on;
-
-        location / {
-            proxy_redirect off;
-            proxy_pass_header Server;
-            proxy_set_header Host $http_host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_pass http://account-www:7001;
-        }
-    }
-    ```
+- nginx 필수 세팅과 설명
+    - proxy_redirect
+        - off
+    - [proxy_pass_header](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass_header)
+        - Server
+    - [proxy_set_header](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_set_header)
+        - Host $http_host
+        - X-Real-IP $remote_addr
+        - X-Forwarded-Proto $scheme
+    - [proxy_pass](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass)
+        - http://account-www:7001
+    - [예시 account.conf](https://github.com/ridi/account/blob/master/docs/dev/nginx/account.conf)
+    - [예시 cert](https://github.com/ridi/account/blob/master/docs/dev/cert/)
+    
 
 - 동작 하지 않을때 확인 할 것들
     - docker-compose 에서 nginx의 서비스의 이름이 `site_domain`과 동일한지
