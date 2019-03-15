@@ -113,6 +113,7 @@ development-manual:
   <<: *deployment
   stage: manual-deploy
   when: manual
+  allow_failure: false
   except:
   - master
   variables:
