@@ -101,7 +101,8 @@ push-dev-image-to-docker-hub:
   <<: *deployment
   stage: push-dev-image-to-docker-hub
   only:
-  - master
+  - feature/docker_push
+  when: on_success
   variables:
     DOCKER_DEV_ID: $DOCKER_DEV_ID
     DOCKER_DEV_PASSWORD: $DOCKER_DEV_PASSWORD
