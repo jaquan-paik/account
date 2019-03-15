@@ -117,8 +117,8 @@ pipenv run make pm-test
     - `sentry_dsn`은 반드시 빈값으로 설정해야 함
     - [예시 account-dev-docker-compose.yml](https://github.com/ridi/account/blob/master/accoutn-dev-docker-compose.yml)
 
-- nginx 필수 세팅과 설명
-    - proxy_redirect
+- nginx 필수 세팅
+    - [proxy_redirect](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_redirect)
         - off
     - [proxy_pass_header](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass_header)
         - Server
