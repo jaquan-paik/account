@@ -2,11 +2,11 @@ image: ridibooks/python:bootstrap-django-2018.11.12.2
 
 stages:
 - build
-- push-to-docker-hub
 - manual-deploy
 - deploy-development
 - deploy-staging
 - deploy-productiuon
+- push-to-docker-hub
 
 pytest:
   stage: build
@@ -36,7 +36,7 @@ build:
   image: ridibooks/python:gitlab-ci-2018.11.12.1
   stage: build
   only:
-  - feature/docker_push
+  - master
 
   before_script:
   - export TAG=${CI_COMMIT_SHA::8}
@@ -45,11 +45,11 @@ build:
   - AWS_ACCESS_KEY_ID=$DEV_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DEV_AWS_SECRET_ACCESS_KEY make ci-settings ns=development
   - ENVIRONMENT=development docker-compose -f ./docs/docker/compose/build.yml build
 
-#  - AWS_ACCESS_KEY_ID=$PROD_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY make ci-settings ns=staging
-#  - ENVIRONMENT=staging docker-compose -f ./docs/docker/compose/build.yml build
-#
-#  - AWS_ACCESS_KEY_ID=$PROD_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY make ci-settings ns=production
-#  - ENVIRONMENT=production docker-compose -f ./docs/docker/compose/build.yml build
+  - AWS_ACCESS_KEY_ID=$PROD_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY make ci-settings ns=staging
+  - ENVIRONMENT=staging docker-compose -f ./docs/docker/compose/build.yml build
+
+  - AWS_ACCESS_KEY_ID=$PROD_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY make ci-settings ns=production
+  - ENVIRONMENT=production docker-compose -f ./docs/docker/compose/build.yml build
 
 
 .deployment-template: &deployment
@@ -101,9 +101,8 @@ push-to-docker-hub:
   <<: *deployment
   stage: push-to-docker-hub
   only:
-  - feature/docker_push
+  - master
   variables:
-    ENVIRONMENT: "development"
     DOCKER_ID: $DOCKER_ID
     DOCKER_PASSWORD: $DOCKER_PASSWORD
     DOCKER_REPO_URL: $DOCKER_REPO_URL
