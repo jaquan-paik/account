@@ -107,7 +107,7 @@ push-to-docker-hub:
     DOCKER_ID: $DOCKER_ID
     DOCKER_PASSWORD: $DOCKER_PASSWORD
     DOCKER_REPO_URL: $DOCKER_REPO_URL
-   script:
+  script:
      - sh docs/scripts/push-to-docker-hub.sh
 
 development-manual:
