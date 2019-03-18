@@ -36,7 +36,7 @@ build:
   image: ridibooks/python:gitlab-ci-2018.11.12.1
   stage: build
   only:
-  - feature/docker_push
+  - master
 
   before_script:
   - export TAG=${CI_COMMIT_SHA::8}
@@ -66,7 +66,7 @@ development:
   <<: *deployment
   stage: deploy-development
   only:
-  - feature/docker_push
+  - master
   variables:
     ENVIRONMENT: "development"
     ECR_REPO_URL: $DEV_ACCOUNT_ECR
@@ -77,7 +77,7 @@ push-dev-image-to-docker-hub:
   <<: *deployment
   stage: push-dev-image-to-docker-hub
   only:
-  - feature/docker_push
+  - master
   when: on_success
   allow_failure: true
   variables:
@@ -115,7 +115,7 @@ development-manual:
   stage: manual-deploy
   when: manual
   except:
-  - feature/docker_push
+  - master
   variables:
     ENVIRONMENT: "development"
     ECR_REPO_URL: $DEV_ACCOUNT_ECR
@@ -136,7 +136,7 @@ staging-manual:
   stage: manual-deploy
   when: manual
   except:
-  - feature/docker_push
+  - master
   variables:
     ENVIRONMENT: "staging"
     ECR_REPO_URL: $PROD_ACCOUNT_ECR
