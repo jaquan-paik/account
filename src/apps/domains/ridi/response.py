@@ -1,5 +1,3 @@
-import json
-
 from django.http import HttpResponseRedirect
 from django.forms import Form
 from django.shortcuts import render

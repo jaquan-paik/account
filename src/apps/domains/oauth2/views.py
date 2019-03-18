@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.views import View
 
 from apps.domains.oauth2.forms import AuthorizationForm
+from apps.domains.oauth2.services.oauth2_authorization_code_service import OAuth2AuthorizationCodeService
 from apps.domains.ridi.response import get_template_from_form_error
 
 
@@ -11,12 +12,12 @@ class AuthorizationView(LoginRequiredMixin, View):
         authorize_form = AuthorizationForm(request.GET)
         if not authorize_form.is_valid():
             return get_template_from_form_error(request, authorize_form.errors)
-        # cleaned_data = authorize_form.clean()
-        # code = OAuth2AuthorizationCodeService.create_code(cleaned_data['client_id'], cleaned_data['redirect_uri'], request.user.idx)
+        cleaned_data = authorize_form.clean()
+        code = OAuth2AuthorizationCodeService.create_code(cleaned_data['client_id'], cleaned_data['redirect_uri'], request.user.idx)
         #
         # redirect_param = {'code': code}
         # if cleaned_data['state']:
         #     redirect_param['state'] = cleaned_data['state']
         #
         # redirect_uri = generate_query_url(cleaned_data['redirect_uri'], redirect_param)
-        return JsonResponse(data={}, status=200)
+        return JsonResponse(data={'code': code}, status=200)
