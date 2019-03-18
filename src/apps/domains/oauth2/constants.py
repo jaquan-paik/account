@@ -47,8 +47,4 @@ class ErrorMessage(BaseConstant):
 
     @classmethod
     def get_code_from_error_message(cls, code):
-        from lib.log.logger import logger
-        logger.info('-' * 100)
-        logger.info(code)
-        logger.info(cls._INT_MAP)
         return cls._INT_MAP.get(code, HttpStatusCodes.C_400_BAD_REQUEST)
