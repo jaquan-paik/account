@@ -22,3 +22,9 @@ class GrantType(BaseConstant):
     REFRESH_TOKEN = 'refresh_token'
 
     _LIST = [AUTHORIZATION_CODE, PASSWORD, CLIENT_CREDENTIALS, REFRESH_TOKEN]
+
+
+class ResponseType(BaseConstant):
+    CODE = 'code'
+
+    _LIST = [CODE]
