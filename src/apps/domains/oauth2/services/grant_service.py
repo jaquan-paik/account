@@ -1,12 +1,10 @@
-# from apps.domains.oauth2.constants import SCOPE
-# from apps.domains.oauth2.models.models import Grant, Client
-# from apps.domains.oauth2.models.repositories.grant_repository import GrantRepository
+from apps.domains.oauth2.models import Application as Client
+from apps.domains.oauth2.repositories.grant_repository import GrantRepository
 
 
 class GrantService:
     @staticmethod
-    def create_grant(client, redirect_uri: str, u_idx: int, scope=''):
-        pass
-# grant = GrantRepository.create_grant(client, redirect_uri, u_idx, scope)
-# return grant
+    def create_grant(client: Client, redirect_uri: str, u_idx: int, scope='all'):
+        grant = GrantRepository.create_grant(client, redirect_uri, u_idx, scope)
+        return grant
 #
