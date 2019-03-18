@@ -2,10 +2,11 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 
 from infra.network.constants.http_status_code import HttpStatusCodes
+from lib.ridibooks.store_auth.drf_middlewares import DrfAuthentication
 
 
 class AuthorizeView(APIView):
-    # authentication_classes = (authentication.TokenAuthentication,)
+    authentication_classes = (DrfAuthentication,)
 
     def get(self, request):
         # authorize_form = AuthorizeForm(request.GET)

@@ -32,7 +32,7 @@ services:
       - account-redis
       - account-mariadb
 
-  account.local.ridi.io: # 로컬이나 테스트 환경에서 self call 할 때, host 설정을 위해 domain으로 container 이름을 설정함.
+  account.dev.ridi.io: # 로컬이나 테스트 환경에서 self call 할 때, host 설정을 위해 domain으로 container 이름을 설정함.
     image: nginx:stable
     container_name: account.local.ridi.io
     restart: always
