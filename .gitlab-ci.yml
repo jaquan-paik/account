@@ -4,9 +4,9 @@ stages:
 - build
 - manual-deploy
 - deploy-development
+- push-dev-image-to-docker-hub
 - deploy-staging
 - deploy-productiuon
-- push-dev-image-to-docker-hub
 
 pytest:
   stage: build
@@ -36,7 +36,7 @@ build:
   image: ridibooks/python:gitlab-ci-2018.11.12.1
   stage: build
   only:
-  - master
+  - feature/docker_push
 
   before_script:
   - export TAG=${CI_COMMIT_SHA::8}
@@ -66,12 +66,25 @@ development:
   <<: *deployment
   stage: deploy-development
   only:
-  - master
+  - feature/docker_push
   variables:
     ENVIRONMENT: "development"
     ECR_REPO_URL: $DEV_ACCOUNT_ECR
     AWS_ACCESS_KEY_ID: $DEV_AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $DEV_AWS_SECRET_ACCESS_KEY
+
+push-dev-image-to-docker-hub:
+  <<: *deployment
+  stage: push-dev-image-to-docker-hub
+  only:
+  - feature/docker_push
+  when: on_success
+  allow_failure: true
+  variables:
+    DOCKER_DEV_ID: $DOCKER_DEV_ID
+    DOCKER_DEV_PASSWORD: $DOCKER_DEV_PASSWORD
+  script:
+     - sh docs/scripts/push-dev-image-to-docker-hub.sh
 
 staging:
   <<: *deployment
@@ -91,31 +104,18 @@ production:
   when: manual
   only:
   - master
-  allow_failure: false
   variables:
     ENVIRONMENT: "production"
     ECR_REPO_URL: $PROD_ACCOUNT_ECR
     AWS_ACCESS_KEY_ID: $PROD_AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $PROD_AWS_SECRET_ACCESS_KEY
 
-push-dev-image-to-docker-hub:
-  <<: *deployment
-  stage: push-dev-image-to-docker-hub
-  only:
-  - master
-  when: on_success
-  variables:
-    DOCKER_DEV_ID: $DOCKER_DEV_ID
-    DOCKER_DEV_PASSWORD: $DOCKER_DEV_PASSWORD
-  script:
-     - sh docs/scripts/push-dev-image-to-docker-hub.sh
-
 development-manual:
   <<: *deployment
   stage: manual-deploy
   when: manual
   except:
-  - master
+  - feature/docker_push
   variables:
     ENVIRONMENT: "development"
     ECR_REPO_URL: $DEV_ACCOUNT_ECR
@@ -136,7 +136,7 @@ staging-manual:
   stage: manual-deploy
   when: manual
   except:
-  - master
+  - feature/docker_push
   variables:
     ENVIRONMENT: "staging"
     ECR_REPO_URL: $PROD_ACCOUNT_ECR
