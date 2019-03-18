@@ -1,0 +1,28 @@
+# site_domain : account.master.test.ridi.io
+# allowed_hosts : account.master.test.ridi.io
+# store_url: https://master.test.ridi.io (default)
+# ridibooks_login_url : https://master.test.ridi.io/account/login (default)
+# cookie_root_domain : .ridi.io (default)
+
+version: '3.4'
+services:
+  account-www:
+    image: ridibooks/account-dev
+    container_name: account-www
+    environment:
+      - site_domain=account.master.test.ridi.io
+      - allowed_hosts=account.master.test.ridi.io account.dev.ridi.io
+      - sentry_dsn= # sentry_dsn을 빈값으로 설정해야 함
+
+  account.master.test.ridi.io:
+    image: nginx:stable
+    restart: always
+    volumes:
+    - ./docs/dev/nginx:/etc/nginx/conf.d:ro
+    - ./docs/dev/cert:/etc/nginx/cert/:ro
+    ports:
+    - 443:443
+    depends_on:
+    - account-www
+    links:
+    - account-www
