@@ -2,15 +2,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from oauth2_provider.models import AbstractApplication
 
 from apps.domains.oauth2.exceptions import NotExistedClient, NotInHouseClient, InvalidAuthorizationGrantType, InvalidRedirectUri
-from apps.domains.oauth2.models import Application
+from apps.domains.oauth2.models import Application as Client
 from lib.utils.url import is_same_url_until_domain, is_same_url
 
 
 class ClientService:
     @classmethod
-    def get_client(cls, client_id: str) -> Application:
+    def get_client(cls, client_id: str) -> Client:
         try:
-            client = Application.objects.get(client_id=client_id)
+            client = Client.objects.get(client_id=client_id)
         except ObjectDoesNotExist:
             raise NotExistedClient
 
@@ -20,7 +20,7 @@ class ClientService:
         return client
 
     @classmethod
-    def get_in_house_client(cls, client_id: str) -> Application:
+    def get_in_house_client(cls, client_id: str) -> Client:
         client = cls.get_client(client_id)
 
         if not client.is_in_house:
@@ -29,7 +29,7 @@ class ClientService:
         return client
 
     @staticmethod
-    def assert_in_house_client_redirect_uri(client: Application, redirect_uri: str):
+    def assert_in_house_client_redirect_uri(client: Client, redirect_uri: str):
         if not client.is_in_house:
             raise NotInHouseClient
 
@@ -40,7 +40,7 @@ class ClientService:
         raise InvalidRedirectUri
 
     @classmethod
-    def assert_house_client_redirect_uri(cls, client: Application, redirect_uri: str):
+    def assert_house_client_redirect_uri(cls, client: Client, redirect_uri: str):
         if client.is_in_house:
             cls.assert_in_house_client_redirect_uri(client, redirect_uri)
             return
