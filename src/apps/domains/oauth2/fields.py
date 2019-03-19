@@ -16,7 +16,7 @@ class ResponseTypeCodeField(forms.CharField):
         if not response_type:
             raise forms.ValidationError('response_type is required')
         if response_type != ResponseType.CODE:
-            raise forms.ValidationError('unsupported response_type')
+            raise forms.ValidationError('this response_type is unsupported')
 
 
 class RedirectUriField(forms.URLField):
