@@ -1,0 +1,12 @@
+{% extends "error.html" %}
+
+{% block title %}
+    오류가 발생했습니다.
+{% endblock title %}
+
+{% block content %}
+    <h2 class="error_title">{{ title }}</h2>
+    <p class="error_description">
+        <strong>{{ message }}</strong><br>
+    </p>
+{% endblock content %}
