@@ -2,6 +2,7 @@ import json
 from typing import Dict
 
 from infra.configure.config import GeneralConfig
+from lib.decorators.alarm import log_execute_time, LogExecuteKey
 from lib.log.logger import logger
 from lib.ridibooks.api.base import BaseApi
 from lib.ridibooks.api.exceptions import InvalidRequestException, InvalidUserDormantedException, InvalidUserNotFoundException, \
@@ -19,13 +20,19 @@ class StoreApi(BaseApi):
     IS_LOGINABLE = '/api/account/is-loginable'
 
     def get_account_info(self) -> Dict:
-        return self._request(method=HttpMethod.GET, path=self.ACCOUNT_INFO)
+        return log_execute_time(LogExecuteKey.STORE_API_ACCOUNT_INFO, timeout=30, always=False, with_sentry_if_exceeded=True)(
+            self._request
+        )(
+            method=HttpMethod.GET, path=self.ACCOUNT_INFO
+        )
 
     def is_loginable(self, username: str, password: str) -> Dict:
         try:
-            return self._request_with_internal_server_auth(
-                token_key=AuthList.ACCOUNT_TO_STORE,
-                method=HttpMethod.POST, path=self.IS_LOGINABLE, data={'u_id': username, 'password': password}, is_json_data=True
+            return log_execute_time(LogExecuteKey.STORE_API_ACCOUNT_IS_LOGINABLE, timeout=30, always=False, with_sentry_if_exceeded=True)(
+                self._request_with_internal_server_auth
+            )(
+                token_key=AuthList.ACCOUNT_TO_STORE, method=HttpMethod.POST, path=self.IS_LOGINABLE,
+                data={'u_id': username, 'password': password}, is_json_data=True
             )
 
         except HTTPException as e:
