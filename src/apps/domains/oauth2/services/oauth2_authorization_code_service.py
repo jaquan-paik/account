@@ -1,5 +1,6 @@
 from apps.domains.oauth2.services.client_service import ClientService
 from apps.domains.oauth2.services.grant_service import GrantService
+from apps.domains.oauth2.constants import DEFAULT_SCOPE
 
 
 class OAuth2AuthorizationCodeService:
@@ -13,5 +14,5 @@ class OAuth2AuthorizationCodeService:
         client = ClientService.get_client(client_id)
         cls._authenticate_user(client.skip_authorization)
         ClientService.assert_house_client_redirect_uri(client, redirect_uri)
-        code = GrantService.create_grant(client, redirect_uri, u_idx).code
+        code = GrantService.create_grant(client, redirect_uri, u_idx, DEFAULT_SCOPE).code
         return code
