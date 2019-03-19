@@ -5,6 +5,8 @@ import requests
 from requests import Response
 from requests.exceptions import HTTPError, RequestException
 
+from lib.log import sentry
+from lib.log.logger import logger
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY, HttpMethod, PHP_SESSION_COOKIE_KEY
 from lib.ridibooks.common.exceptions import HTTPException, InvalidResponseException, ServerException
 from lib.ridibooks.internal_server_auth.helpers.internal_server_auth_helper import InternalServerAuthHelper
@@ -40,7 +42,9 @@ class BaseApi:
 
         try:
             response = requests.request(**kwargs)
-        except RequestException:
+        except RequestException as e:
+            logger.error(f'[RIDI API ERROR] {self.domain}{path}, error: {e.errno}')
+            sentry.exception()
             raise ServerException()
 
         return self._process_response(response=response)
