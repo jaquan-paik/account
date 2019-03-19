@@ -37,13 +37,8 @@ class InvalidClient(OAuth2Error):
     description = 'invalid client'
 
 
-class UnknownClient(InvalidClient):
-    description = 'this client is unknown client'
-
-
-class UnauthorizedClient(InvalidClient):
-    error = 'unauthorized_client'
-    description = 'this client is not authorized to use this authorization grant type.'
+class NotExistedClient(InvalidClient):
+    description = 'this client is not existed'
 
 
 class NotInHouseClient(InvalidClient):
@@ -51,7 +46,13 @@ class NotInHouseClient(InvalidClient):
     description = 'this client is not in-house client'
 
 
-class InvalidRedirectUri(InvalidClient):
+class InvalidRedirectUri(OAuth2Error):
     error = 'invalid_redirect_uri'
     status_code = HttpStatusCodes.C_403_FORBIDDEN
-    description = 'this client can not use this redirect uri'
+    description = 'this client is not authorized to use this redirect uri'
+
+
+class InvalidAuthorizationGrantType(OAuth2Error):
+    error = 'invalid_authorization_grant_type'
+    status_code = HttpStatusCodes.C_403_FORBIDDEN
+    description = 'this client is not authorized to use this authorization grant type.'

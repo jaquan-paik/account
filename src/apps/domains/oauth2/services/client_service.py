@@ -1,7 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from oauth2_provider.models import AbstractApplication
 
-from apps.domains.oauth2.exceptions import UnknownClient, NotInHouseClient, UnauthorizedClient, InvalidRedirectUri
+from apps.domains.oauth2.exceptions import NotExistedClient, NotInHouseClient, InvalidAuthorizationGrantType, InvalidRedirectUri
 from apps.domains.oauth2.models import Application
 from lib.utils.url import is_same_url_until_domain, is_same_url
 
@@ -12,10 +12,10 @@ class ClientService:
         try:
             client = Application.objects.get(client_id=client_id)
         except ObjectDoesNotExist:
-            raise UnknownClient
+            raise NotExistedClient
 
         if client.authorization_grant_type != AbstractApplication.GRANT_AUTHORIZATION_CODE:
-            raise UnauthorizedClient
+            raise InvalidAuthorizationGrantType
 
         return client
 
