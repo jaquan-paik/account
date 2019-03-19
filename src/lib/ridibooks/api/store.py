@@ -20,7 +20,7 @@ class StoreApi(BaseApi):
     IS_LOGINABLE = '/api/account/is-loginable'
 
     def get_account_info(self) -> Dict:
-        return log_execute_time(LogExecuteKey.STORE_API_ACCOUNT_INFO, timeout=0, always=False, with_sentry_if_exceeded=True)(
+        return log_execute_time(LogExecuteKey.STORE_API_ACCOUNT_INFO, timeout=30, always=False, with_sentry_if_exceeded=True)(
             self._request
         )(
             method=HttpMethod.GET, path=self.ACCOUNT_INFO
