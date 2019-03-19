@@ -4,7 +4,7 @@ from django.views import View
 
 from apps.domains.oauth2.forms import AuthorizationForm
 from apps.domains.oauth2.services.oauth2_authorization_code_service import OAuth2AuthorizationCodeService
-from apps.domains.ridi.response import get_template_from_form_error
+from apps.domains.ridi.response import get_invalid_form_template_response
 from lib.utils.url import generate_query_url
 
 
@@ -12,7 +12,7 @@ class AuthorizationView(LoginRequiredMixin, View):
     def get(self, request):
         authorize_form = AuthorizationForm(request.GET)
         if not authorize_form.is_valid():
-            return get_template_from_form_error(request, authorize_form.errors)
+            return get_invalid_form_template_response(request, authorize_form)
         cleaned_data = authorize_form.clean()
         code = OAuth2AuthorizationCodeService.create_code(cleaned_data['client_id'], cleaned_data['redirect_uri'], request.user.idx)
 
