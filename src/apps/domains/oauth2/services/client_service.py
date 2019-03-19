@@ -1,6 +1,7 @@
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.exceptions import ObjectDoesNotExist
 from oauth2_provider.models import AbstractApplication
 
+from apps.domains.oauth2.exceptions import UnknownClient, NotInHouseClient, UnauthorizedClient, InvalidRedirectUri
 from apps.domains.oauth2.models import Application
 from lib.utils.url import is_same_url_until_domain, is_same_url
 
@@ -11,10 +12,10 @@ class ClientService:
         try:
             client = Application.objects.get(client_id=client_id)
         except ObjectDoesNotExist:
-            raise PermissionDenied()
+            raise UnknownClient
 
         if client.authorization_grant_type != AbstractApplication.GRANT_AUTHORIZATION_CODE:
-            raise NotImplementedError()
+            raise UnauthorizedClient
 
         return client
 
@@ -23,20 +24,20 @@ class ClientService:
         client = cls.get_client(client_id)
 
         if not client.is_in_house:
-            raise PermissionDenied()
+            raise NotInHouseClient
 
         return client
 
     @staticmethod
     def assert_in_house_client_redirect_uri(client: Application, redirect_uri: str):
         if not client.is_in_house:
-            raise PermissionDenied()
+            raise NotInHouseClient
 
         for client_redirect_uri in client.redirect_uris.split():
             if is_same_url_until_domain(redirect_uri, client_redirect_uri):
                 return
 
-        raise PermissionDenied()
+        raise InvalidRedirectUri
 
     @classmethod
     def assert_house_client_redirect_uri(cls, client: Application, redirect_uri: str):
@@ -48,4 +49,4 @@ class ClientService:
             if is_same_url(redirect_uri, client_redirect_uri):
                 return
 
-        raise PermissionDenied()
+        raise InvalidRedirectUri
