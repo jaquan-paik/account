@@ -5,10 +5,12 @@ from django.views import View
 from apps.domains.oauth2.forms import AuthorizationForm
 from apps.domains.oauth2.services.oauth2_authorization_code_service import OAuth2AuthorizationCodeService
 from lib.base.response import get_invalid_form_template_response
+from lib.decorators.oauth2_error_handler import oauth2_error_handler
 from lib.utils.url import generate_query_url
 
 
 class AuthorizationView(LoginRequiredMixin, View):
+    @oauth2_error_handler(return_template=True)
     def get(self, request):
         authorize_form = AuthorizationForm(request.GET)
         if not authorize_form.is_valid():
