@@ -4,7 +4,7 @@ from django.views import View
 
 from apps.domains.oauth2.forms import AuthorizationForm
 from apps.domains.oauth2.services.oauth2_authorization_code_service import OAuth2AuthorizationCodeService
-from apps.domains.ridi.response import get_invalid_form_template_response
+from lib.base.response import get_invalid_form_template_response
 from lib.utils.url import generate_query_url
 
 
