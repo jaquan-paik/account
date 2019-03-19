@@ -15,10 +15,3 @@ class OAuth2AuthorizationCodeService:
         ClientService.assert_house_client_redirect_uri(client, redirect_uri)
         code = GrantService.create_grant(client, redirect_uri, u_idx).code
         return code
-
-    # @staticmethod
-    # def create_token(client_id: str, client_secret: str, redirect_uri: str, code: str) -> dict:
-    #     client = ClientService.get_confidential_client(client_id, client_secret, GrantType.AUTHORIZATION_CODE)
-    #     grant = GrantService.get_grant(client, redirect_uri, code)
-    #     return TokenHelper.generate_tokens(grant.user, client, [SCOPE])
-#

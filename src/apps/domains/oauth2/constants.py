@@ -5,6 +5,7 @@ from lib.base.constants import BaseConstant
 JWT_VERIFY_MARGIN = -(60 * 10)  # -10분
 ACCESS_TOKEN_EXPIRE_SECONDS = 60 * 60  # 3600, 1hour
 CODE_LENGTH = 30
+SCOPE = 'all'
 
 
 class JwtAlg(BaseConstant):
