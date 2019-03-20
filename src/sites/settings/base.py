@@ -1,15 +1,12 @@
 import os
 
 from infra.configure.constants import SecretKeyName
-from infra.storage.redis.constants import RedisDatabase
-
+from lib.log.setup import setup_logging
 from lib.ridibooks.internal_server_auth.helpers.config_helper import AuthList, ConfigHelper as InternalServerAuthConfigHelper
 from lib.secret.secret import Secret
-from lib.log.setup import setup_logging
 from lib.settings.asserts import assert_allowed_hosts_with_cookie_root_domain
 
 # PATH
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # src dir
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -108,7 +105,7 @@ DATABASES = {
         'PASSWORD': Secret().get(SecretKeyName.WRITE_DB_PASSWORD),
         'HOST': Secret().get(SecretKeyName.WRITE_DB_HOST),
         'PORT': '3306',
-        'CONN_MAX_AGE': 300,
+        'CONN_MAX_AGE': 0,
         'OPTIONS': {
             'sql_mode': 'STRICT_TRANS_TABLES',
             'charset': 'utf8',
@@ -121,15 +118,6 @@ DATABASE_APPS_MAPPING = {
     'account_app': 'account',
 }
 
-CACHES = {
-    'default': {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": Secret().get(SecretKeyName.CACHE_LOCATION),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -169,22 +157,6 @@ AUTH_USER_MODEL = 'account_app.User'
 # Login
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
-
-# Session
-SESSION_COOKIE_AGE = 60 * 12
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = None
-
-SESSION_ENGINE = 'redis_sessions.session'
-SESSION_REDIS_SOCKET_TIMEOUT = 1
-
-SESSION_REDIS = {
-    'host': Secret().get(SecretKeyName.REDIS_HOST),
-    'port': 6379,
-    'db': RedisDatabase.SESSION,
-    'prefix': 'session',
-    'socket_timeout': 1
-}
 
 # OAuth2
 OAUTH2_PROVIDER = {

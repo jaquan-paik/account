@@ -112,6 +112,256 @@
 							"response": []
 						},
 						{
+							"name": "[200]store cors test",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "92b8737d-f614-4ff7-a72b-40024961468e",
+										"exec": [
+											"const h = eval(globals.loadHelpers);",
+											"h.printResponseBody();",
+											"h.testStatus(200);",
+											"",
+											"const jsonData = JSON.parse(responseBody);",
+											"const origin = postman.getResponseHeader(\"Access-Control-Allow-Origin\");",
+											"",
+											"tests[\"Access Control Allow Origin\"] = origin === pm.environment.get('store_host')",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Origin",
+										"value": "{{store_host}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}{{complete_path}}",
+									"host": [
+										"{{host}}{{complete_path}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[200]library cors test",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "92b8737d-f614-4ff7-a72b-40024961468e",
+										"exec": [
+											"const h = eval(globals.loadHelpers);",
+											"h.printResponseBody();",
+											"h.testStatus(200);",
+											"",
+											"const jsonData = JSON.parse(responseBody);",
+											"const origin = postman.getResponseHeader(\"Access-Control-Allow-Origin\");",
+											"",
+											"tests[\"Access Control Allow Origin\"] = origin === pm.environment.get('library_host')",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Origin",
+										"value": "{{library_host}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}{{complete_path}}",
+									"host": [
+										"{{host}}{{complete_path}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[200]view cors test",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "92b8737d-f614-4ff7-a72b-40024961468e",
+										"exec": [
+											"const h = eval(globals.loadHelpers);",
+											"h.printResponseBody();",
+											"h.testStatus(200);",
+											"",
+											"const jsonData = JSON.parse(responseBody);",
+											"const origin = postman.getResponseHeader(\"Access-Control-Allow-Origin\");",
+											"",
+											"tests[\"Access Control Allow Origin\"] = origin === pm.environment.get('view_host')",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Origin",
+										"type": "text",
+										"value": "{{view_host}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}{{complete_path}}",
+									"host": [
+										"{{host}}{{complete_path}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[200]select cors test",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "92b8737d-f614-4ff7-a72b-40024961468e",
+										"exec": [
+											"const h = eval(globals.loadHelpers);",
+											"h.printResponseBody();",
+											"h.testStatus(200);",
+											"",
+											"const jsonData = JSON.parse(responseBody);",
+											"const origin = postman.getResponseHeader(\"Access-Control-Allow-Origin\");",
+											"",
+											"tests[\"Access Control Allow Origin\"] = origin === pm.environment.get('select_host')",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Origin",
+										"type": "text",
+										"value": "{{select_host}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}{{complete_path}}",
+									"host": [
+										"{{host}}{{complete_path}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[200]pay cors test",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "92b8737d-f614-4ff7-a72b-40024961468e",
+										"exec": [
+											"const h = eval(globals.loadHelpers);",
+											"h.printResponseBody();",
+											"h.testStatus(200);",
+											"",
+											"const jsonData = JSON.parse(responseBody);",
+											"const origin = postman.getResponseHeader(\"Access-Control-Allow-Origin\");",
+											"",
+											"tests[\"Access Control Allow Origin\"] = origin === pm.environment.get('pay_host')",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Origin",
+										"type": "text",
+										"value": "{{pay_host}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}{{complete_path}}",
+									"host": [
+										"{{host}}{{complete_path}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "[200]cors block test",
 							"event": [
 								{
@@ -141,12 +391,14 @@
 										"key": "Content-Type",
 										"name": "Content-Type",
 										"type": "text",
-										"value": "application/x-www-form-urlencoded"
+										"value": "application/x-www-form-urlencoded",
+										"disabled": true
 									},
 									{
 										"key": "Origin",
 										"type": "text",
-										"value": "{{dummy_redirect_uri}}"
+										"value": "{{dummy_redirect_uri}}",
+										"disabled": true
 									}
 								],
 								"body": {
@@ -154,9 +406,16 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{host}}{{complete_path}}",
+									"raw": "https://account.ridibook.com/ridi/complete",
+									"protocol": "https",
 									"host": [
-										"{{host}}{{complete_path}}"
+										"account",
+										"ridibook",
+										"com"
+									],
+									"path": [
+										"ridi",
+										"complete"
 									]
 								}
 							},
