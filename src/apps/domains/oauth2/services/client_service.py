@@ -3,6 +3,7 @@ from oauth2_provider.models import AbstractApplication
 
 from apps.domains.oauth2.exceptions import NotExistedClient, NotInHouseClient, InvalidAuthorizationGrantType, InvalidRedirectUri
 from apps.domains.oauth2.models import Application as Client
+from apps.domains.oauth2.repositories.client_repository import ClientRepository
 from lib.utils.url import is_same_url_until_domain, is_same_url
 
 
@@ -10,7 +11,7 @@ class ClientService:
     @classmethod
     def get_client(cls, client_id: str) -> Client:
         try:
-            client = Client.objects.get(client_id=client_id)
+            client = ClientRepository.get_by_client_id(client_id)
         except ObjectDoesNotExist:
             raise NotExistedClient
 
