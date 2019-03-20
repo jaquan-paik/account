@@ -7,7 +7,7 @@ from apps.domains.oauth2.services.client_service import ClientService
 class OAuth2AuthorizationCodeService:
     @staticmethod
     def _authenticate_user(skip_authorization: bool):
-        if not skip_authorization:
+        if not skip_authorization:  # TODO: open api 지원할 때 로직 추가가 필요하다.
             raise NotImplementedError
 
     @classmethod
