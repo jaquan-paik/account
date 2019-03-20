@@ -1,7 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
-from oauth2_provider.models import AbstractApplication
 
-from apps.domains.oauth2.exceptions import NotExistedClient, NotInHouseClient, InvalidAuthorizationGrantType, InvalidRedirectUri
+from apps.domains.oauth2.exceptions import NotExistedClient, NotInHouseClient, InvalidRedirectUri
 from apps.domains.oauth2.models import Application as Client
 from apps.domains.oauth2.repositories.client_repository import ClientRepository
 from lib.utils.url import is_same_url_until_domain, is_same_url
@@ -14,9 +13,6 @@ class ClientService:
             client = ClientRepository.get_by_client_id(client_id)
         except ObjectDoesNotExist:
             raise NotExistedClient
-
-        if client.authorization_grant_type != AbstractApplication.GRANT_AUTHORIZATION_CODE:
-            raise InvalidAuthorizationGrantType
 
         return client
 
@@ -41,7 +37,7 @@ class ClientService:
         raise InvalidRedirectUri
 
     @classmethod
-    def assert_house_client_redirect_uri(cls, client: Client, redirect_uri: str):
+    def assert_client_redirect_uri(cls, client: Client, redirect_uri: str):
         if client.is_in_house:
             cls.assert_in_house_client_redirect_uri(client, redirect_uri)
             return

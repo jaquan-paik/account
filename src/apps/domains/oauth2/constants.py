@@ -23,8 +23,9 @@ class GrantType(BaseConstant):
     PASSWORD = 'password'
     CLIENT_CREDENTIALS = 'client_credentials'
     REFRESH_TOKEN = 'refresh_token'
+    OLD_AUTHORIZATION_CODE = 'authorization-code'  # 호환성을 위해 필요하지만 후에 제거 되어야한다.
 
-    _LIST = [AUTHORIZATION_CODE, PASSWORD, CLIENT_CREDENTIALS, REFRESH_TOKEN]
+    _LIST = [AUTHORIZATION_CODE, PASSWORD, CLIENT_CREDENTIALS, REFRESH_TOKEN, OLD_AUTHORIZATION_CODE]
 
 
 class ResponseType:
