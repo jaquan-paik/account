@@ -11,9 +11,8 @@ from apps.domains.oauth2.services.revoke_token_service import RevokeTokenService
 class RevokeTokenServiceTestCase(TestCase):
     def setUp(self):
         user = G(User, idx=1, id='testuser')
-
-        G(RefreshToken, user=user, token='1234')
-        G(Grant, user=user, code='1111')
+        G(RefreshToken, user=user, token='1234', expires=datetime(year=1970, month=1, day=1))
+        G(Grant, user=user, code='1111', expires=datetime(year=1970, month=1, day=1))
 
     def test_token_expired(self):
         RevokeTokenService.revoke_expired()
