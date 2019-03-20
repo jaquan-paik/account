@@ -1,20 +1,30 @@
 from django.db import models
+from django.utils import timezone
 from oauth2_provider.models import AbstractAccessToken, AbstractApplication, AbstractGrant, AbstractRefreshToken
 from oauthlib.uri_validate import is_absolute_uri
 
 from apps.domains.account.models import OAuth2User, User
-from apps.domains.oauth2.constants import JwtAlg
+from apps.domains.oauth2.constants import JwtAlg, ACCESS_TOKEN_EXPIRE_SECONDS, GRANT_CODE_LENGTH
 from apps.domains.oauth2.managers import ApplicationManager, GrantManager, RefreshTokenManager
 from infra.configure.config import GeneralConfig
 from lib.django.db.mysql import TinyBooleanField
 from lib.utils.string import generate_random_str
 from lib.utils.url import is_same_url, is_same_url_until_path
+from datetime import timedelta
 
 JWT_HS_256_SECRET_LEN = 32
 
 
 def jwt_hs_256_secret():
     return generate_random_str(JWT_HS_256_SECRET_LEN)
+
+
+def _get_grant_expires():
+    return timezone.now() + timedelta(seconds=ACCESS_TOKEN_EXPIRE_SECONDS)
+
+
+def _create_random_code():
+    return generate_random_str(GRANT_CODE_LENGTH)
 
 
 class Application(AbstractApplication):
@@ -74,11 +84,13 @@ class Application(AbstractApplication):
 
 
 class Grant(AbstractGrant):
+    code = models.CharField(max_length=255, default=_create_random_code, unique=True, )
     user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE, to_field='idx')
     redirect_uri = models.CharField(max_length=16384)
     updated = None
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
     last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
+    expires = models.DateTimeField(default=_get_grant_expires)
 
     objects = GrantManager()
 
