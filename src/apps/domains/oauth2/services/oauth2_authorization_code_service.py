@@ -1,7 +1,7 @@
-from apps.domains.oauth2.exceptions import NotExistedClient
-from apps.domains.oauth2.services.client_service import ClientService
-from apps.domains.oauth2.services.grant_service import GrantService
 from apps.domains.oauth2.constants import DEFAULT_SCOPE, GrantType
+from apps.domains.oauth2.exceptions import NotExistedClient
+from apps.domains.oauth2.repositories.grant_repository import GrantRepository
+from apps.domains.oauth2.services.client_service import ClientService
 
 
 class OAuth2AuthorizationCodeService:
@@ -18,5 +18,5 @@ class OAuth2AuthorizationCodeService:
             raise NotExistedClient
         cls._authenticate_user(client.skip_authorization)
         ClientService.assert_client_redirect_uri(client, redirect_uri)
-        code = GrantService.create_grant(client, redirect_uri, u_idx, DEFAULT_SCOPE).code
+        code = GrantRepository.create_grant(client, redirect_uri, u_idx, DEFAULT_SCOPE).code
         return code
