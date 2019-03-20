@@ -1,14 +1,16 @@
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
-from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
-from apps.domains.account.services.account_info_service import AccountInfoService
+from rest_framework.views import APIView
+
 from apps.domains.account.schemas import RidiAccountInfoGetSchema
+from apps.domains.account.services.account_info_service import AccountInfoService
 from infra.configure.config import GeneralConfig
 from infra.network.constants.api_status_code import ApiStatusCodes
 from lib.base.exceptions import ErrorException
 from lib.django.views.api.mixins import ResponseMixin
 from lib.django.views.cookie.mixins import CookieMixin
+from lib.log import sentry
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY
 from lib.ridibooks.common.exceptions import HTTPException, InvalidResponseException, ServerException
 from lib.utils.url import generate_query_url
@@ -53,11 +55,13 @@ class RidiAccountInfoView(CookieMixin, ResponseMixin, APIView):
         try:
             data = AccountInfoService.get_account_info(access_token)
         except ServerException:
+            sentry.exception()
             code = self.make_response_code(
                 ApiStatusCodes.X_400_RIDIBOOKS_NOT_CONNECTION, 'Ridibooks server is not connected'
             )
             return self.fail_response(code)
         except (HTTPException, InvalidResponseException):
+            sentry.exception()
             code = self.make_response_code(
                 ApiStatusCodes.X_400_RIDIBOOKS_BAD_RESPONSE, 'Ridibooks server respond bad response'
             )

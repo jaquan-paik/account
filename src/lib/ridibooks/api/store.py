@@ -2,7 +2,7 @@ import json
 from typing import Dict
 
 from infra.configure.config import GeneralConfig
-from lib.decorators.alarm import log_execute_time, LogExecuteKey
+from lib.decorators.alarm import LogExecuteKey, log_execute_time
 from lib.log.logger import logger
 from lib.ridibooks.api.base import BaseApi
 from lib.ridibooks.api.exceptions import InvalidRequestException, InvalidUserDormantedException, InvalidUserNotFoundException, \
@@ -38,7 +38,6 @@ class StoreApi(BaseApi):
         except HTTPException as e:
             content = json.loads(e.content.decode('utf-8'))
             if e.status == 400:
-                logger.error(f'[STORE API][IS_LOGINABLE] Error: {content}')
                 raise InvalidRequestException
 
             elif e.status == 401:
