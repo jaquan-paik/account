@@ -33,6 +33,10 @@ class SecretKeyName(BaseConstant):
 
     SENTRY_DSN = 'sentry_dsn'
 
+    RIDI_CLIENT_ID = 'ridi_client_id'
+    RIDI_CLIENT_SECRET = 'ridi_client_secret'
+    RIDI_JWT_SECRET = 'ridi_jwt_secret'
+
     RIDI_INTERNAL_AUTH_ACCOUNT_TO_STORE = 'ridi_internal_auth_account_to_store'
 
     STATE_CRYPTO_KEY = 'state_crypto_key'

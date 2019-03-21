@@ -41,6 +41,7 @@ class BaseApi:
 
         try:
             response = requests.request(**kwargs)
+
         except RequestException:
             sentry.exception()
             raise ServerException()
@@ -60,8 +61,10 @@ class BaseApi:
         try:
             response.raise_for_status()
             return response.json()
+
         except HTTPError as e:
             raise HTTPException(origin_exception=e, content=e.response.content, status=e.response.status_code)
+
         except (JSONDecodeError, TypeError):
             raise InvalidResponseException(response.content)
 

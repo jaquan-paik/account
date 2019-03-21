@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f96c776f1e5cd17d97167e35e15946455d9ff3494af593754aa500e898e0e31f"
+            "sha256": "056bbbac4bacb4ca466dddbf20eb6e9f1c50620c29e7049df498e240bfc6442e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -465,6 +465,13 @@
             "index": "pypi",
             "version": "==2.20.0"
         },
+        "ridi-django-oauth2": {
+            "hashes": [
+                "sha256:951849994f827151bc8372917dbab9c40e3a4043bf839967951976b11573dcec"
+            ],
+            "index": "pypi",
+            "version": "==0.0.11"
+        },
         "ruamel.yaml": {
             "hashes": [
                 "sha256:0ae64b150ec39667ce2815227271207d27a6218bc501b73e70a7403f2cf987ee",
@@ -722,10 +729,10 @@
         },
         "sqlparse": {
             "hashes": [
-                "sha256:ce028444cfab83be538752a2ffdb56bc417b7784ff35bb9a3062413717807dec",
-                "sha256:d9cf190f51cbb26da0412247dfe4fb5f4098edb73db84e02f9fc21fdca31fed4"
+                "sha256:40afe6b8d4b1117e7dff5504d7a8ce07d9a1b15aeeade8a2d10f130a834f8177",
+                "sha256:7c3dca29c022744e95b547e867cee89f4fce4373f3549ccd8797d8eb52cdb873"
             ],
-            "version": "==0.2.4"
+            "version": "==0.3.0"
         },
         "urllib3": {
             "hashes": [
