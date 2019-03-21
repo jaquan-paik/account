@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'corsheaders',
 
+    'ridi_django_oauth2',
+
     # django api 문서화 라이브러리
     'drf_yasg',
 
@@ -70,6 +72,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'lib.ridibooks.store_auth.middlewares.AuthenticationMiddleware',
+    'ridi_django_oauth2.middlewares.AuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'sites.urls'
@@ -212,11 +215,17 @@ RAVEN_CONFIG = {
         'lib.base.exceptions.MsgException',
         'OSError',
     ],
+    'exclude_paths': [
+        'ridi_django_oauth2',
+        'rest_framework',
+    ],
 }
 
 # DRF
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'ridi_django_oauth2.rest_framework.authentication.OAuth2Authentication',
+    ),
 }
 
 STATE_CRYPTO_KEY = Secret().get(SecretKeyName.STATE_CRYPTO_KEY)

@@ -2,6 +2,8 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
+from ridi_django_oauth2.decorators import scope_required
+from ridi_oauth2.resource.constants import Scope
 
 from apps.domains.account.schemas import RidiAccountInfoGetSchema
 from apps.domains.account.services.account_info_service import AccountInfoService
@@ -45,6 +47,7 @@ class RidiLoginView(LoginView):  # pylint: disable=too-many-ancestors
 
 class RidiAccountInfoView(CookieMixin, ResponseMixin, APIView):
     @swagger_auto_schema(**RidiAccountInfoGetSchema.to_swagger_schema())
+    @scope_required(required_scopes=[Scope.ALL])
     def get(self, request):
         access_token = self.get_cookie(request=request, key=ACCESS_TOKEN_COOKIE_KEY)
         if access_token is None:
