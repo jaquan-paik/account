@@ -6,7 +6,7 @@ from apps.domains.oauth2.services.client_service import ClientService
 
 class OAuth2AuthorizationCodeService:
     @staticmethod
-    def _authenticate_user(skip_authorization: bool):
+    def _assert_if_user_grant_client_access_request(skip_authorization: bool):
         if not skip_authorization:  # TODO: open api 지원할 때 로직 추가가 필요하다.
             raise NotImplementedError
 
@@ -16,7 +16,7 @@ class OAuth2AuthorizationCodeService:
         authorization_grant_type = client.authorization_grant_type
         if authorization_grant_type != GrantType.OLD_AUTHORIZATION_CODE and authorization_grant_type != GrantType.AUTHORIZATION_CODE:
             raise NotExistedClient
-        cls._authenticate_user(client.skip_authorization)
+        cls._assert_if_user_grant_client_access_request(client.skip_authorization)
         ClientService.assert_client_redirect_uri(client, redirect_uri)
         code = GrantRepository.create_grant(client, redirect_uri, u_idx, DEFAULT_SCOPE).code
         return code
