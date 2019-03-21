@@ -72,7 +72,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'lib.ridibooks.store_auth.middlewares.AuthenticationMiddleware',
-    'ridi_django_oauth2.middlewares.AuthenticationMiddleware',
+    'lib.ridibooks.ridi_oauth2.middlewares.AuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'sites.urls'
