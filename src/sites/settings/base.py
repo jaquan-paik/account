@@ -186,6 +186,11 @@ OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'oauth2_app.RefreshToken'
 # https://github.com/evonove/django-oauth-toolkit/commit/65af7372a0fb208a19899fa75982163bdff713f9
 OAUTH2_PROVIDER_REFRESH_MODEL = 'oauth2_app.RefreshToken'
 
+# RIDI Django OAuth2 Setting
+RIDI_OAUTH2_CLIENT_ID = Secret().get(SecretKeyName.RIDI_CLIENT_ID)
+RIDI_OAUTH2_CLIENT_SECRET = Secret().get(SecretKeyName.RIDI_CLIENT_SECRET)
+RIDI_OAUTH2_JWT_SECRET = Secret().get(SecretKeyName.RIDI_JWT_SECRET)
+
 # RIDI Internal Server Auth
 RIDI_INTERNAL_AUTH_DATA = InternalServerAuthConfigHelper.generate_auth_data({
     AuthList.ACCOUNT_TO_STORE: Secret().get(SecretKeyName.RIDI_INTERNAL_AUTH_ACCOUNT_TO_STORE),
