@@ -1,5 +1,7 @@
 from oauthlib.oauth2 import OAuth2Error
 
+from infra.network.constants.http_status_code import HttpStatusCodes
+
 
 class JwtTokenErrorException(Exception):
     pass
@@ -7,23 +9,50 @@ class JwtTokenErrorException(Exception):
 
 class LoginFailError(OAuth2Error):
     error = 'login_fail'
-    status_code = 401
-    description = '로그인에 실패했습니다.'
+    status_code = HttpStatusCodes.C_401_UNAUTHORIZED
+    description = 'Login failed'
 
 
 class InvalidUserError(OAuth2Error):
     error = 'invalid_user'
-    status_code = 401
-    description = '인증에 실패했습니다.'
+    status_code = HttpStatusCodes.C_401_UNAUTHORIZED
+    description = 'Authentication failed.'
 
 
 class InvalidUserUnverifiedError(InvalidUserError):
-    description = '인증이 완료되지 않은 계정입니다.'
+    description = 'This account has not been verified.'
 
 
 class InvalidUserSecededError(InvalidUserError):
-    description = '탈퇴된 계정입니다.'
+    description = 'This account is unsubscribed.'
 
 
 class InvalidUserDormantedError(InvalidUserError):
-    description = '휴면 계정입니다.'
+    description = 'This account is Inactive.'
+
+
+class InvalidClient(OAuth2Error):
+    error = 'invalid_client'
+    status_code = HttpStatusCodes.C_401_UNAUTHORIZED
+    description = 'invalid client'
+
+
+class NotExistedClient(InvalidClient):
+    description = 'this client is not existed'
+
+
+class NotInHouseClient(InvalidClient):
+    status_code = HttpStatusCodes.C_403_FORBIDDEN
+    description = 'this client is not in-house client'
+
+
+class InvalidRedirectUri(OAuth2Error):
+    error = 'invalid_redirect_uri'
+    status_code = HttpStatusCodes.C_403_FORBIDDEN
+    description = 'this client is not authorized to use this redirect uri'
+
+
+class InvalidAuthorizationGrantType(OAuth2Error):
+    error = 'invalid_authorization_grant_type'
+    status_code = HttpStatusCodes.C_403_FORBIDDEN
+    description = 'this client is not authorized to use this authorization grant type.'

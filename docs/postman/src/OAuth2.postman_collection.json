@@ -302,14 +302,14 @@
 										"exec": [
 											"const h = eval(globals.loadHelpers);",
 											"h.printResponseBody();",
-											"h.testStatus(400);",
+											"h.testStatus(401);",
 											"",
 											"pm.test(\"invalid client_id error exists\", function () {",
-											"    pm.expect(pm.response.text()).to.include(\"invalid_request\");",
+											"    pm.expect(pm.response.text()).to.include(\"invalid_client\");",
 											"});",
 											"",
 											"pm.test(\"invalid client_id error_description exists\", function () {",
-											"    pm.expect(pm.response.text()).to.include(\"Invalid client_id parameter value\");",
+											"    pm.expect(pm.response.text()).to.include(\"this client is not existed\");",
 											"});"
 										],
 										"type": "text/javascript"
@@ -357,20 +357,20 @@
 									"listen": "test",
 									"script": {
 										"id": "acf1416b-b6b8-479e-9bca-9f54d078e0fa",
-										"type": "text/javascript",
 										"exec": [
 											"const h = eval(globals.loadHelpers);",
 											"h.printResponseBody();",
 											"h.testStatus(400);",
 											"",
 											"pm.test(\"missing client_id error exists\", function () {",
-											"    pm.expect(pm.response.text()).to.include(\"invalid_request\");",
+											"    pm.expect(pm.response.text()).to.include(\"client_id\");",
 											"});",
 											"",
 											"pm.test(\"missing client_id error_description exists\", function () {",
-											"    pm.expect(pm.response.text()).to.include(\"Missing client_id parameter\");",
+											"    pm.expect(pm.response.text()).to.include(\"client id is required\");",
 											"});"
-										]
+										],
+										"type": "text/javascript"
 									}
 								}
 							],
@@ -414,14 +414,14 @@
 										"exec": [
 											"const h = eval(globals.loadHelpers);",
 											"h.printResponseBody();",
-											"h.testStatus(400);",
+											"h.testStatus(403);",
 											"",
 											"pm.test(\"invalid redirect_uri error exists\", function () {",
-											"    pm.expect(pm.response.text()).to.include(\"invalid_request\");",
+											"    pm.expect(pm.response.text()).to.include(\"invalid_redirect_uri\");",
 											"});",
 											"",
 											"pm.test(\"invalid redirect_uri error_description exists\", function () { ",
-											"    pm.expect(pm.response.text()).to.include(\"Mismatching redirect URI.\");",
+											"    pm.expect(pm.response.text()).to.include(\"this client is not authorized to use this redirect uri\");",
 											"});",
 											""
 										],
