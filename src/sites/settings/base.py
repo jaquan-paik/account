@@ -71,7 +71,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'lib.ridibooks.store_auth.middlewares.AuthenticationMiddleware',
     'lib.ridibooks.ridi_oauth2.middlewares.AuthenticationMiddleware',
 ]
 

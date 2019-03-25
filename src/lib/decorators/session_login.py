@@ -50,9 +50,11 @@ def session_login_required():
 
                 else:
                     user, _ = get_user_model().objects.get_or_create(idx=account_info['result']['idx'], id=account_info['result']['id'])
-
             if not user.is_authenticated:
-                return HttpResponseRedirect(reverse("account:login"))
+                return HttpResponseRedirect(f"{reverse('account:login')}?next=")
+
+            request.user = user
+
             return _func(self, request, *args, **kwargs)
 
         return wrapper
