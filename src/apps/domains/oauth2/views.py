@@ -5,12 +5,12 @@ from oauthlib.oauth2 import OAuth2Error
 from apps.domains.oauth2.forms import AuthorizationForm
 from apps.domains.oauth2.services.oauth2_authorization_code_service import OAuth2AuthorizationCodeService
 from lib.base.response import get_invalid_form_template_response, get_template_response
-from lib.decorators.session_login import session_login_required
+from lib.decorators.session_login import ridibooks_session_login_required
 from lib.utils.url import generate_query_url
 
 
 class AuthorizationView(View):
-    @session_login_required()
+    @ridibooks_session_login_required()
     def get(self, request):
         authorize_form = AuthorizationForm(request.GET)
         if not authorize_form.is_valid():

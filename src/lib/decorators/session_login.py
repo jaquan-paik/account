@@ -8,7 +8,7 @@ from lib.ridibooks.common.constants import PHP_SESSION_COOKIE_KEY
 from lib.ridibooks.common.exceptions import RidibooksException
 
 
-def session_login():
+def ridibooks_session_login():
     def decorator(_func):
         def wrapper(self, request, *args, **kwargs):
             ridibooks_session_id = request.COOKIES.get(PHP_SESSION_COOKIE_KEY, None)
@@ -34,7 +34,7 @@ def session_login():
     return decorator
 
 
-def session_login_required():
+def ridibooks_session_login_required():
     def decorator(_func):
         def wrapper(self, request, *args, **kwargs):
             ridibooks_session_id = request.COOKIES.get(PHP_SESSION_COOKIE_KEY, None)

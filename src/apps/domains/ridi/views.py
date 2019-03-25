@@ -18,7 +18,7 @@ from infra.configure.config import GeneralConfig
 from infra.network.constants.http_status_code import HttpStatusCodes
 from lib.base.response import InHouseHttpResponseRedirect, get_invalid_form_template_response
 from lib.decorators.cookie_handler import clear_tokens_in_cookie
-from lib.decorators.session_login import session_login_required
+from lib.decorators.session_login import ridibooks_session_login_required
 from lib.ridibooks.common.constants import AUTO_LOGIN_COOKIE_KEY, AUTO_LOGIN_ON_COOKIE_VALUE
 
 
@@ -27,7 +27,7 @@ def is_auto_login_request(request) -> bool:
 
 
 class AuthorizeView(View):
-    @session_login_required()
+    @ridibooks_session_login_required()
     def get(self, request):
         authorize_form = AuthorizeForm(request.GET)
         if not authorize_form.is_valid():
@@ -38,7 +38,7 @@ class AuthorizeView(View):
 
 
 class CallbackView(View):
-    @session_login_required()
+    @ridibooks_session_login_required()
     def get(self, request):
         if request.GET.get('deprecated', None) or len(request.GET.get('state', '')) == 10:  # 현재 지원되지 않는 state의 길이가 10이다.
             return HttpResponseRedirect(GeneralConfig.get_store_url())
