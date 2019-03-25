@@ -10,6 +10,7 @@ from apps.domains.account.services.account_info_service import AccountInfoServic
 from infra.configure.config import GeneralConfig
 from infra.network.constants.api_status_code import ApiStatusCodes
 from lib.base.exceptions import ErrorException
+from lib.decorators.session_login import ridibooks_session_login
 from lib.django.views.api.mixins import ResponseMixin
 from lib.django.views.cookie.mixins import CookieMixin
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY
@@ -18,6 +19,7 @@ from lib.utils.url import generate_query_url
 
 
 class RidiLoginView(LoginView):  # pylint: disable=too-many-ancestors
+    @ridibooks_session_login()
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             # 로그인 되어 있으면 Next로 이동한다.

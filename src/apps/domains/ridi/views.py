@@ -1,27 +1,24 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views import View
-
 from drf_yasg.utils import swagger_auto_schema
-
 from rest_framework.views import APIView
 
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
+from apps.domains.ridi.exception_handler import return_json_response_if_http_error_raised, clear_tokens_if_permission_denied_raised
+from apps.domains.ridi.forms import AuthorizeForm, CallbackForm, TokenForm
 from apps.domains.ridi.helpers.response_cookie_helper import ResponseCookieHelper
 from apps.domains.ridi.helpers.state_helper import StateHelper
 from apps.domains.ridi.helpers.token_helper import TokenHelper
 from apps.domains.ridi.helpers.url_helper import UrlHelper
 from apps.domains.ridi.schemas import TokenGetSchema
-from apps.domains.ridi.services.token_refresh_service import TokenRefreshService
 from apps.domains.ridi.services.authorization_code_service import AuthorizationCodeService
-from apps.domains.ridi.forms import AuthorizeForm, CallbackForm, TokenForm
-from apps.domains.ridi.exception_handler import return_json_response_if_http_error_raised, clear_tokens_if_permission_denied_raised
+from apps.domains.ridi.services.token_refresh_service import TokenRefreshService
 from infra.configure.config import GeneralConfig
 from infra.network.constants.http_status_code import HttpStatusCodes
-
 from lib.base.response import InHouseHttpResponseRedirect, get_invalid_form_template_response
 from lib.decorators.cookie_handler import clear_tokens_in_cookie
+from lib.decorators.session_login import ridibooks_session_login_required
 from lib.ridibooks.common.constants import AUTO_LOGIN_COOKIE_KEY, AUTO_LOGIN_ON_COOKIE_VALUE
 
 
@@ -29,7 +26,8 @@ def is_auto_login_request(request) -> bool:
     return request.COOKIES.get(AUTO_LOGIN_COOKIE_KEY, '0') == AUTO_LOGIN_ON_COOKIE_VALUE
 
 
-class AuthorizeView(LoginRequiredMixin, View):
+class AuthorizeView(View):
+    @ridibooks_session_login_required()
     def get(self, request):
         authorize_form = AuthorizeForm(request.GET)
         if not authorize_form.is_valid():
@@ -39,7 +37,8 @@ class AuthorizeView(LoginRequiredMixin, View):
         return HttpResponseRedirect(url)
 
 
-class CallbackView(LoginRequiredMixin, View):
+class CallbackView(View):
+    @ridibooks_session_login_required()
     def get(self, request):
         if request.GET.get('deprecated', None) or len(request.GET.get('state', '')) == 10:  # 현재 지원되지 않는 state의 길이가 10이다.
             return HttpResponseRedirect(GeneralConfig.get_store_url())
