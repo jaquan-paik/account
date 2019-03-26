@@ -28,10 +28,8 @@ CORS_ORIGIN_REGEX_WHITELIST = (rf"{Secret().get(SecretKeyName.CORS_ORIGIN_REGEX_
 
 COOKIE_ROOT_DOMAIN = Secret().get(SecretKeyName.COOKIE_ROOT_DOMAIN)
 
-
 # allowed hosts 안에 있는 호스트 들은 쿠키 루트 도메인으로 이루어져있음을 보장해야한다.
 assert_allowed_hosts_with_cookie_root_domain(ALLOWED_HOSTS, COOKIE_ROOT_DOMAIN)
-
 
 # Application definition
 INSTALLED_APPS = [
@@ -71,7 +69,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'lib.ridibooks.ridi_oauth2.middlewares.AuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'sites.urls'
@@ -119,7 +116,6 @@ DATABASE_APPS_MAPPING = {
     'oauth2_app': 'account',
     'account_app': 'account',
 }
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

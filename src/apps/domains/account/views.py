@@ -1,5 +1,6 @@
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
+from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
 from ridi_django_oauth2.decorators import scope_required
@@ -10,6 +11,7 @@ from apps.domains.account.services.account_info_service import AccountInfoServic
 from infra.configure.config import GeneralConfig
 from infra.network.constants.api_status_code import ApiStatusCodes
 from lib.base.exceptions import ErrorException
+from lib.decorators.ridi_oauth2_access_token_login import ridi_oauth2_access_token_login
 from lib.decorators.session_login import ridibooks_session_login
 from lib.django.views.api.mixins import ResponseMixin
 from lib.django.views.cookie.mixins import CookieMixin
@@ -47,6 +49,7 @@ class RidiLoginView(LoginView):  # pylint: disable=too-many-ancestors
         pass
 
 
+@method_decorator(ridi_oauth2_access_token_login, 'dispatch')
 class RidiAccountInfoView(CookieMixin, ResponseMixin, APIView):
     @swagger_auto_schema(**RidiAccountInfoGetSchema.to_swagger_schema())
     @scope_required(required_scopes=[Scope.ALL])
