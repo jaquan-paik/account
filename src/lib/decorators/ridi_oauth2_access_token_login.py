@@ -1,0 +1,5 @@
+from django.utils.decorators import decorator_from_middleware
+
+from lib.ridibooks.ridi_oauth2.middlewares import AuthenticationMiddleware
+
+ridi_oauth2_access_token_login = decorator_from_middleware(AuthenticationMiddleware)
