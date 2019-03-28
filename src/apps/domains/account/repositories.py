@@ -26,3 +26,11 @@ class UserRepository(BaseRepository):
     @classmethod
     def find_by_u_idxes(cls, u_idxes: List[int]) -> List[User]:
         return cls.model_class.objects.filter(idx__in=u_idxes)
+
+    @classmethod
+    def update(cls, entities: List, update_fields: List = None):
+        super().update(entities)  # TODO user_modified_history 추가
+
+    @classmethod
+    def create(cls, entities: List, is_bulk: bool = False, bulk_bundle_count: int = 1000) -> List[User]:
+        return super().create(entities, is_bulk, bulk_bundle_count)  # TODO user_modified_history 추가

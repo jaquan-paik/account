@@ -5,7 +5,7 @@ from django.db import transaction
 
 from apps.domains.account.dtos import UserDto
 from apps.domains.account.models import User
-from apps.domains.account.repositories.user_repository import UserRepository
+from apps.domains.account.repositories import UserRepository
 from apps.globals.routines.worker_status.constants import WorkerType
 from apps.globals.routines.worker_status.repositories import WorkerStatusRepository
 from infra.storage.database.constants import Database
@@ -80,7 +80,7 @@ class CrawlStoreUserService:
     @classmethod
     def _get_users_to_create_or_update(cls, store_updated_user_idxes: List[int]) -> Tuple[List[User], List[User]]:
         store_user_dtos = cls._get_store_user_dtos(store_updated_user_idxes)
-        existing_users_dict = to_dict(UserRepository.find_by_idxes(store_updated_user_idxes), 'idx')
+        existing_users_dict = to_dict(UserRepository.find_by_u_idxes(store_updated_user_idxes), 'idx')
 
         users_to_create = []
         users_to_update = []
