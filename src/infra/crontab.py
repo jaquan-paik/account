@@ -1,5 +1,5 @@
 from django.core.management import call_command
-from uwsgidecorators import timer
+from uwsgidecorators import timer, lock
 
 
 @timer(300)
@@ -10,3 +10,9 @@ def revoke_expired_tokens(signum: int):
 @timer(1)
 def set_user_modified_history_order(signum: int):
     call_command('set_user_modified_history_order')
+
+
+@timer(1)
+@lock
+def crawl_store_user(signum: int):
+    call_command('crawl_store_user')
