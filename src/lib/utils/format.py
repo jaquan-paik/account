@@ -1,6 +1,6 @@
-
 class DateTimeFormat:
     ISO_YMD_HMS = '%Y-%m-%dT%H:%M:%S'
+    ISO_YMD_HMSZ = '%Y-%m-%dT%H:%M:%S.%fZ'
     YMD_HMSM = '%Y-%m-%d %H:%M:%S%f'
     YMD_HMS = '%Y-%m-%d %H:%M:%S'
     YMD_HM = '%Y-%m-%d %H:%M'

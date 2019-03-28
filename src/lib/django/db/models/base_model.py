@@ -16,3 +16,26 @@ class BaseModel(models.Model):
 class BaseUserModel(BaseModel, AbstractBaseUser):
     class Meta:
         abstract = True
+
+
+class EqualizeMixin:
+    equal_fields = ()
+
+    def __eq__(self, other):
+        equal_fields = self._get_equal_fields()
+        for field in equal_fields:
+            if getattr(self, field) != getattr(other, field):
+                return False
+        return True
+
+    def _get_equal_fields(self):
+        if not self.equal_fields:
+            raise NotImplementedError()
+
+        return self.equal_fields
+
+    def merge(self, other):
+        equal_fields = self._get_equal_fields()
+        for field in equal_fields:
+            if getattr(self, field) != getattr(other, field):
+                setattr(self, field, getattr(other, field))
