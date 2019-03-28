@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import List, Dict, Tuple
+from typing import List, Tuple
 
 from django.db import transaction
 
@@ -25,13 +25,14 @@ class CrawlStoreUserService:
         last_date = cls._get_last_date(worker_status.last_date)
         store_updated_user_idxes = cls._get_store_updated_user_idxes(last_date)
 
-        cls._save_created_or_changed_users_by_limit(store_updated_user_idxes, STORE_API_LIMIT)
+        cls._save_created_or_changed_users(store_updated_user_idxes)
 
         worker_status.last_date = last_date
         worker_status.save()
 
     @classmethod
-    def _save_created_or_changed_users_by_limit(cls, store_updated_user_idxes: List[int], limit: int):
+    @transaction.atomic(using=Database.DEFAULT)
+    def _save_created_or_changed_users(cls, store_updated_user_idxes: List[int], limit=STORE_API_LIMIT):
         offset = 0
         while True:
             if offset > len(store_updated_user_idxes):
@@ -77,7 +78,7 @@ class CrawlStoreUserService:
         )
 
     @classmethod
-    def _get_users_to_create_or_update(cls, store_updated_user_idxes: List[int]) -> Tuple:
+    def _get_users_to_create_or_update(cls, store_updated_user_idxes: List[int]) -> Tuple[List[User], List[User]]:
         store_user_dtos = cls._get_store_user_dtos(store_updated_user_idxes)
         existing_users_dict = to_dict(UserRepository.find_by_idxes(store_updated_user_idxes), 'idx')
 
@@ -96,13 +97,10 @@ class CrawlStoreUserService:
         return users_to_create, users_to_update
 
     @staticmethod
-    @transaction.atomic(using=Database.DEFAULT)
     @retry(retry_count=3)
     def _create_users(users: List[User]):
         UserRepository.create(users)
 
     @staticmethod
-    @transaction.atomic(using=Database.DEFAULT)
-    @retry(retry_count=3)
     def _update_users(users: List[User]):
         UserRepository.update(users)
