@@ -1,4 +1,7 @@
 from drf_yasg import openapi
+
+from apps.domains.account.serializers import MultipleUserRequestSerializer, MultipleUserResponseSerializer, \
+    UserModifiedHistoryRequestSerializer, UserModifiedHistoryResponseSerializer
 from lib.base.schema import BaseSchema, SecurityScope
 
 
@@ -16,4 +19,24 @@ class RidiAccountInfoGetSchema(BaseSchema):
         '400': openapi.Response(
             description='Ridibooks server is not connected or Ridibooks server respond bad response'
         )
+    }
+
+
+class MultipleUserInfoPostSchema(BaseSchema):
+    operation_id = 'Multiple user info'
+    operation_description = '유저 리스트'
+    request_body = MultipleUserRequestSerializer
+    security_scope = SecurityScope.INTERNAL
+    responses = {
+        '200': openapi.Response('success', schema=MultipleUserResponseSerializer(), )
+    }
+
+
+class UserModifiedHistoryGetSchema(BaseSchema):
+    operation_id = 'User modified history'
+    operation_description = '사용자 정보 변경 리스트'
+    request_body = UserModifiedHistoryRequestSerializer
+    security_scope = SecurityScope.INTERNAL
+    responses = {
+        '200': openapi.Response('success', schema=UserModifiedHistoryResponseSerializer(), )
     }
