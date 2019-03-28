@@ -4,8 +4,8 @@ from typing import List, Tuple
 from django.db import transaction, IntegrityError
 
 from apps.domains.account.dtos import UserDto
-from apps.domains.account.models import User
-from apps.domains.account.repositories import UserRepository
+from apps.domains.account.models import User, UserModifiedHistory
+from apps.domains.account.repositories import UserRepository, UserModifiedHistoryRepository
 from apps.globals.routines.worker_status.constants import WorkerType
 from apps.globals.routines.worker_status.repositories import WorkerStatusRepository
 from infra.storage.database.constants import Database
@@ -96,11 +96,20 @@ class CrawlStoreUserService:
 
         return users_to_create, users_to_update
 
-    @staticmethod
+    @classmethod
     @retry(retry_count=3, retriable_exceptions=IntegrityError)
-    def _create_users(users: List[User]):
+    def _create_users(cls, users: List[User]):
+        cls._create_user_modified_histories_by_users(users)
         UserRepository.create(users)
 
-    @staticmethod
-    def _update_users(users: List[User]):
+    @classmethod
+    def _update_users(cls, users: List[User]):
+        cls._create_user_modified_histories_by_users(users)
         UserRepository.update(users)
+
+    @staticmethod
+    def _create_user_modified_histories_by_users(users: List[User]):
+        user_modified_histories = []
+        for user in users:
+            user_modified_histories.append(UserModifiedHistory(u_idx=user.idx))
+        UserModifiedHistoryRepository.create(user_modified_histories, True)
