@@ -26,6 +26,10 @@ class GeneralConfig:
     def get_ridibooks_login_url() -> str:
         return settings.RIDIBOOKS_LOGIN_URL
 
+    @staticmethod
+    def get_store_api_url() -> str:
+        return settings.STORE_API_URL
+
 
 class FilterConfig:
     @staticmethod
