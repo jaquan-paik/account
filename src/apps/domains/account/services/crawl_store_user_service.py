@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import List, Tuple
 
-from django.db import transaction
+from django.db import transaction, IntegrityError
 
 from apps.domains.account.dtos import UserDto
 from apps.domains.account.models import User
@@ -97,7 +97,7 @@ class CrawlStoreUserService:
         return users_to_create, users_to_update
 
     @staticmethod
-    @retry(retry_count=3)
+    @retry(retry_count=3, retriable_exceptions=IntegrityError)
     def _create_users(users: List[User]):
         UserRepository.create(users)
 
