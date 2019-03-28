@@ -35,7 +35,7 @@ class User(EqualizeMixin, BaseUserModel):
 
 
 class UserModifiedHistory(BaseModel):
-    u_idx = models.ForeignKey(User, null=False, on_delete=models.PROTECT, verbose_name='u_idx', db_column='idx')
+    u_idx = models.ForeignKey(User, null=False, on_delete=models.PROTECT, verbose_name='u_idx')
     order = models.BigIntegerField(null=True, db_index=True, verbose_name='히스토리 순서')
 
     class Meta:
