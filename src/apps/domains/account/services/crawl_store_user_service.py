@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
 from django.db import transaction
 
@@ -36,8 +36,9 @@ class CrawlStoreUserService:
         while True:
             if offset > len(store_updated_user_idxes):
                 break
-            users_to_save = cls._get_users_to_save(store_updated_user_idxes[offset:offset + limit])
-            cls._save_users_with_history(users_to_save)
+            users_to_create, users_to_update = cls._get_users_to_create_or_update(store_updated_user_idxes[offset:offset + limit])
+            cls._create_users(users_to_create)
+            cls._update_users(users_to_update)
 
             offset += limit
 
@@ -76,19 +77,32 @@ class CrawlStoreUserService:
         )
 
     @classmethod
-    def _get_users_to_save(cls, store_updated_user_idxes: List[int]) -> List[User]:
+    def _get_users_to_create_or_update(cls, store_updated_user_idxes: List[int]) -> Tuple:
         store_user_dtos = cls._get_store_user_dtos(store_updated_user_idxes)
         existing_users_dict = to_dict(UserRepository.find_by_idxes(store_updated_user_idxes), 'idx')
 
-        user_to_save = []
+        users_to_create = []
+        users_to_update = []
+
         for store_user_dto in store_user_dtos:
             user = cls._create_user_from_dto(store_user_dto)
-            if not (user in existing_users_dict and user == existing_users_dict[user.idx]):
-                user_to_save.append(user)
-        return user_to_save
+
+            if user.idx not in existing_users_dict:
+                users_to_create.append(user)
+
+            elif user != existing_users_dict[user.idx]:
+                users_to_update.append(user)
+
+        return users_to_create, users_to_update
 
     @staticmethod
     @transaction.atomic(using=Database.DEFAULT)
     @retry(retry_count=3)
-    def _save_users_with_history(users: List[User]):
-        pass
+    def _create_users(users: List[User]):
+        UserRepository.create(users)
+
+    @staticmethod
+    @transaction.atomic(using=Database.DEFAULT)
+    @retry(retry_count=3)
+    def _update_users(users: List[User]):
+        UserRepository.update(users)
