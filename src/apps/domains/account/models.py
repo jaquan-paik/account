@@ -18,6 +18,16 @@ class User(BaseUserModel):
         verbose_name_plural = '사용자 계정 리스트'
 
 
+class UserModifiedHistory(BaseModel):
+    u_idx = models.ForeignKey(User, null=False, on_delete=models.PROTECT, verbose_name='u_idx')
+    order = models.BigIntegerField(null=True, db_index=True, verbose_name='히스토리 순서')
+
+    class Meta:
+        db_table = 'user_modified_history'
+        verbose_name = '사용자 정보 변경 내역'
+        verbose_name_plural = '사용자 정보 변경 내역 리스트'
+
+
 class OAuth2User(BaseModel):
     name = models.CharField(max_length=16, unique=True, verbose_name='이름', )
 
