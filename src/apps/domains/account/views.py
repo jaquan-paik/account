@@ -6,7 +6,10 @@ from rest_framework.views import APIView
 from ridi_django_oauth2.decorators import scope_required
 from ridi_oauth2.resource.constants import Scope
 
-from apps.domains.account.schemas import RidiAccountInfoGetSchema
+from apps.domains.account.repositories import UserModifiedHistoryRepository, UserRepository
+from apps.domains.account.schemas import MultipleUserInfoPostSchema, RidiAccountInfoGetSchema, UserModifiedHistoryGetSchema
+from apps.domains.account.serializers import MultipleUserRequestSerializer, MultipleUserResponseSerializer, \
+    UserModifiedHistoryRequestSerializer, UserModifiedHistoryResponseSerializer
 from apps.domains.account.services.account_info_service import AccountInfoService
 from infra.configure.config import GeneralConfig
 from infra.network.constants.api_status_code import ApiStatusCodes
@@ -17,6 +20,7 @@ from lib.django.views.api.mixins import ResponseMixin
 from lib.django.views.cookie.mixins import CookieMixin
 from lib.ridibooks.common.constants import ACCESS_TOKEN_COOKIE_KEY
 from lib.ridibooks.common.exceptions import HTTPException, InvalidResponseException, ServerException
+from lib.ridibooks.internal_server_auth.decorators import ridi_internal_auth
 from lib.utils.url import generate_query_url
 
 
@@ -78,3 +82,33 @@ class RidiAccountInfoView(CookieMixin, ResponseMixin, APIView):
             return self.fail_response(code)
 
         return self.success_response(data={'result': data['result']})
+
+
+@method_decorator(ridi_internal_auth, 'dispatch')
+class UserInfoView(ResponseMixin, APIView):
+    @swagger_auto_schema(**MultipleUserInfoPostSchema.to_swagger_schema())
+    def post(self, request):
+        serializer = MultipleUserRequestSerializer(data=request.data)
+        if not serializer.is_valid():
+            code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
+            return self.fail_response(response_code=code, data=serializer.errors)
+
+        users = UserRepository.find_by_u_idxes(serializer.validated_data['u_idxes'])
+        return self.success_response(data=MultipleUserResponseSerializer({'users': users}, fields=serializer.validated_data['fields']).data)
+
+
+@method_decorator(ridi_internal_auth, 'dispatch')
+class UserModifiedHistoryView(ResponseMixin, APIView):
+    @swagger_auto_schema(**UserModifiedHistoryGetSchema.to_swagger_schema())
+    def get(self, request):
+        serializer = UserModifiedHistoryRequestSerializer(data=request.data)
+        if not serializer.is_valid():
+            code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
+            return self.fail_response(response_code=code, data=serializer.errors)
+
+        order = serializer.validated_data['order']
+        offset = serializer.validated_data['offset']
+        limit = serializer.validated_data['limit']
+
+        histories = UserModifiedHistoryRepository.find_after_order(order, offset, limit)
+        return self.success_response(data=UserModifiedHistoryResponseSerializer({'histories': histories}).data)

@@ -29,6 +29,10 @@ class BaseRepository:
             entity.delete()
 
     @classmethod
+    def delete_by_ids(cls, ids: List):
+        cls.model_class.objects.filter(id__in=ids).delete()
+
+    @classmethod
     def soft_delete(cls, entities: List):
         for entity in entities:
             entity.is_deleted = True
@@ -36,7 +40,7 @@ class BaseRepository:
 
     @classmethod
     def find(cls, offset: int = 0, limit: int = DEFAULT_LIMIT) -> List:
-        return cls.model_class.objects.all()[offset:offset + limit]
+        return cls.model_class.objects.all().order_by('id')[offset:offset + limit]
 
     @classmethod
     def find_all(cls) -> List:
