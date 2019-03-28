@@ -29,8 +29,17 @@ class UserRepository(BaseRepository):
 
     @classmethod
     def update(cls, entities: List, update_fields: List = None):
-        super().update(entities)  # TODO user_modified_history 추가
+        cls._create_user_modified_histories_by_users(entities)
+        super().update(entities)
 
     @classmethod
     def create(cls, entities: List, is_bulk: bool = False, bulk_bundle_count: int = 1000) -> List[User]:
-        return super().create(entities, is_bulk, bulk_bundle_count)  # TODO user_modified_history 추가
+        cls._create_user_modified_histories_by_users(entities)
+        return super().create(entities, is_bulk, bulk_bundle_count)
+
+    @staticmethod
+    def _create_user_modified_histories_by_users(users: List[User]):
+        user_modified_histories = []
+        for user in users:
+            user_modified_histories.append(UserModifiedHistory(u_idx=user.idx))
+        UserModifiedHistoryRepository.create(user_modified_histories, True)
