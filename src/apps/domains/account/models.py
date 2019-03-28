@@ -26,6 +26,7 @@ class UserModifiedHistory(BaseModel):
         db_table = 'user_modified_history'
         verbose_name = '사용자 정보 변경 내역'
         verbose_name_plural = '사용자 정보 변경 내역 리스트'
+        index_together = [['id', 'order', ], ]
 
 
 class OAuth2User(BaseModel):

@@ -35,7 +35,7 @@ class MultipleUserInfoPostSchema(BaseSchema):
 class UserModifiedHistoryGetSchema(BaseSchema):
     operation_id = 'User modified history'
     operation_description = '사용자 정보 변경 리스트'
-    request_body = UserModifiedHistoryRequestSerializer
+    query_serializer = UserModifiedHistoryRequestSerializer
     security_scope = SecurityScope.INTERNAL
     responses = {
         '200': openapi.Response('success', schema=UserModifiedHistoryResponseSerializer(), )

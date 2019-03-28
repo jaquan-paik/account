@@ -25,7 +25,7 @@ class MultipleUserResponseSerializer(BaseSerializer):
         super().__init__(*args, **kwargs)
         if fields is None:
             fields = []
-        self._fields = fields
+        self._fields_only = fields
 
     users = serializers.ListField(child=UserSerializer(), required=True, label='user 리스트')
 
