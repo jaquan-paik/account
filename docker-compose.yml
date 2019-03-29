@@ -22,6 +22,8 @@ services:
     volumes:
       - .:/htdocs/www
     command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h account-mariadb -u root -proot', 'make docker-all']
+    environment:
+      - PYTHONUNBUFFERED=1
     depends_on:
       - account-mariadb
     links:
