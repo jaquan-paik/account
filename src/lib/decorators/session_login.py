@@ -6,6 +6,7 @@ from django.urls import reverse
 from lib.ridibooks.api.store import StoreApi
 from lib.ridibooks.common.constants import PHP_SESSION_COOKIE_KEY
 from lib.ridibooks.common.exceptions import RidibooksException
+from lib.utils.url import generate_query_url
 
 
 def ridibooks_session_login():
@@ -51,7 +52,8 @@ def ridibooks_session_login_required():
                 else:
                     user, _ = get_user_model().objects.get_or_create(idx=account_info['result']['idx'], id=account_info['result']['id'])
             if not user.is_authenticated:
-                return HttpResponseRedirect(f"{reverse('account:login')}?next=")
+                redirect_uri = generate_query_url(reverse('account:login'), {'next': request.get_full_path()})
+                return HttpResponseRedirect(redirect_uri)
 
             request.user = user
 
