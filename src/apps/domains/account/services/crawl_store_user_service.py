@@ -25,7 +25,8 @@ class CrawlStoreUserService:
         last_date = cls._get_last_date(worker_status.last_date)
         store_updated_user_idxes = cls._get_store_updated_user_idxes(last_date)
 
-        cls._save_created_or_changed_users(store_updated_user_idxes)
+        if not store_updated_user_idxes:
+            cls._save_created_or_changed_users(store_updated_user_idxes)
 
         worker_status.last_date = last_date
         worker_status.save()
