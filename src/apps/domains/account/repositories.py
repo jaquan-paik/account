@@ -9,7 +9,7 @@ class UserModifiedHistoryRepository(BaseRepository):
 
     @classmethod
     def get_last_ordered(cls) -> UserModifiedHistory:
-        return cls.model_class.objects.filter(order___isnull=False).order_by('-order').first()
+        return cls.model_class.objects.filter(order__isnull=False).order_by('-order').first()
 
     @classmethod
     def find_unordered(cls, offset: int, limit: int) -> List[UserModifiedHistory]:

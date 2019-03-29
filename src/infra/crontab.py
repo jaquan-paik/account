@@ -1,5 +1,5 @@
 from django.core.management import call_command
-from uwsgidecorators import timer, lock
+from uwsgidecorators import lock, timer
 
 
 @timer(300)
@@ -8,6 +8,7 @@ def revoke_expired_tokens(signum: int):
 
 
 @timer(1)
+@lock
 def set_user_modified_history_order(signum: int):
     call_command('set_user_modified_history_order')
 
