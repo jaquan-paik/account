@@ -93,24 +93,26 @@ class CrawlStoreUserService:
                 users_to_create.append(user)
 
             elif user != existing_users_dict[user.idx]:
-                users_to_update.append(user)
+                existing_user = existing_users_dict[user.idx]
+                existing_user.merge(user)
+                users_to_update.append(existing_user)
 
         return users_to_create, users_to_update
 
     @classmethod
     @retry(retry_count=3, retriable_exceptions=IntegrityError)
     def _create_users(cls, users: List[User]):
-        cls._create_user_modified_histories_by_users(users)
         UserRepository.create(users)
+        cls._create_user_modified_histories_by_users(users)
 
     @classmethod
     def _update_users(cls, users: List[User]):
-        cls._create_user_modified_histories_by_users(users)
         UserRepository.update(users)
+        cls._create_user_modified_histories_by_users(users)
 
     @staticmethod
     def _create_user_modified_histories_by_users(users: List[User]):
         user_modified_histories = []
         for user in users:
-            user_modified_histories.append(UserModifiedHistory(u_idx=user))
+            user_modified_histories.append(UserModifiedHistory(user=user))
         UserModifiedHistoryRepository.create(user_modified_histories, True)
