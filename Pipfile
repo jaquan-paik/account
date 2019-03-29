@@ -47,7 +47,7 @@ name = "pypi"
 "requests" = "==2.20.0"
 "PyJWT" = "==1.6.1"
 "cryptography" = "==2.3"
-"filelock" = "3.0.10"
+"filelock" = "==3.0.10"
 
 [dev-packages]
 "django-debug-toolbar" = "==1.9.1"
