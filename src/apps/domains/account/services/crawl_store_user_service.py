@@ -25,7 +25,7 @@ class CrawlStoreUserService:
         last_date = cls._get_last_date(worker_status.last_date)
         store_updated_user_idxes = cls._get_store_updated_user_idxes(last_date)
 
-        if not store_updated_user_idxes:
+        if store_updated_user_idxes:
             cls._save_created_or_changed_users(store_updated_user_idxes)
 
         worker_status.last_date = last_date
@@ -112,5 +112,5 @@ class CrawlStoreUserService:
     def _create_user_modified_histories_by_users(users: List[User]):
         user_modified_histories = []
         for user in users:
-            user_modified_histories.append(UserModifiedHistory(u_idx=user.idx))
+            user_modified_histories.append(UserModifiedHistory(u_idx=user))
         UserModifiedHistoryRepository.create(user_modified_histories, True)
