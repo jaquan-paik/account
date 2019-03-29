@@ -2,13 +2,15 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 from apps.domains.account.models import User, UserModifiedHistory
-from lib.base.serializers import BaseSerializer
+from lib.base.serializers import BaseSerializer, DynamicChildFieldsSerializer
 
 
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ('idx', 'id')
+        fields = (
+            'idx', 'id', 'name', 'reg_date', 'ip', 'device_id', 'email', 'birth_date', 'gender', 'verified', 'status', 'email_verify_date'
+        )
 
 
 class MultipleUserRequestSerializer(BaseSerializer):
@@ -20,17 +22,13 @@ class MultipleUserRequestSerializer(BaseSerializer):
     )
 
 
-class MultipleUserResponseSerializer(BaseSerializer):
-    def __init__(self, *args, fields=None, **kwargs):
-        super().__init__(*args, **kwargs)
-        if fields is None:
-            fields = []
-        self._fields_only = fields
-
+class MultipleUserResponseSerializer(DynamicChildFieldsSerializer):
     users = serializers.ListField(child=UserSerializer(), required=True, label='user 리스트')
 
 
 class UserModifiedHistorySerializer(ModelSerializer):
+    u_idx = serializers.IntegerField(source='user_id')
+
     class Meta:
         model = UserModifiedHistory
         fields = ('u_idx', 'order', 'last_modified')

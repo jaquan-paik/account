@@ -94,7 +94,9 @@ class UserInfoView(ResponseMixin, APIView):
             return self.fail_response(response_code=code, data=serializer.errors)
 
         users = UserRepository.find_by_u_idxes(serializer.validated_data['u_idxes'])
-        return self.success_response(data=MultipleUserResponseSerializer({'users': users}, fields=serializer.validated_data['fields']).data)
+        return self.success_response(data=MultipleUserResponseSerializer(
+            {'users': users}, fields={'users': serializer.validated_data['fields']}
+        ).data)
 
 
 @method_decorator(ridi_internal_auth, 'dispatch')
