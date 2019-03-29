@@ -100,7 +100,7 @@ class CrawlStoreUserService:
         return users_to_create, users_to_update
 
     @classmethod
-    @retry(retry_count=3, retriable_exceptions=IntegrityError)
+    @retry(retry_count=3, retriable_exceptions=(IntegrityError,))
     def _create_users(cls, users: List[User]):
         UserRepository.create(users)
         cls._create_user_modified_histories_by_users(users)
