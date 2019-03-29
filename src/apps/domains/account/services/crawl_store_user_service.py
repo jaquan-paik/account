@@ -25,7 +25,8 @@ class CrawlStoreUserService:
         last_date = cls._get_last_date(worker_status.last_date)
         store_updated_user_idxes = cls._get_store_updated_user_idxes(last_date)
 
-        cls._save_created_or_changed_users(store_updated_user_idxes)
+        if store_updated_user_idxes:
+            cls._save_created_or_changed_users(store_updated_user_idxes)
 
         worker_status.last_date = last_date
         worker_status.save()
@@ -37,11 +38,20 @@ class CrawlStoreUserService:
         while True:
             if offset > len(store_updated_user_idxes):
                 break
-            users_to_create, users_to_update = cls._get_users_to_create_or_update(store_updated_user_idxes[offset:offset + limit])
-            cls._create_users(users_to_create)
-            cls._update_users(users_to_update)
+            partitioned_user_idxes = store_updated_user_idxes[offset:offset + limit]
+
+            store_user_dtos = cls._get_store_user_dtos(partitioned_user_idxes)
+
+            cls._update_or_create_users_after_compare(partitioned_user_idxes, store_user_dtos)
 
             offset += limit
+
+    @classmethod
+    @retry(retry_count=3, retriable_exceptions=(IntegrityError,))
+    def _update_or_create_users_after_compare(cls, partitioned_updated_user_idxes: List[int], store_user_dtos: List[UserDto]):
+        users_to_create, users_to_update = cls._get_users_to_create_or_update(store_user_dtos, partitioned_updated_user_idxes)
+        cls._create_users_with_history(users_to_create)
+        cls._update_users_with_history(users_to_update)
 
     @staticmethod
     def _get_last_date(worker_last_date: datetime) -> datetime:
@@ -78,9 +88,8 @@ class CrawlStoreUserService:
         )
 
     @classmethod
-    def _get_users_to_create_or_update(cls, store_updated_user_idxes: List[int]) -> Tuple[List[User], List[User]]:
-        store_user_dtos = cls._get_store_user_dtos(store_updated_user_idxes)
-        existing_users_dict = to_dict(UserRepository.find_by_u_idxes(store_updated_user_idxes), 'idx')
+    def _get_users_to_create_or_update(cls, store_user_dtos: List[UserDto], user_idxes: List[int]) -> Tuple[List[User], List[User]]:
+        existing_users_dict = to_dict(UserRepository.find_by_u_idxes(user_idxes), 'idx')
 
         users_to_create = []
         users_to_update = []
@@ -92,24 +101,23 @@ class CrawlStoreUserService:
                 users_to_create.append(user)
 
             elif user != existing_users_dict[user.idx]:
-                users_to_update.append(user)
+                existing_user = existing_users_dict[user.idx]
+                existing_user.merge(user)
+                users_to_update.append(existing_user)
 
         return users_to_create, users_to_update
 
     @classmethod
-    @retry(retry_count=3, retriable_exceptions=IntegrityError)
-    def _create_users(cls, users: List[User]):
-        cls._create_user_modified_histories_by_users(users)
+    def _create_users_with_history(cls, users: List[User]):
         UserRepository.create(users)
+        cls._create_user_modified_histories_by_users(users)
 
     @classmethod
-    def _update_users(cls, users: List[User]):
-        cls._create_user_modified_histories_by_users(users)
+    def _update_users_with_history(cls, users: List[User]):
         UserRepository.update(users)
+        cls._create_user_modified_histories_by_users(users)
 
     @staticmethod
     def _create_user_modified_histories_by_users(users: List[User]):
-        user_modified_histories = []
-        for user in users:
-            user_modified_histories.append(UserModifiedHistory(u_idx=user.idx))
+        user_modified_histories = [UserModifiedHistory(user=user) for user in users]
         UserModifiedHistoryRepository.create(user_modified_histories, True)
