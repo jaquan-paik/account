@@ -2,8 +2,10 @@ from django.views import View
 from rest_framework.views import APIView
 from ridi_django_oauth2.decorators import login_required
 
-from apps.domains.sso.constants import SSO_TOKEN_TTL
+from apps.domains.sso.config import SSOConfig
+from apps.domains.sso.constants import SSO_TOKEN_TTL, SSOKeyHint
 from apps.domains.sso.exceptions import FailVerifyTokenException, NotFoundSSOKeyException
+from apps.domains.sso.forms import SSOLoginForm
 from apps.domains.sso.serializers import GenerateTokenResponseSerializer, VerifyTokenRequestSerializer, \
     VerifyTokenResponseSerializer, GenerateTokenRequestSerializer
 from apps.domains.sso.services.sso_key_service import SSOKeyService
@@ -51,4 +53,15 @@ class VerifySSOTokenView(ResponseMixin, APIView):
 
 class SSOLoginView(View):
     def get(self, request):
-        pass
+        form = SSOLoginForm(request.GET, domain=SSOConfig.get_sso_root_domain())
+        if not form.is_valid():
+            # redirect to store ? 어디로 ?
+            return
+
+        try:
+            u_idx = SSOTokenService.verify(form.cleaned_data['token'], SSOKeyService.get_key(SSOKeyHint.VIEWER))
+        except FailVerifyTokenException as e:
+            return
+
+        token = SSOTokenService.generate(u_idx, SSO_TOKEN_TTL, SSOKeyService.get_key(SSOKeyHint.SESSION_LOGIN))
+        return

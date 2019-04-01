@@ -50,7 +50,9 @@ class SecretKeyName(BaseConstant):
 
     COOKIE_ROOT_DOMAIN = 'cookie_root_domain'
 
-    SSO_KEY_VIEWER = 'sso_key_viewer',
+    SSO_KEY_VIEWER = 'sso_key_viewer'
+    SSO_KEY_SESSION_LOGIN = 'sso_key_session_login'
+    SSO_ROOT_DOMAIN = 'sso_root_domain'
 
     _LIST = [
         ENVIRONMENT, SECRET_KEY, CACHE_LOCATION, WRITE_DB_HOST, WRITE_DB_ACCOUNT, WRITE_DB_PASSWORD, READ_DB_HOST, READ_DB_ACCOUNT,
