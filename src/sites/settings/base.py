@@ -1,5 +1,6 @@
 import os
 
+from apps.domains.sso.constants import SSOKeyHint
 from infra.configure.constants import SecretKeyName
 from lib.log.setup import setup_logging
 from lib.ridibooks.internal_server_auth.helpers.config_helper import AuthList, ConfigHelper as InternalServerAuthConfigHelper
@@ -234,3 +235,7 @@ REST_FRAMEWORK = {
 }
 
 STATE_CRYPTO_KEY = Secret().get(SecretKeyName.STATE_CRYPTO_KEY)
+
+SSO_CRYPTO_KEYS = {
+    SSOKeyHint.VIEWER: Secret().get(SecretKeyName.SSO_KEY_VIEWER)
+}
