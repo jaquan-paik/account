@@ -24,7 +24,7 @@ class SSOTokenService:
         try:
             body = CryptoHelper(key).decrypt(token)
             data = json.loads(body)
-        except:
+        except Exception:
             raise FailVerifyTokenException('복호화에 실패했습니다.')
 
         now = datetime.now()

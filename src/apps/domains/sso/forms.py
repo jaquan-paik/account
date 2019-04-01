@@ -9,7 +9,7 @@ class SSOLoginForm(forms.Form):
     token = forms.CharField(required=True, label='SSO 토큰')
     redirect_uri = forms.CharField(required=True, label='Redirect URI')
 
-    def __init__(self, domain: str, *args, **kwargs):
+    def __init__(self, *args, domain: str, **kwargs):
         super().__init__(*args, **kwargs)
         self.domain = domain
 
