@@ -240,4 +240,5 @@ SSO_CRYPTO_KEYS = {
     SSOKeyHint.VIEWER: Secret().get(SecretKeyName.SSO_KEY_VIEWER),
     SSOKeyHint.SESSION_LOGIN: Secret().get(SecretKeyName.SSO_KEY_SESSION_LOGIN)
 }
-SSO_ROOT_DOMAIN = Secret().get(SecretKeyName.SSO_ROOT_DOMAIN)
+SSO_REDIRECT_DOMAIN = Secret().get(SecretKeyName.SSO_REDIRECT_DOMAIN)
+SSO_LOGIN_URL = Secret().get(SecretKeyName.SSO_LOGIN_URL)

@@ -55,7 +55,7 @@ class VerifySSOTokenView(ResponseMixin, APIView):
 
 class SSOLoginView(View):
     def get(self, request):
-        form = SSOLoginForm(request.GET, domain=SSOConfig.get_sso_root_domain())
+        form = SSOLoginForm(request.GET, domain=SSOConfig.get_sso_redirect_domain())
         if not form.is_valid():
             return HttpResponseBadRequest()
 
@@ -69,5 +69,4 @@ class SSOLoginView(View):
             'token': token,
             'return_url': form.cleaned_data['redirect_uri']
         }
-        # TODO CHANGE TO Store SSO Domain
-        return HttpResponseRedirect(generate_query_url('https://ridibooks.com/accounts/sso', query))
+        return HttpResponseRedirect(generate_query_url(SSOConfig.get_sso_login_url(), query))
