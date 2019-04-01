@@ -1,5 +1,4 @@
-from django.http import HttpResponseBadRequest
-from django.shortcuts import redirect
+from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.views import View
 from rest_framework.views import APIView
 from ridi_django_oauth2.decorators import login_required
@@ -15,6 +14,7 @@ from apps.domains.sso.services.sso_token_service import SSOTokenService
 from infra.network.constants.api_status_code import ApiStatusCodes
 from lib.decorators.ridi_oauth2_access_token_login import ridi_oauth2_access_token_login
 from lib.django.views.api.mixins import ResponseMixin
+from lib.utils.url import generate_query_url
 
 
 class GenerateSSOTokenView(ResponseMixin, APIView):
@@ -65,4 +65,9 @@ class SSOLoginView(View):
             return HttpResponseBadRequest()
 
         token = SSOTokenService.generate(u_idx, SSO_TOKEN_TTL, SSOKeyService.get_key(SSOKeyHint.SESSION_LOGIN))
-        return redirect()
+        query = {
+            'token': token,
+            'return_url': form.cleaned_data['redirect_uri']
+        }
+        # TODO CHANGE TO Store SSO Domain
+        return HttpResponseRedirect(generate_query_url('https://ridibooks.com/accounts/sso', query))
