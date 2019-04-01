@@ -1,3 +1,5 @@
+from django.http import HttpResponseBadRequest
+from django.shortcuts import redirect
 from django.views import View
 from rest_framework.views import APIView
 from ridi_django_oauth2.decorators import login_required
@@ -55,13 +57,12 @@ class SSOLoginView(View):
     def get(self, request):
         form = SSOLoginForm(request.GET, domain=SSOConfig.get_sso_root_domain())
         if not form.is_valid():
-            # redirect to store ? 어디로 ?
-            return
+            return HttpResponseBadRequest()
 
         try:
             u_idx = SSOTokenService.verify(form.cleaned_data['token'], SSOKeyService.get_key(SSOKeyHint.VIEWER))
-        except FailVerifyTokenException as e:
-            return
+        except FailVerifyTokenException:
+            return HttpResponseBadRequest()
 
         token = SSOTokenService.generate(u_idx, SSO_TOKEN_TTL, SSOKeyService.get_key(SSOKeyHint.SESSION_LOGIN))
-        return
+        return redirect()

@@ -6,6 +6,7 @@ from lib.utils.url import is_url
 
 
 class SSOLoginForm(forms.Form):
+    token = forms.CharField(required=True, label='SSO 토큰')
     redirect_uri = forms.CharField(required=True, label='Redirect URI')
 
     def __init__(self, domain: str, *args, **kwargs):
