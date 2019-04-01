@@ -1,2 +1,2 @@
 
-SSO_TOKEN_TTL = 60
+SSO_TOKEN_TTL = 60  # 60초
