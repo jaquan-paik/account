@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     'apps.domains.account.apps.AccountConfig',
     'apps.domains.oauth2.apps.OAuth2Config',
     'apps.domains.ridi.apps.RidiConfig',
-
+    'apps.domains.sso.apps.SSOAppConfig',
     # routines
     'apps.globals.routines.worker_status.apps.WorkerStatusAppConfig',
 ]
