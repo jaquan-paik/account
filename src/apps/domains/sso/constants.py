@@ -1,0 +1,2 @@
+
+SSO_TOKEN_TTL = 60
