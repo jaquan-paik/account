@@ -17,7 +17,7 @@ from lib.django.views.api.mixins import ResponseMixin
 from lib.utils.url import generate_query_url
 
 
-class GenerateSSOTokenView(ResponseMixin, APIView):
+class GenerateSSOOtpView(ResponseMixin, APIView):
     @ridi_oauth2_access_token_login
     @login_required()
     def get(self, request):
@@ -36,7 +36,7 @@ class GenerateSSOTokenView(ResponseMixin, APIView):
         return self.success_response(data=GenerateTokenResponseSerializer({'token': token}).data)
 
 
-class VerifySSOTokenView(ResponseMixin, APIView):
+class VerifySSOOtpView(ResponseMixin, APIView):
     def get(self, request):
         serializer = VerifyTokenRequestSerializer(request.params)
         if not serializer.is_valid():
