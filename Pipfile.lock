@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3e60818ed3c30be11b8a369f18bbe5dbfd8287f8bbec3c248e0cf6aa149d3378"
+            "sha256": "b85ae743615dc2109f177e8f95d4551405958078810a1c401682197c852c0298"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -163,6 +163,13 @@
             ],
             "index": "pypi",
             "version": "==1.1.6"
+        },
+        "django-multiselectfield": {
+            "hashes": [
+                "sha256:52483d23aecbf6b502f9e6806e97da9288d5d7f2a3f99f736390763de68c8fd7"
+            ],
+            "index": "pypi",
+            "version": "==0.1.8"
         },
         "django-oauth-toolkit": {
             "hashes": [
