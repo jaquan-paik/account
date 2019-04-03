@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from multiselectfield import MultiSelectField
 from oauth2_provider.models import AbstractAccessToken, AbstractApplication, AbstractGrant, AbstractRefreshToken
 from oauthlib.uri_validate import is_absolute_uri
 
@@ -42,7 +43,8 @@ class Application(AbstractApplication):
         max_length=32, choices=CLIENT_TYPES, default=AbstractApplication.CLIENT_CONFIDENTIAL, verbose_name='Client 종류',
         help_text='Confidential 만 지원한다.'
     )
-    authorization_grant_type = models.CharField(
+    # TODO 나중에 max_length 늘리자
+    authorization_grant_type = MultiSelectField(
         max_length=32, choices=GRANT_TYPES, default=AbstractApplication.GRANT_AUTHORIZATION_CODE, verbose_name='Grant 종류',
         help_text='Authorization code와 Password 만 지원한다.'
     )
@@ -71,6 +73,9 @@ class Application(AbstractApplication):
         return ' '.join(redirect_uris)
 
     objects = ApplicationManager()
+
+    def allows_grant_type(self, *grant_types):
+        return any(allowed_grant_type in grant_types for allowed_grant_type in self.authorization_grant_type)
 
     def redirect_uri_allowed(self, uri):
         for allowed_uri in self.redirect_uris.split():
