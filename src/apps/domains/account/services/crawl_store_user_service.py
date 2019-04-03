@@ -1,11 +1,10 @@
 from datetime import datetime, timedelta
+from django.db import IntegrityError, transaction
 from typing import List, Tuple
-
-from django.db import transaction, IntegrityError
 
 from apps.domains.account.dtos import UserDto
 from apps.domains.account.models import User, UserModifiedHistory
-from apps.domains.account.repositories import UserRepository, UserModifiedHistoryRepository
+from apps.domains.account.repositories import UserModifiedHistoryRepository, UserRepository
 from apps.globals.routines.worker_status.constants import WorkerType
 from apps.globals.routines.worker_status.repositories import WorkerStatusRepository
 from infra.storage.database.constants import Database
@@ -79,11 +78,11 @@ class CrawlStoreUserService:
             ip=user_dto.ip,
             device_id=user_dto.device_id,
             email=user_dto.email,
-            birth_date=user_dto.birth_date,
+            birthday=user_dto.birth_date,
             gender=user_dto.gender,
-            verified=user_dto.verified,
+            is_verified=user_dto.verified,
             status=user_dto.status,
-            email_verify_date=user_dto.email_verify_date,
+            email_verified_date=user_dto.email_verify_date,
             last_modified=user_dto.updated_at
         )
 

@@ -8,22 +8,25 @@ from lib.django.db.models.base_model import BaseModel, BaseUserModel, EqualizeMi
 class User(EqualizeMixin, BaseUserModel):
     idx = models.AutoField(primary_key=True, editable=False, verbose_name='u_idx')
     id = models.CharField(max_length=32, unique=True, editable=False, verbose_name='u_id', )
-
     name = models.CharField(null=True, max_length=32, verbose_name='name')
-    reg_date = models.DateTimeField(null=True, verbose_name='reg_date')
-    ip = models.CharField(null=True, max_length=16, verbose_name='ip')
+
+    reg_date = models.DateTimeField(null=True, verbose_name='가입일')
+    ip = models.GenericIPAddressField(null=True, verbose_name='ip')
     device_id = models.CharField(null=True, max_length=128, verbose_name='device_id')
+
     email = models.CharField(null=True, max_length=256, verbose_name='email')
-    birth_date = models.DateTimeField(null=True, verbose_name='birth_date')
-    gender = models.IntegerField(null=True, choices=GenderType.get_choices(), verbose_name='gender')
-    verified = models.BooleanField(default=False, verbose_name='verified')
-    status = models.IntegerField(null=True, choices=StatusType.get_choices(), verbose_name='status')
-    email_verify_date = models.DateTimeField(null=True, verbose_name='email_verify_date')
+    email_verified_date = models.DateTimeField(null=True, verbose_name='이메일 인증 날짜')
+
+    birthday = models.DateTimeField(null=True, verbose_name='생일')
+    gender = models.IntegerField(null=True, choices=GenderType.get_choices(), verbose_name='성별')
+    is_verified = models.BooleanField(default=False, verbose_name='인증여부')
+
+    status = models.IntegerField(null=True, choices=StatusType.get_choices(), verbose_name='계정 상태')
 
     USERNAME_FIELD = 'id'
 
     equal_fields = (
-        'idx', 'id', 'name', 'reg_date', 'ip', 'device_id', 'email', 'birth_date', 'gender', 'verified', 'status', 'email_verify_date'
+        'idx', 'id', 'name', 'reg_date', 'ip', 'device_id', 'email', 'birthday', 'gender', 'is_verified', 'status', 'email_verified_date'
     )
 
     objects = UserManager()

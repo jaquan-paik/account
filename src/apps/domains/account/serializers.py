@@ -9,7 +9,8 @@ class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'idx', 'id', 'name', 'reg_date', 'ip', 'device_id', 'email', 'birth_date', 'gender', 'verified', 'status', 'email_verify_date'
+            'idx', 'id', 'name', 'reg_date', 'ip', 'device_id', 'email', 'birthday', 'gender', 'is_verified', 'status',
+            'email_verified_date'
         )
 
 
