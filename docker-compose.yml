@@ -7,6 +7,8 @@ services:
     restart: always
     volumes:
       - ./.tmp/mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: account
@@ -20,6 +22,8 @@ services:
     volumes:
       - .:/htdocs/www
     command: ['./docs/docker/wait_for_it.sh', 'mysqladmin ping -h account-mariadb -u root -proot', 'make docker-all']
+    environment:
+      - PYTHONUNBUFFERED=1
     depends_on:
       - account-mariadb
     links:

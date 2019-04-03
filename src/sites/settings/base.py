@@ -22,6 +22,8 @@ ALLOWED_HOSTS = Secret().get(SecretKeyName.ALLOWED_HOSTS).split()
 
 STORE_URL = Secret().get(SecretKeyName.STORE_URL)
 
+STORE_API_URL = Secret().get(SecretKeyName.STORE_API_URL)
+
 RIDIBOOKS_LOGIN_URL = Secret().get(SecretKeyName.RIDIBOOKS_LOGIN_URL)
 
 CORS_ORIGIN_REGEX_WHITELIST = (rf"{Secret().get(SecretKeyName.CORS_ORIGIN_REGEX_WHITELIST)}",)
@@ -57,6 +59,9 @@ INSTALLED_APPS = [
     'apps.domains.account.apps.AccountConfig',
     'apps.domains.oauth2.apps.OAuth2Config',
     'apps.domains.ridi.apps.RidiConfig',
+
+    # routines
+    'apps.globals.routines.worker_status.apps.WorkerStatusAppConfig',
 ]
 
 MIDDLEWARE = [

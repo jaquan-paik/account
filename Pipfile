@@ -48,6 +48,7 @@ name = "pypi"
 "PyJWT" = "==1.6.1"
 "cryptography" = "==2.3"
 "django-multiselectfield" = "==0.1.8"
+"filelock" = "==3.0.10"
 
 [dev-packages]
 "django-debug-toolbar" = "==1.9.1"
