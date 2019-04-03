@@ -2,10 +2,17 @@ from lib.base.constants import BaseConstant
 
 # pyJWT 라이브러리의 leeway 값은 토큰의 유효기간을 늘려주는 값이다.
 JWT_VERIFY_MARGIN = -(60 * 10)  # -10분
-ACCESS_TOKEN_EXPIRE_SECONDS = 60 * 60  # 3600, 1hour
+
 GRANT_CODE_LENGTH = 30
 DEFAULT_SCOPE = 'all'
 
+TOKEN_TYPE = 'Bearer'
+
+# AccessToken
+ACCESS_TOKEN_EXPIRE_SECONDS = 60 * 60  # 3600, 1hour
+
+# RefershToken
+REFRESH_TOKEN_EXPIRE_SECONDS = 30 * 24 * 60 * 60  # 2592000, 30 days
 
 class JwtAlg(BaseConstant):
     HS256 = 'HS256'
