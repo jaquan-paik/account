@@ -15,7 +15,7 @@ class InHouseClientCredentialsService:
         try:
             client = ClientHelper.get_in_house_client(client_id)
             user = User.objects.get(idx=u_idx)
-            tokens = OAuth2ClientCredentialsService.get_tokens(client, user, audience)
+            tokens = OAuth2ClientCredentialsService.get_tokens(client.client_id, client.client_secret, user, audience)
         except (PermissionDenied, ObjectDoesNotExist, UnsupportedGrantType) as e:
             raise e
 
