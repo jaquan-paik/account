@@ -39,3 +39,7 @@ class GrantType(BaseConstant):
 
 class ResponseType:
     CODE = 'code'
+
+
+class ClientType:
+    CONFIDENTIAL = 'confidential'
