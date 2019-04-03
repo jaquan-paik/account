@@ -3,13 +3,13 @@ from django.conf import settings
 
 class SSOConfig:
     @staticmethod
-    def get_sso_redirect_domain():
+    def get_sso_redirect_domain() -> str:
         return settings.SSO_REDIRECT_DOMAIN
 
     @staticmethod
-    def get_sso_login_url():
+    def get_sso_login_url() -> str:
         return settings.SSO_LOGIN_URL
 
     @staticmethod
-    def get_crypto_key(hint: str) -> str:
-        return settings.SSO_CRYPTO_KEYS[hint]
+    def get_sso_otp_key() -> str:
+        return settings.SSO_OTP_KEY

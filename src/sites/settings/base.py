@@ -236,9 +236,6 @@ REST_FRAMEWORK = {
 
 STATE_CRYPTO_KEY = Secret().get(SecretKeyName.STATE_CRYPTO_KEY)
 
-SSO_CRYPTO_KEYS = {
-    SSOKeyHint.VIEWER: Secret().get(SecretKeyName.SSO_KEY_VIEWER),
-    SSOKeyHint.SESSION_LOGIN: Secret().get(SecretKeyName.SSO_KEY_SESSION_LOGIN)
-}
+SSO_OTP_KEY = Secret().get(SecretKeyName.SSO_OTP_KEY)
 SSO_REDIRECT_DOMAIN = Secret().get(SecretKeyName.SSO_REDIRECT_DOMAIN)
 SSO_LOGIN_URL = Secret().get(SecretKeyName.SSO_LOGIN_URL)
