@@ -1,56 +1,62 @@
-from django.http import HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponseBadRequest, HttpResponseRedirect, HttpResponseForbidden
+from django.shortcuts import redirect
 from django.views import View
 from rest_framework.views import APIView
 from ridi_django_oauth2.decorators import login_required
 
+from apps.domains.oauth2.constants import GrantType
+from apps.domains.oauth2.services.in_house_client_credentials_service import InHouseClientCredentialsService
+from apps.domains.ridi.helpers.response_cookie_helper import ResponseCookieHelper
+from apps.domains.ridi.views import is_auto_login_request
 from apps.domains.sso.config import SSOConfig
-from apps.domains.sso.constants import SSO_TOKEN_TTL, SSOKeyHint
-from apps.domains.sso.exceptions import FailVerifyTokenException, NotFoundSSOKeyException
+from apps.domains.sso.exceptions import FailVerifyOtpException
 from apps.domains.sso.forms import SSOLoginForm
-from apps.domains.sso.serializers import GenerateTokenResponseSerializer, VerifyTokenRequestSerializer, \
-    VerifyTokenResponseSerializer, GenerateTokenRequestSerializer
-from apps.domains.sso.services.sso_key_service import SSOKeyService
-from apps.domains.sso.services.sso_token_service import SSOTokenService
+from apps.domains.sso.serializers import SSOOtpGenerateResponseSerializer, SSOOtpGenerateRequestSerializer, \
+    SSOOtpVerifyResponseSerializer, SSOOtpVerifyRequestSerializer
+from apps.domains.sso.services.sso_otp_service import SSOOtpService
+from infra.configure.config import GeneralConfig
 from infra.network.constants.api_status_code import ApiStatusCodes
 from lib.decorators.ridi_oauth2_access_token_login import ridi_oauth2_access_token_login
 from lib.django.views.api.mixins import ResponseMixin
+from lib.ridibooks.internal_server_auth.decorators import ridi_internal_auth
 from lib.utils.url import generate_query_url
+
+
+_SSO_AUDIENCE = 'sso'
 
 
 class GenerateSSOOtpView(ResponseMixin, APIView):
     @ridi_oauth2_access_token_login
     @login_required()
-    def get(self, request):
-        serializer = GenerateTokenRequestSerializer(request.params)
+    def post(self, request):
+        serializer = SSOOtpGenerateRequestSerializer(request.params)
         if not serializer.is_valid():
             code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
             return self.fail_response(code, serializer.errors)
 
-        try:
-            key = SSOKeyService.get_key(serializer.validated_data['hint'])
-        except NotFoundSSOKeyException as e:
-            code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
-            return self.fail_response(code, {'message': e.msg})
-
-        token = SSOTokenService.generate(request.user.idx, SSO_TOKEN_TTL, key)
-        return self.success_response(data=GenerateTokenResponseSerializer({'token': token}).data)
+        otp = SSOOtpService.generate(SSOConfig.get_sso_otp_key(), request.user.idx, request.user.token_info.client_id)
+        return self.success_response(
+            data=SSOOtpGenerateResponseSerializer({'otp': otp}).data
+        )
 
 
 class VerifySSOOtpView(ResponseMixin, APIView):
+    @ridi_internal_auth
     def get(self, request):
-        serializer = VerifyTokenRequestSerializer(request.params)
+        serializer = SSOOtpVerifyRequestSerializer(request.params)
         if not serializer.is_valid():
             code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
             return self.fail_response(code, serializer.errors)
 
         try:
-            key = SSOKeyService.get_key(serializer.validated_data['hint'])
-            u_idx = SSOTokenService.verify(serializer.validated_data['token'], key)
-        except (FailVerifyTokenException, NotFoundSSOKeyException) as e:
-            code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
+            u_idx, _ = SSOOtpService.verify(SSOConfig.get_sso_otp_key(), serializer.validated_data['otp'])
+        except FailVerifyOtpException as e:
+            code = self.make_response_code(ApiStatusCodes.C_401_UNAUTHORIZED)
             return self.fail_response(code, {'message': e.msg})
 
-        return self.success_response(data=VerifyTokenResponseSerializer({'u_idx': u_idx}).data)
+        return self.success_response(
+            data=SSOOtpVerifyResponseSerializer({'u_idx': u_idx}).data
+        )
 
 
 class SSOLoginView(View):
@@ -59,14 +65,30 @@ class SSOLoginView(View):
         if not form.is_valid():
             return HttpResponseBadRequest()
 
-        try:
-            u_idx = SSOTokenService.verify(form.cleaned_data['token'], SSOKeyService.get_key(SSOKeyHint.VIEWER))
-        except FailVerifyTokenException:
-            return HttpResponseBadRequest()
+        otp = form.cleaned_data['otp']
+        redirect_uri = form.cleaned_data.get('redirect_uri', None)
+        if redirect_uri:
+            return self._login_with_store(otp, redirect_uri)
 
-        token = SSOTokenService.generate(u_idx, SSO_TOKEN_TTL, SSOKeyService.get_key(SSOKeyHint.SESSION_LOGIN))
-        query = {
-            'token': token,
-            'return_url': form.cleaned_data['redirect_uri']
-        }
-        return HttpResponseRedirect(generate_query_url(SSOConfig.get_sso_login_url(), query))
+        try:
+            u_idx, client_id = SSOOtpService.verify(SSOConfig.get_sso_otp_key(), otp)
+            access_token, refresh_token = InHouseClientCredentialsService.create_token(
+                client_id=client_id, u_idx=u_idx, audience=_SSO_AUDIENCE
+            )
+        except FailVerifyOtpException:
+            return HttpResponseForbidden()
+
+        response = HttpResponseRedirect(GeneralConfig.get_store_url())
+        ResponseCookieHelper.add_token_cookie(response, access_token, refresh_token, is_auto_login_request(request))
+        return response
+
+    def _login_with_store(self, otp: str, redirect_uri: str):
+        try:
+            u_idx, _ = SSOOtpService.verify(SSOConfig.get_sso_otp_key(), otp)
+        except FailVerifyOtpException:
+            return HttpResponseForbidden()
+
+        new_otp = SSOOtpService.generate(SSOConfig.get_sso_otp_key(), u_idx)
+        return redirect(
+            generate_query_url(SSOConfig.get_sso_login_url(), {'token': new_otp, 'return_url': redirect_uri})
+        )
