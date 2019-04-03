@@ -112,5 +112,5 @@ class UserModifiedHistoryView(ResponseMixin, APIView):
         offset = serializer.validated_data['offset']
         limit = serializer.validated_data['limit']
 
-        histories = UserModifiedHistoryRepository.find_after_order(order, offset, limit)
+        histories = UserModifiedHistoryRepository.find_order_or_over(order, offset, limit)
         return self.success_response(data=UserModifiedHistoryResponseSerializer({'histories': histories}).data)
