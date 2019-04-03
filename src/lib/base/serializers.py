@@ -31,7 +31,7 @@ class DynamicChildFieldsSerializer(BaseSerializer):
         super().__init__(*args, **kwargs)
         self._allowed_fields = fields
 
-    def to_representation(self, obj):
+    def to_representation(self, instance):
         if self._allowed_fields:
             for field, allowed_fields in self._allowed_fields.items():
                 allowed = set(allowed_fields)
@@ -39,4 +39,4 @@ class DynamicChildFieldsSerializer(BaseSerializer):
                 for field_name in existing - allowed:
                     self.fields[field].child.fields.pop(field_name)
 
-        return super().to_representation(obj)
+        return super().to_representation(instance)
