@@ -17,8 +17,8 @@ def get_month_start_end_date(year: int, month: int) -> Tuple:
     return start_date, end_date
 
 
-def strptime(datetime_string: str) -> datetime:
-    return datetime.strptime(datetime_string, DateTimeFormat.YMD_HMSM)
+def strptime(datetime_string: str, datetime_format=DateTimeFormat.YMD_HMSM) -> datetime:
+    return datetime.strptime(datetime_string, datetime_format)
 
 
 def reset_minutes(_datetime: datetime) -> datetime:

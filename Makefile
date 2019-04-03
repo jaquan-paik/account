@@ -26,13 +26,13 @@ ci-settings:
 	@python3.6 src/script/handle_secret_file.py -a generate -e $(ns)
 
 global-python-package-install-development:
-	@pip3.6 install -U pip==18.0 pipenv && pipenv install --system --deploy --dev
+	@pip3.6 install -U pip pipenv && pipenv install --system --deploy --dev
 
 global-python-package-install-staging:
-	@pip3.6 install -U pip==18.0 pipenv && pipenv install --system --deploy
+	@pip3.6 install -U pip pipenv && pipenv install --system --deploy
 
 global-python-package-install-production:
-	@pip3.6 install -U pip==18.0 pipenv && pipenv install --system --deploy
+	@pip3.6 install -U pip pipenv && pipenv install --system --deploy
 
 
 # run
@@ -87,3 +87,4 @@ docker-down:
 
 docker-logs:
 	@docker ps -a -q -f name=account-www | awk '{print $1}' | xargs docker logs -f
+

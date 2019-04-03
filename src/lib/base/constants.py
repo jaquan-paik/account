@@ -1,7 +1,5 @@
 from typing import Dict, List
 
-from lib.base.exceptions import MsgException
-
 
 class BaseConstant:
     _LIST = []
@@ -25,8 +23,16 @@ class BaseConstant:
             if v == string:
                 return k
 
-        raise MsgException('존재하지 않는 값입니다.')
+        raise NotImplementedError
 
     @classmethod
     def get_string_map(cls) -> Dict:
         return cls._STRING_MAP
+
+    @classmethod
+    def to_key_from_string(cls, string: str) -> int:
+        for k, v in cls._STRING_MAP.items():
+            if v == string:
+                return k
+
+        raise NotImplementedError
