@@ -15,6 +15,7 @@ class OAuth2AuthorizationCodeService:
         client = ClientService.get_client(client_id)
         if not client.allows_grant_type(GrantType.OLD_AUTHORIZATION_CODE, GrantType.AUTHORIZATION_CODE):
             raise NotExistedClient
+
         cls._assert_if_user_grant_client_access_request(client.skip_authorization)
         ClientService.assert_client_redirect_uri(client, redirect_uri)
         code = GrantRepository.create_grant(client, redirect_uri, u_idx, DEFAULT_SCOPE).code
