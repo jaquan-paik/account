@@ -41,7 +41,7 @@ def f_lock(key_prefix: str, lock_ttl: int = 600, lock_waiting_timeout: int = 0):
                 _lock.acquire(timeout=lock_waiting_timeout)
 
             except Timeout:
-                return
+                return None
 
             try:
                 return _func(request, *args, **kwargs)
