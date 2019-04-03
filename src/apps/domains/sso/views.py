@@ -4,7 +4,6 @@ from django.views import View
 from rest_framework.views import APIView
 from ridi_django_oauth2.decorators import login_required
 
-from apps.domains.oauth2.constants import GrantType
 from apps.domains.oauth2.services.in_house_client_credentials_service import InHouseClientCredentialsService
 from apps.domains.ridi.helpers.response_cookie_helper import ResponseCookieHelper
 from apps.domains.ridi.views import is_auto_login_request
@@ -20,7 +19,6 @@ from lib.decorators.ridi_oauth2_access_token_login import ridi_oauth2_access_tok
 from lib.django.views.api.mixins import ResponseMixin
 from lib.ridibooks.internal_server_auth.decorators import ridi_internal_auth
 from lib.utils.url import generate_query_url
-
 
 _SSO_AUDIENCE = 'sso'
 
