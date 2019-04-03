@@ -13,6 +13,8 @@ ACCESS_TOKEN_EXPIRE_SECONDS = 60 * 60  # 3600, 1hour
 
 # RefershToken
 REFRESH_TOKEN_EXPIRE_SECONDS = 30 * 24 * 60 * 60  # 2592000, 30 days
+REFRESH_TOKEN_EXPIRE_DAYS = 30
+
 
 class JwtAlg(BaseConstant):
     HS256 = 'HS256'

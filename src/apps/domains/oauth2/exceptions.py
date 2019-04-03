@@ -7,6 +7,12 @@ class JwtTokenErrorException(Exception):
     pass
 
 
+class UnsupportedGrantType(OAuth2Error):
+    error = 'unsupported_grant_type'
+    status_code = HttpStatusCodes.C_400_BAD_REQUEST
+    description = 'this grant type is not supported'
+
+
 class LoginFailError(OAuth2Error):
     error = 'login_fail'
     status_code = HttpStatusCodes.C_401_UNAUTHORIZED
