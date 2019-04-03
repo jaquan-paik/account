@@ -4,7 +4,7 @@ from django.views import View
 from rest_framework.views import APIView
 from ridi_django_oauth2.decorators import login_required
 
-from apps.domains.oauth2.services.in_house_client_credentials_service import InHouseClientCredentialsService
+from apps.domains.ridi.services.in_house_client_credentials_service import InHouseClientCredentialsService
 from apps.domains.ridi.helpers.response_cookie_helper import ResponseCookieHelper
 from apps.domains.ridi.views import is_auto_login_request
 from apps.domains.sso.config import SSOConfig
@@ -70,10 +70,10 @@ class SSOLoginView(View):
 
         try:
             u_idx, client_id = SSOOtpService.verify(SSOConfig.get_sso_otp_key(), otp)
-            access_token, refresh_token = InHouseClientCredentialsService.create_token(
+            access_token, refresh_token = InHouseClientCredentialsService.get_tokens(
                 client_id=client_id, u_idx=u_idx, audience=_SSO_AUDIENCE
             )
-        except FailVerifyOtpException:
+        except Exception:
             return HttpResponseForbidden()
 
         response = HttpResponseRedirect(GeneralConfig.get_store_url())
