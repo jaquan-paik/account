@@ -13,7 +13,7 @@ class ClientHelper:
         except ObjectDoesNotExist:
             raise PermissionDenied()
 
-        if client.authorization_grant_type != AbstractApplication.GRANT_AUTHORIZATION_CODE:
+        if not client.allows_grant_type(AbstractApplication.GRANT_AUTHORIZATION_CODE):
             raise NotImplementedError()
 
         return client
