@@ -16,7 +16,7 @@ class UserModifiedHistoryRepository(BaseRepository):
         return cls.model_class.objects.filter(order__isnull=True).order_by('id')[offset:offset + limit]
 
     @classmethod
-    def find_after_order(cls, order: int, offset: int, limit: int) -> List[UserModifiedHistory]:
+    def find_order_or_over(cls, order: int, offset: int, limit: int) -> List[UserModifiedHistory]:
         return cls.model_class.objects.filter(order__gte=order).order_by('order')[offset:offset + limit]
 
 
