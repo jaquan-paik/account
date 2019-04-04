@@ -51,7 +51,7 @@ class SecretKeyName(BaseConstant):
     COOKIE_ROOT_DOMAIN = 'cookie_root_domain'
 
     SSO_OTP_KEY = 'sso_otp_key'
-    SSO_REDIRECT_DOMAIN = 'sso_redirect_domain'
+    SSO_REDIRECT_ROOT_DOMAIN = 'sso_redirect_root_domain'
     SSO_STORE_LOGIN_URL = 'sso_store_login_url'
 
     _LIST = [

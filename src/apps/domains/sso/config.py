@@ -3,8 +3,8 @@ from django.conf import settings
 
 class SSOConfig:
     @staticmethod
-    def get_sso_redirect_domain() -> str:
-        return settings.SSO_REDIRECT_DOMAIN
+    def get_sso_redirect_root_domain() -> str:
+        return settings.SSO_REDIRECT_ROOT_DOMAIN
 
     @staticmethod
     def get_sso_store_login_url() -> str:

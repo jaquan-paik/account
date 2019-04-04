@@ -53,7 +53,7 @@ class VerifySSOOtpView(ResponseMixin, APIView):
 
 class SSOLoginView(View):
     def get(self, request):
-        form = SSOLoginForm(request.GET, domain=SSOConfig.get_sso_redirect_domain())
+        form = SSOLoginForm(request.GET, domain=SSOConfig.get_sso_redirect_root_domain())
         if not form.is_valid():
             return HttpResponseBadRequest()
 
