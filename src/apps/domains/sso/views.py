@@ -1,5 +1,6 @@
 from django.http import HttpResponseBadRequest, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
 from django.views import View
 from rest_framework.views import APIView
 from ridi_django_oauth2.decorators import login_required
@@ -17,14 +18,15 @@ from infra.configure.config import GeneralConfig
 from infra.network.constants.api_status_code import ApiStatusCodes
 from lib.decorators.ridi_oauth2_access_token_login import ridi_oauth2_access_token_login
 from lib.django.views.api.mixins import ResponseMixin
+from lib.log.logger import logger
 from lib.ridibooks.internal_server_auth.decorators import ridi_internal_auth
 from lib.utils.url import generate_query_url
 
 _SSO_AUDIENCE = 'sso'
 
 
+@method_decorator(ridi_oauth2_access_token_login, 'dispatch')
 class GenerateSSOOtpView(ResponseMixin, APIView):
-    @ridi_oauth2_access_token_login
     @login_required()
     def post(self, request):
         otp = SSOOtpService.generate(SSOConfig.get_sso_otp_key(), request.user.idx, request.user.token_info.client_id)
