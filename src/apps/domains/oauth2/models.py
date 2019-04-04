@@ -5,7 +5,7 @@ from oauth2_provider.models import AbstractAccessToken, AbstractApplication, Abs
 from oauthlib.uri_validate import is_absolute_uri
 
 from apps.domains.account.models import OAuth2User, User
-from apps.domains.oauth2.constants import JwtAlg, ACCESS_TOKEN_EXPIRE_SECONDS, GRANT_CODE_LENGTH
+from apps.domains.oauth2.constants import JwtAlg, ACCESS_TOKEN_EXPIRE_SECONDS, GRANT_CODE_LENGTH, GrantType
 from apps.domains.oauth2.managers import ApplicationManager, GrantManager, RefreshTokenManager
 from infra.configure.config import GeneralConfig
 from lib.django.db.mysql import TinyBooleanField
@@ -32,6 +32,7 @@ class Application(AbstractApplication):
     GRANT_TYPES = (
         (AbstractApplication.GRANT_AUTHORIZATION_CODE, 'Authorization code'),
         (AbstractApplication.GRANT_PASSWORD, 'Resource owner password-based'),
+        (GrantType.CLIENT_CREDENTIALS, 'Client Credentials'),
     )
     CLIENT_TYPES = ((AbstractApplication.CLIENT_CONFIDENTIAL, 'Confidential'),)
 
@@ -43,9 +44,8 @@ class Application(AbstractApplication):
         max_length=32, choices=CLIENT_TYPES, default=AbstractApplication.CLIENT_CONFIDENTIAL, verbose_name='Client 종류',
         help_text='Confidential 만 지원한다.'
     )
-    # TODO 나중에 max_length 늘리자
     authorization_grant_type = MultiSelectField(
-        max_length=32, choices=GRANT_TYPES, default=AbstractApplication.GRANT_AUTHORIZATION_CODE, verbose_name='Grant 종류',
+        max_length=128, choices=GRANT_TYPES, default=AbstractApplication.GRANT_AUTHORIZATION_CODE, verbose_name='Grant 종류',
         help_text='Authorization code와 Password 만 지원한다.'
     )
 
