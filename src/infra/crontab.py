@@ -15,8 +15,7 @@ def revoke_expired_tokens(signum: int):
 def set_user_modified_history_order(signum: int):
     call_command(CommandName.SET_USER_MODIFIED_HISTORY_ORDER)
 
-
-@timer(1)
-@f_lock(CommandName.CRAWL_STORE_USER)
-def crawl_store_user(signum: int):
-    call_command(CommandName.CRAWL_STORE_USER)
+# @timer(1)
+# @f_lock(CommandName.CRAWL_STORE_USER)
+# def crawl_store_user(signum: int):
+#     call_command(CommandName.CRAWL_STORE_USER)
