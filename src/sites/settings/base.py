@@ -109,7 +109,7 @@ DATABASES = {
         'PASSWORD': Secret().get(SecretKeyName.WRITE_DB_PASSWORD),
         'HOST': Secret().get(SecretKeyName.WRITE_DB_HOST),
         'PORT': '3306',
-        'CONN_MAX_AGE': 60,
+        'CONN_MAX_AGE': 1024,
         'OPTIONS': {
             'sql_mode': 'STRICT_TRANS_TABLES',
             'charset': 'utf8',
