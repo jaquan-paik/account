@@ -14,7 +14,7 @@ class AccessTokenService:
             'sub': user.id,
             'exp': round(datetime.now().timestamp()) + ACCESS_TOKEN_EXPIRE_SECONDS,
             'u_idx': user.idx,
-            'client_id': client.id,
+            'client_id': client.client_id,
             'scope': scope
         }
 
