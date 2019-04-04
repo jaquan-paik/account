@@ -3,7 +3,7 @@ from typing import Tuple
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 
 from apps.domains.account.models import User
-from apps.domains.oauth2.exceptions import UnsupportedGrantType
+from apps.domains.oauth2.exceptions import DisallowedGrantType
 from apps.domains.oauth2.services.oauth2_client_credentials_service import OAuth2ClientCredentialsService
 from apps.domains.ridi.dtos import TokenData
 from apps.domains.ridi.helpers.client_helper import ClientHelper
@@ -16,7 +16,7 @@ class InHouseClientCredentialsService:
             client = ClientHelper.get_in_house_client(client_id)
             user = User.objects.get(idx=u_idx)
             tokens = OAuth2ClientCredentialsService.get_tokens(client.client_id, client.client_secret, user)
-        except (PermissionDenied, ObjectDoesNotExist, UnsupportedGrantType) as e:
+        except (PermissionDenied, ObjectDoesNotExist, DisallowedGrantType) as e:
             raise e
 
         access_token = TokenData(tokens['access_token'], tokens['expires_in'])

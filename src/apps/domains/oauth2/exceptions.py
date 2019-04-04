@@ -13,6 +13,12 @@ class UnsupportedGrantType(OAuth2Error):
     description = 'this grant type is not supported'
 
 
+class DisallowedGrantType(OAuth2Error):
+    error = 'disallowed_grant_type'
+    status_code = HttpStatusCodes.C_400_BAD_REQUEST
+    description = 'this grant type is disallowed'
+
+
 class LoginFailError(OAuth2Error):
     error = 'login_fail'
     status_code = HttpStatusCodes.C_401_UNAUTHORIZED
