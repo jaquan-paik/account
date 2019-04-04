@@ -1,9 +1,9 @@
 import os
 
-from apps.domains.sso.constants import SSOKeyHint
 from infra.configure.constants import SecretKeyName
 from lib.log.setup import setup_logging
-from lib.ridibooks.internal_server_auth.helpers.config_helper import AuthList, ConfigHelper as InternalServerAuthConfigHelper
+from lib.ridibooks.internal_server_auth.helpers.config_helper import AuthList, \
+    ConfigHelper as InternalServerAuthConfigHelper
 from lib.secret.secret import Secret
 from lib.settings.asserts import assert_allowed_hosts_with_cookie_root_domain
 
