@@ -37,17 +37,18 @@ class GenerateSSOOtpView(ResponseMixin, APIView):
 
 class VerifySSOOtpView(ResponseMixin, APIView):
     @ridi_internal_auth
-    def get(self, request):
-        serializer = SSOOtpVerifyRequestSerializer(request.params)
+    def post(self, request):
+        serializer = SSOOtpVerifyRequestSerializer(data=request.data)
         if not serializer.is_valid():
             code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
             return self.fail_response(code, serializer.errors)
 
         try:
+            logger.info(serializer.validated_data['otp'])
             u_idx, _ = SSOOtpService.verify(SSOConfig.get_sso_otp_key(), serializer.validated_data['otp'])
         except FailVerifyOtpException as e:
-            code = self.make_response_code(ApiStatusCodes.C_401_UNAUTHORIZED)
-            return self.fail_response(code, {'message': e.msg})
+            code = self.make_response_code(ApiStatusCodes.C_401_UNAUTHORIZED, e.msg)
+            return self.fail_response(code)
 
         return self.success_response(
             data=SSOOtpVerifyResponseSerializer({'u_idx': u_idx}).data
