@@ -9,12 +9,11 @@ from apps.domains.oauth2.models import Application
 
 class AccessTokenService:
     @staticmethod
-    def generate(client: Application, user: User, scope: str, aud: str = None) -> str:
+    def generate(client: Application, user: User, scope: str) -> str:
         payload = {
             'sub': user.id,
             'exp': round(datetime.now().timestamp()) + ACCESS_TOKEN_EXPIRE_SECONDS,
             'u_idx': user.idx,
-            'aud': aud,
             'client_id': client.id,
             'scope': scope
         }

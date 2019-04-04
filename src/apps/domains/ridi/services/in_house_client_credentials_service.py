@@ -11,11 +11,11 @@ from apps.domains.ridi.helpers.client_helper import ClientHelper
 
 class InHouseClientCredentialsService:
     @classmethod
-    def get_tokens(cls, client_id: str, u_idx: int, audience: str) -> Tuple[TokenData, TokenData]:
+    def get_tokens(cls, client_id: str, u_idx: int) -> Tuple[TokenData, TokenData]:
         try:
             client = ClientHelper.get_in_house_client(client_id)
             user = User.objects.get(idx=u_idx)
-            tokens = OAuth2ClientCredentialsService.get_tokens(client.client_id, client.client_secret, user, audience)
+            tokens = OAuth2ClientCredentialsService.get_tokens(client.client_id, client.client_secret, user)
         except (PermissionDenied, ObjectDoesNotExist, UnsupportedGrantType) as e:
             raise e
 

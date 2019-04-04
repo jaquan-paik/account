@@ -9,9 +9,9 @@ from apps.domains.oauth2.services.token_service import TokenService
 
 class OAuth2ClientCredentialsService:
     @staticmethod
-    def get_tokens(client_id: str, client_secret: str, user: User, aud: str = None) -> Dict:
+    def get_tokens(client_id: str, client_secret: str, user: User) -> Dict:
         client = ClientService.get_confidential_client(client_id, client_secret)
         if not client.allows_grant_type(GrantType.CLIENT_CREDENTIALS):
             raise UnsupportedGrantType()
 
-        return TokenService.generate(client, user, [DEFAULT_SCOPE], aud)
+        return TokenService.generate(client, user, [DEFAULT_SCOPE])

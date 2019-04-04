@@ -9,9 +9,9 @@ from apps.domains.oauth2.services.refresh_token_service import RefreshTokenServi
 
 class TokenService:
     @staticmethod
-    def generate(client: Client, user: User, scopes: List[str], aud: str = None) -> dict:
+    def generate(client: Client, user: User, scopes: List[str]) -> dict:
         scope = ' '.join(scopes)
-        access_token = AccessTokenService.generate(client, user, scope, aud)
+        access_token = AccessTokenService.generate(client, user, scope)
         refresh_token = RefreshTokenService.generate(client, user, scope)
         return {
             "access_token": access_token,
