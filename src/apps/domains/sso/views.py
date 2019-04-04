@@ -21,8 +21,6 @@ from lib.django.views.api.mixins import ResponseMixin
 from lib.ridibooks.internal_server_auth.decorators import ridi_internal_auth
 from lib.utils.url import generate_query_url
 
-_SSO_AUDIENCE = 'sso'
-
 
 @method_decorator(ridi_oauth2_access_token_login, 'dispatch')
 class GenerateSSOOtpView(ResponseMixin, APIView):
@@ -66,9 +64,7 @@ class SSOLoginView(View):
 
         try:
             u_idx, client_id = SSOOtpService.verify(SSOConfig.get_sso_otp_key(), otp)
-            access_token, refresh_token = InHouseClientCredentialsService.get_tokens(
-                client_id=client_id, u_idx=u_idx, audience=_SSO_AUDIENCE
-            )
+            access_token, refresh_token = InHouseClientCredentialsService.get_tokens(client_id=client_id, u_idx=u_idx)
         except Exception:
             return HttpResponseForbidden()
 
