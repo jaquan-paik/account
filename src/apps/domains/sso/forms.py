@@ -7,15 +7,15 @@ from lib.utils.url import is_url
 
 class SSOLoginForm(forms.Form):
     otp = forms.CharField(required=True, label='SSO Otp')
-    redirect_uri = forms.CharField(label='Redirect URI')
+    redirect_uri = forms.CharField(required=False, label='Redirect URI')
 
     def __init__(self, *args, domain: str, **kwargs):
         super().__init__(*args, **kwargs)
         self._domain = domain
 
     def clean_redirect_uri(self):
-        data = self.cleaned_data.get('redirect_uri', None)
-        if data is None:
+        data = self.cleaned_data.get('redirect_uri', '')
+        if not data:
             return data
 
         if not is_url(data):
