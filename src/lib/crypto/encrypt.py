@@ -19,7 +19,7 @@ class CryptoHelper:
         enc = base64.b64decode(enc)
         cipher = AES.new(self.__key, AES.MODE_CBC, self._get_iv())
         dec = cipher.decrypt(enc)
-        return CryptoHelper._unpad(dec).decode('utf-8')
+        return self._unpad(dec).decode('utf-8')
 
     def _get_iv(self) -> str:
         return chr(0) * self.__bs
@@ -27,6 +27,5 @@ class CryptoHelper:
     def _pad(self, string):
         return string + (self.__bs - len(string) % self.__bs) * chr(self.__bs - len(string) % self.__bs).encode()
 
-    @staticmethod
-    def _unpad(byte_string: bytes) -> bytes:
+    def _unpad(self, byte_string: bytes) -> bytes:
         return byte_string[:-ord(byte_string[len(byte_string) - 1:])]

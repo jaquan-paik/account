@@ -7,6 +7,18 @@ class JwtTokenErrorException(Exception):
     pass
 
 
+class UnsupportedGrantType(OAuth2Error):
+    error = 'unsupported_grant_type'
+    status_code = HttpStatusCodes.C_400_BAD_REQUEST
+    description = 'this grant type is not supported'
+
+
+class DisallowedGrantType(OAuth2Error):
+    error = 'disallowed_grant_type'
+    status_code = HttpStatusCodes.C_400_BAD_REQUEST
+    description = 'this grant type is disallowed'
+
+
 class LoginFailError(OAuth2Error):
     error = 'login_fail'
     status_code = HttpStatusCodes.C_401_UNAUTHORIZED
@@ -56,3 +68,15 @@ class InvalidAuthorizationGrantType(OAuth2Error):
     error = 'invalid_authorization_grant_type'
     status_code = HttpStatusCodes.C_403_FORBIDDEN
     description = 'this client is not authorized to use this authorization grant type.'
+
+
+class InvalidClientSecret(OAuth2Error):
+    error = 'invalid_client_secret'
+    status_code = HttpStatusCodes.C_403_FORBIDDEN
+    description = 'this secret is different with client\'s secret'
+
+
+class InvalidClientType(OAuth2Error):
+    error = 'invalid_client_type'
+    status_code = HttpStatusCodes.C_403_FORBIDDEN
+    description = 'this client is not authorized to use a grant type'

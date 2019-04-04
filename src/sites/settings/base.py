@@ -2,7 +2,8 @@ import os
 
 from infra.configure.constants import SecretKeyName
 from lib.log.setup import setup_logging
-from lib.ridibooks.internal_server_auth.helpers.config_helper import AuthList, ConfigHelper as InternalServerAuthConfigHelper
+from lib.ridibooks.internal_server_auth.helpers.config_helper import AuthList, \
+    ConfigHelper as InternalServerAuthConfigHelper
 from lib.secret.secret import Secret
 from lib.settings.asserts import assert_allowed_hosts_with_cookie_root_domain
 
@@ -59,7 +60,7 @@ INSTALLED_APPS = [
     'apps.domains.account.apps.AccountConfig',
     'apps.domains.oauth2.apps.OAuth2Config',
     'apps.domains.ridi.apps.RidiConfig',
-
+    'apps.domains.sso.apps.SSOAppConfig',
     # routines
     'apps.globals.routines.worker_status.apps.WorkerStatusAppConfig',
 ]
@@ -234,3 +235,7 @@ REST_FRAMEWORK = {
 }
 
 STATE_CRYPTO_KEY = Secret().get(SecretKeyName.STATE_CRYPTO_KEY)
+
+SSO_OTP_KEY = Secret().get(SecretKeyName.SSO_OTP_KEY)
+SSO_REDIRECT_ROOT_DOMAIN = Secret().get(SecretKeyName.SSO_REDIRECT_ROOT_DOMAIN)
+SSO_STORE_LOGIN_URL = Secret().get(SecretKeyName.SSO_STORE_LOGIN_URL)

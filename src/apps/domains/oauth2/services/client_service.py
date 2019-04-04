@@ -1,6 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 
-from apps.domains.oauth2.exceptions import NotExistedClient, NotInHouseClient, InvalidRedirectUri
+from apps.domains.oauth2.constants import ClientType
+from apps.domains.oauth2.exceptions import NotExistedClient, NotInHouseClient, InvalidRedirectUri, InvalidClientSecret, \
+    InvalidClientType
 from apps.domains.oauth2.models import Application as Client
 from apps.domains.oauth2.repositories.client_repository import ClientRepository
 from lib.utils.url import is_same_url_until_domain, is_same_url
@@ -14,6 +16,13 @@ class ClientService:
         except ObjectDoesNotExist:
             raise NotExistedClient
 
+        return client
+
+    @classmethod
+    def get_confidential_client(cls, client_id: str, client_secret: str) -> Client:
+        client = cls.get_client(client_id)
+        cls.assert_if_mismatch_client_secret(client, client_secret)
+        cls.assert_if_differ_with_client_type(client, ClientType.CONFIDENTIAL)
         return client
 
     @classmethod
@@ -47,3 +56,13 @@ class ClientService:
                 return
 
         raise InvalidRedirectUri
+
+    @staticmethod
+    def assert_if_mismatch_client_secret(client: Client, client_secret: str):
+        if client.client_secret != client_secret:
+            raise InvalidClientSecret
+
+    @staticmethod
+    def assert_if_differ_with_client_type(client: Client, client_type: str):
+        if client.client_type != client_type:
+            raise InvalidClientType
