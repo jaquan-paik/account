@@ -7,8 +7,8 @@ class SSOConfig:
         return settings.SSO_REDIRECT_DOMAIN
 
     @staticmethod
-    def get_sso_login_url() -> str:
-        return settings.SSO_LOGIN_URL
+    def get_sso_store_login_url() -> str:
+        return settings.SSO_STORE_LOGIN_URL
 
     @staticmethod
     def get_sso_otp_key() -> str:

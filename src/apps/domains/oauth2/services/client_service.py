@@ -19,7 +19,7 @@ class ClientService:
         return client
 
     @classmethod
-    def get_confidential_client(cls, client_id: str, client_secret: str):
+    def get_confidential_client(cls, client_id: str, client_secret: str) -> Client:
         client = cls.get_client(client_id)
         cls.assert_if_mismatch_client_secret(client, client_secret)
         cls.assert_if_not_confidential(client)

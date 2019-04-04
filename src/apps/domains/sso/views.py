@@ -88,5 +88,5 @@ class SSOLoginView(View):
 
         new_otp = SSOOtpService.generate(SSOConfig.get_sso_otp_key(), u_idx)
         return redirect(
-            generate_query_url(SSOConfig.get_sso_login_url(), {'token': new_otp, 'return_url': redirect_uri})
+            generate_query_url(SSOConfig.get_sso_store_login_url(), {'token': new_otp, 'return_url': redirect_uri})
         )

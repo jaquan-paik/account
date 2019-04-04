@@ -52,7 +52,7 @@ class SecretKeyName(BaseConstant):
 
     SSO_OTP_KEY = 'sso_otp_key'
     SSO_REDIRECT_DOMAIN = 'sso_redirect_domain'
-    SSO_LOGIN_URL = 'sso_login_url'
+    SSO_STORE_LOGIN_URL = 'sso_store_login_url'
 
     _LIST = [
         ENVIRONMENT, SECRET_KEY, CACHE_LOCATION, WRITE_DB_HOST, WRITE_DB_ACCOUNT, WRITE_DB_PASSWORD, READ_DB_HOST, READ_DB_ACCOUNT,
