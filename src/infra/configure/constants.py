@@ -57,11 +57,10 @@ class SecretKeyName(BaseConstant):
     ]
 
 
-class CommandName(BaseConstant):
-    REVOKE_EXPIRED_TOKENS = 'revoke_expired_tokens'
+class FileLockKeyName(BaseConstant):
     SET_USER_MODIFIED_HISTORY_ORDER = 'set_user_modified_history_order'
     CRAWL_STORE_USER = 'crawl_store_user'
 
     _LIST = [
-        REVOKE_EXPIRED_TOKENS, SET_USER_MODIFIED_HISTORY_ORDER, CRAWL_STORE_USER
+        SET_USER_MODIFIED_HISTORY_ORDER, CRAWL_STORE_USER
     ]
