@@ -67,7 +67,7 @@ class InvalidAuthorizationGrantType(OAuth2Error):
 class InvalidClientSecret(OAuth2Error):
     error = 'invalid_client_secret'
     status_code = HttpStatusCodes.C_403_FORBIDDEN
-    description = 'mismatch client_secret'
+    description = 'this secret is different with client\'s secret'
 
 
 class InvalidClientType(OAuth2Error):
