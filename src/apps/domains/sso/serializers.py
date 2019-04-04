@@ -3,10 +3,6 @@ from rest_framework import serializers
 from lib.base.serializers import BaseSerializer
 
 
-class SSOOtpGenerateRequestSerializer(BaseSerializer):
-    pass
-
-
 class SSOOtpGenerateResponseSerializer(BaseSerializer):
     otp = serializers.CharField(required=True, label='SSO Otp')
 

@@ -4,13 +4,13 @@ from django.views import View
 from rest_framework.views import APIView
 from ridi_django_oauth2.decorators import login_required
 
-from apps.domains.ridi.services.in_house_client_credentials_service import InHouseClientCredentialsService
 from apps.domains.ridi.helpers.response_cookie_helper import ResponseCookieHelper
+from apps.domains.ridi.services.in_house_client_credentials_service import InHouseClientCredentialsService
 from apps.domains.ridi.views import is_auto_login_request
 from apps.domains.sso.config import SSOConfig
 from apps.domains.sso.exceptions import FailVerifyOtpException
 from apps.domains.sso.forms import SSOLoginForm
-from apps.domains.sso.serializers import SSOOtpGenerateResponseSerializer, SSOOtpGenerateRequestSerializer, \
+from apps.domains.sso.serializers import SSOOtpGenerateResponseSerializer, \
     SSOOtpVerifyResponseSerializer, SSOOtpVerifyRequestSerializer
 from apps.domains.sso.services.sso_otp_service import SSOOtpService
 from infra.configure.config import GeneralConfig
@@ -27,11 +27,6 @@ class GenerateSSOOtpView(ResponseMixin, APIView):
     @ridi_oauth2_access_token_login
     @login_required()
     def post(self, request):
-        serializer = SSOOtpGenerateRequestSerializer(request.params)
-        if not serializer.is_valid():
-            code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
-            return self.fail_response(code, serializer.errors)
-
         otp = SSOOtpService.generate(SSOConfig.get_sso_otp_key(), request.user.idx, request.user.token_info.client_id)
         return self.success_response(
             data=SSOOtpGenerateResponseSerializer({'otp': otp}).data
