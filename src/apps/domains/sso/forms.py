@@ -11,7 +11,7 @@ class SSOLoginForm(forms.Form):
 
     def __init__(self, *args, domain: str, **kwargs):
         super().__init__(*args, **kwargs)
-        self.domain = domain
+        self._domain = domain
 
     def clean_redirect_uri(self):
         data = self.cleaned_data.get('redirect_uri', None)
@@ -22,7 +22,7 @@ class SSOLoginForm(forms.Form):
             raise forms.ValidationError('URI를 입력해주세요.')
 
         parsed_url = parse.urlsplit(data)
-        if self.domain not in parsed_url.netloc:
+        if self._domain not in parsed_url.netloc:
             raise forms.ValidationError('유효한 URI를 입력해주세요.')
 
         return data
