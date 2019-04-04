@@ -18,7 +18,6 @@ from infra.configure.config import GeneralConfig
 from infra.network.constants.api_status_code import ApiStatusCodes
 from lib.decorators.ridi_oauth2_access_token_login import ridi_oauth2_access_token_login
 from lib.django.views.api.mixins import ResponseMixin
-from lib.log.logger import logger
 from lib.ridibooks.internal_server_auth.decorators import ridi_internal_auth
 from lib.utils.url import generate_query_url
 
@@ -37,14 +36,13 @@ class GenerateSSOOtpView(ResponseMixin, APIView):
 
 class VerifySSOOtpView(ResponseMixin, APIView):
     @ridi_internal_auth
-    def post(self, request):
+    def get(self, request):
         serializer = SSOOtpVerifyRequestSerializer(data=request.data)
         if not serializer.is_valid():
             code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
             return self.fail_response(code, serializer.errors)
 
         try:
-            logger.info(serializer.validated_data['otp'])
             u_idx, _ = SSOOtpService.verify(SSOConfig.get_sso_otp_key(), serializer.validated_data['otp'])
         except FailVerifyOtpException as e:
             code = self.make_response_code(ApiStatusCodes.C_401_UNAUTHORIZED, e.msg)
