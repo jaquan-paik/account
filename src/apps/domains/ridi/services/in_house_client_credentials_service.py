@@ -16,7 +16,7 @@ class InHouseClientCredentialsService:
             client = ClientHelper.get_in_house_client(client_id)
             user = User.objects.get(idx=u_idx)
             tokens = OAuth2ClientCredentialsService.get_tokens(client.client_id, client.client_secret, user)
-        except (PermissionDenied, ObjectDoesNotExist, DisallowedGrantType) as e:
+        except (PermissionDenied, ObjectDoesNotExist, DisallowedGrantType):
             raise FailOAuth2Exception()
 
         access_token = TokenData(tokens['access_token'], tokens['expires_in'])
