@@ -22,7 +22,7 @@ class ClientService:
     def get_confidential_client(cls, client_id: str, client_secret: str) -> Client:
         client = cls.get_client(client_id)
         cls.assert_if_mismatch_client_secret(client, client_secret)
-        cls.assert_if_not_confidential(client)
+        cls.assert_if_differ_with_client_type(client, ClientType.CONFIDENTIAL)
         return client
 
     @classmethod
@@ -63,6 +63,6 @@ class ClientService:
             raise InvalidClientSecret
 
     @staticmethod
-    def assert_if_not_confidential(client: Client):
-        if client.client_type != ClientType.CONFIDENTIAL:
+    def assert_if_differ_with_client_type(client: Client, client_type: str):
+        if client.client_type != client_type:
             raise InvalidClientType
