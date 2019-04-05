@@ -1,5 +1,5 @@
 from django import forms
-from apps.domains.oauth2.fields import ClientIdField, ResponseTypeCodeField, RedirectUriField
+from apps.domains.oauth2.form_fields import ClientIdField, ResponseTypeCodeField, RedirectUriField
 
 
 class AuthorizationCodeForm(forms.Form):
