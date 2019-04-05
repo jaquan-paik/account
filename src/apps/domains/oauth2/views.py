@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.views import View
 from oauthlib.oauth2 import OAuth2Error
 
-from apps.domains.oauth2.forms import AuthorizationForm
+from apps.domains.oauth2.forms import AuthorizationCodeForm
 from apps.domains.oauth2.services.oauth2_authorization_code_service import OAuth2AuthorizationCodeService
 from lib.base.response import get_invalid_form_template_response, get_template_response
 from lib.decorators.session_login import ridibooks_session_login_required
@@ -12,7 +12,7 @@ from lib.utils.url import generate_query_url
 class AuthorizationView(View):
     @ridibooks_session_login_required()
     def get(self, request):
-        authorize_form = AuthorizationForm(request.GET)
+        authorize_form = AuthorizationCodeForm(request.GET)
         if not authorize_form.is_valid():
             return get_invalid_form_template_response(request, authorize_form)
         cleaned_data = authorize_form.clean()
