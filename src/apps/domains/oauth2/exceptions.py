@@ -84,3 +84,45 @@ class InvalidClientType(OAuth2Error):
     error = 'invalid_client_type'
     status_code = HttpStatusCodes.C_403_FORBIDDEN
     description = 'this client is not authorized to use a grant type'
+
+
+class MissingClientId(OAuth2Error):
+    error = 'missing_client_id'
+    status_code = HttpStatusCodes.C_400_BAD_REQUEST
+    description = 'client id is required'
+
+
+class MissingClientSecret(OAuth2Error):
+    error = 'missing_client_secret'
+    status_code = HttpStatusCodes.C_400_BAD_REQUEST
+    description = 'client secret is required'
+
+
+class MissingCode(OAuth2Error):
+    error = 'missing_code'
+    status_code = HttpStatusCodes.C_400_BAD_REQUEST
+    description = 'code is required'
+
+
+class MissingRedirectUri(OAuth2Error):
+    error = 'missing_redirect_uri'
+    status_code = HttpStatusCodes.C_400_BAD_REQUEST
+    description = 'redirect uri is required'
+
+
+class MissingRefreshToken(OAuth2Error):
+    error = 'missing_refresh_token'
+    status_code = HttpStatusCodes.C_400_BAD_REQUEST
+    description = 'refresh token is required'
+
+
+class MissingUsername(OAuth2Error):
+    error = 'missing_username'
+    status_code = HttpStatusCodes.C_400_BAD_REQUEST
+    description = 'username is required'
+
+
+class MissingGrantType(OAuth2Error):
+    error = 'missing_grant_type'
+    status_code = HttpStatusCodes.C_400_BAD_REQUEST
+    description = 'grant type is required'
