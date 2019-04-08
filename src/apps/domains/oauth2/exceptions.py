@@ -14,13 +14,13 @@ class FailOAuth2Exception(Exception):
 class UnsupportedGrantType(OAuth2Error):
     error = 'unsupported_grant_type'
     status_code = HttpStatusCodes.C_400_BAD_REQUEST
-    description = 'this grant type is not supported'
+    description = 'This grant type is not supported'
 
 
 class DisallowedGrantType(OAuth2Error):
     error = 'disallowed_grant_type'
     status_code = HttpStatusCodes.C_400_BAD_REQUEST
-    description = 'this grant type is disallowed'
+    description = 'This grant type is disallowed'
 
 
 class LoginFailError(OAuth2Error):
@@ -54,39 +54,39 @@ class InvalidClient(OAuth2Error):
 
 
 class NotExistedClient(InvalidClient):
-    description = 'this client is not existed'
+    description = 'This client is not existed'
 
 
 class NotInHouseClient(InvalidClient):
     status_code = HttpStatusCodes.C_403_FORBIDDEN
-    description = 'this client is not in-house client'
+    description = 'This client is not in-house client'
 
 
 class InvalidRedirectUri(OAuth2Error):
     error = 'invalid_redirect_uri'
     status_code = HttpStatusCodes.C_403_FORBIDDEN
-    description = 'this client is not authorized to use this redirect uri'
+    description = 'This client is not authorized to use This redirect uri'
 
 
 class InvalidAuthorizationGrantType(OAuth2Error):
     error = 'invalid_authorization_grant_type'
     status_code = HttpStatusCodes.C_403_FORBIDDEN
-    description = 'this client is not authorized to use this authorization grant type.'
+    description = 'This client is not authorized to use This authorization grant type.'
 
 
 class InvalidClientSecret(OAuth2Error):
     error = 'invalid_client_secret'
     status_code = HttpStatusCodes.C_403_FORBIDDEN
-    description = 'this secret is different with client\'s secret'
+    description = 'This secret is different with client\'s secret'
 
 
 class InvalidClientType(OAuth2Error):
     error = 'invalid_client_type'
     status_code = HttpStatusCodes.C_403_FORBIDDEN
-    description = 'this client is not authorized to use a grant type'
+    description = 'This client is not authorized to use a grant type'
 
 
 class InvalidRefreshToken(OAuth2Error):
     error = 'invalid_refresh_token'
     status_code = HttpStatusCodes.C_403_FORBIDDEN
-    description = 'this refresh token is invalid'
+    description = 'This refresh token is invalid'
