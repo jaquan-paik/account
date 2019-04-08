@@ -15,3 +15,7 @@ class RefreshTokenRepository:
         refresh_token = RefreshToken(application=client, user=user, scope=scope, token=token, expires=expires)
         refresh_token.save()
         return refresh_token
+
+    @staticmethod
+    def get_by_token(token: str) -> RefreshToken:
+        return RefreshToken.objects.get(token=token)

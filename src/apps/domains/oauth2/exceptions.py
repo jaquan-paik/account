@@ -84,3 +84,9 @@ class InvalidClientType(OAuth2Error):
     error = 'invalid_client_type'
     status_code = HttpStatusCodes.C_403_FORBIDDEN
     description = 'this client is not authorized to use a grant type'
+
+
+class InvalidRefreshToken(OAuth2Error):
+    error = 'invalid_refresh_token'
+    status_code = HttpStatusCodes.C_403_FORBIDDEN
+    description = 'this refresh token is invalid'
