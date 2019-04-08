@@ -150,7 +150,7 @@ class AccessToken(AbstractAccessToken):
 
 
 class RefreshToken(AbstractRefreshToken):
-    token = models.CharField(max_length=255, unique=True, default=_create_random_refresh_token)
+    token = models.CharField(max_length=30, unique=True, default=_create_random_refresh_token)
 
     user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE)
 
