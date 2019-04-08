@@ -1,9 +1,7 @@
 from django.db import models
-from django.utils import timezone
 from multiselectfield import MultiSelectField
 from oauth2_provider.models import AbstractAccessToken, AbstractApplication, AbstractGrant, AbstractRefreshToken
 from oauthlib.uri_validate import is_absolute_uri
-
 from apps.domains.account.models import OAuth2User, User
 from apps.domains.oauth2.constants import JwtAlg, ACCESS_TOKEN_EXPIRE_SECONDS, GRANT_CODE_LENGTH, GrantType, REFRESH_TOKEN_EXPIRE_DAYS, \
     REFRESH_TOKEN_LENGTH
@@ -12,7 +10,7 @@ from infra.configure.config import GeneralConfig
 from lib.django.db.mysql import TinyBooleanField
 from lib.utils.string import generate_random_str
 from lib.utils.url import is_same_url, is_same_url_until_path
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 JWT_HS_256_SECRET_LEN = 32
 
@@ -22,7 +20,7 @@ def jwt_hs_256_secret():
 
 
 def _get_grant_expires():
-    return timezone.now() + timedelta(seconds=ACCESS_TOKEN_EXPIRE_SECONDS)
+    return datetime.now() + timedelta(seconds=ACCESS_TOKEN_EXPIRE_SECONDS)
 
 
 def _create_random_code():
@@ -30,7 +28,7 @@ def _create_random_code():
 
 
 def _get_refresh_token_expires():
-    return timezone.now() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+    return datetime.now() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
 
 
 def _create_random_refresh_token():
