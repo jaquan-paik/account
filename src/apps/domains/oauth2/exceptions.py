@@ -90,3 +90,9 @@ class InvalidRefreshToken(OAuth2Error):
     error = 'invalid_refresh_token'
     status_code = HttpStatusCodes.C_403_FORBIDDEN
     description = 'This refresh token is invalid'
+
+
+class InvalidCode(OAuth2Error):
+    error = 'invalid_code'
+    status_code = HttpStatusCodes.C_403_FORBIDDEN
+    description = 'This code is invalid'
