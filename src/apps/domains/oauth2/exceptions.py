@@ -65,13 +65,13 @@ class NotInHouseClient(InvalidClient):
 class InvalidRedirectUri(OAuth2Error):
     error = 'invalid_redirect_uri'
     status_code = HttpStatusCodes.C_403_FORBIDDEN
-    description = 'This client is not authorized to use This redirect uri'
+    description = 'This client is not authorized to use this redirect uri'
 
 
 class InvalidAuthorizationGrantType(OAuth2Error):
     error = 'invalid_authorization_grant_type'
     status_code = HttpStatusCodes.C_403_FORBIDDEN
-    description = 'This client is not authorized to use This authorization grant type.'
+    description = 'This client is not authorized to use this authorization grant type.'
 
 
 class InvalidClientSecret(OAuth2Error):
