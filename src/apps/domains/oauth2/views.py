@@ -4,6 +4,7 @@ from oauthlib.oauth2 import OAuth2Error
 from rest_framework.views import APIView
 
 from apps.domains.oauth2.forms import AuthorizationCodeForm
+from apps.domains.oauth2.oauth2_service_factory import OAuth2TokenServiceFactory
 from apps.domains.oauth2.serializers import GrantTypeSerializer
 from apps.domains.oauth2.services.oauth2_authorization_code_service import OAuth2AuthorizationCodeService
 from infra.network.constants.api_status_code import ApiStatusCodes
@@ -40,8 +41,15 @@ class TokenView(ResponseMixin, APIView):
         if not grant_type_serializer.is_valid():
             code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
             return self.fail_response(code, grant_type_serializer.errors)
+
         try:
-            pass
+            oauth2_token_service = OAuth2TokenServiceFactory(grant_type_serializer.validated_data['grant_type'], request.data)
+
+            if not oauth2_token_service.is_serializer_valid():
+                code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
+                return self.fail_response(code, oauth2_token_service.get_serializer_errors())
+
+            return oauth2_token_service.get_tokens()
 
         except OAuth2Error as e:
             return JsonResponse(data={"error": e.error, "description": e.description}, status=e.status_code)
