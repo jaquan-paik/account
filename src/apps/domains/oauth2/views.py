@@ -3,10 +3,10 @@ from django.views import View
 from oauthlib.oauth2 import OAuth2Error
 from rest_framework.views import APIView
 
-from apps.domains.oauth2.exceptions import UnsupportedGrantType
 from apps.domains.oauth2.forms import AuthorizationCodeForm
 from apps.domains.oauth2.serializers import GrantTypeSerializer
 from apps.domains.oauth2.services.oauth2_authorization_code_service import OAuth2AuthorizationCodeService
+from infra.network.constants.api_status_code import ApiStatusCodes
 from lib.base.response import get_invalid_form_template_response, get_template_response
 from lib.decorators.session_login import ridibooks_session_login_required
 from lib.django.views.api.mixins import ResponseMixin
@@ -37,8 +37,11 @@ class AuthorizationView(View):
 class TokenView(ResponseMixin, APIView):
     def post(self, request):
         grant_type_serializer = GrantTypeSerializer(data=request.data)
+        if not grant_type_serializer.is_valid():
+            code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
+            return self.fail_response(code, grant_type_serializer.errors)
         try:
-            if not grant_type_serializer.is_valid():
-                raise UnsupportedGrantType
+            pass
+
         except OAuth2Error as e:
             return JsonResponse(data={"error": e.error, "description": e.description}, status=e.status_code)
