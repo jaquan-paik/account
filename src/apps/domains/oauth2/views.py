@@ -42,13 +42,11 @@ class TokenView(ResponseMixin, APIView):
             code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
             return self.fail_response(code, grant_type_serializer.errors)
 
+        oauth2_token_service = OAuth2TokenServiceFactory(grant_type_serializer.validated_data['grant_type'], request.data)
+        if not oauth2_token_service.is_serializer_valid():
+            code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
+            return self.fail_response(code, oauth2_token_service.get_serializer_errors())
         try:
-            oauth2_token_service = OAuth2TokenServiceFactory(grant_type_serializer.validated_data['grant_type'], request.data)
-
-            if not oauth2_token_service.is_serializer_valid():
-                code = self.make_response_code(ApiStatusCodes.C_400_BAD_REQUEST)
-                return self.fail_response(code, oauth2_token_service.get_serializer_errors())
-
             return oauth2_token_service.get_tokens()
 
         except OAuth2Error as e:
