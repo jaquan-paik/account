@@ -8,3 +8,8 @@ class GrantRepository:
         grant = Grant(user_id=u_idx, application=client, redirect_uri=redirect_uri, scope=scope)
         grant.save()
         return grant
+
+    @staticmethod
+    def get_grant_by_code(code: str) -> Grant:
+        grant = Grant.objects.get(code=code)
+        return grant
