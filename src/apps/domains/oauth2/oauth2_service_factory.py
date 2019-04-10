@@ -20,4 +20,4 @@ class OAuth2TokenServiceFactory:
         if grant_type == GrantType.REFRESH_TOKEN:
             return RefreshTokenGrantSerializer(data=data), OAuth2RefreshTokenService
 
-        return None, None
+        raise NotImplementedError
