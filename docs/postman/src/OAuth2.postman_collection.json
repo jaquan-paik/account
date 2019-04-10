@@ -309,7 +309,7 @@
 											"});",
 											"",
 											"pm.test(\"invalid client_id error_description exists\", function () {",
-											"    pm.expect(pm.response.text()).to.include(\"this client is not existed\");",
+											"    pm.expect(pm.response.text()).to.include(\"This client is not existed\");",
 											"});"
 										],
 										"type": "text/javascript"
@@ -421,7 +421,7 @@
 											"});",
 											"",
 											"pm.test(\"invalid redirect_uri error_description exists\", function () { ",
-											"    pm.expect(pm.response.text()).to.include(\"this client is not authorized to use this redirect uri\");",
+											"    pm.expect(pm.response.text()).to.include(\"This client is not authorized to use this redirect uri\");",
 											"});",
 											""
 										],
@@ -946,16 +946,16 @@
 									"listen": "test",
 									"script": {
 										"id": "15a814d8-41f2-4dd7-a407-a32f0184540f",
-										"type": "text/javascript",
 										"exec": [
 											"const h = eval(globals.loadHelpers);",
 											"h.printResponseBody();",
-											"h.testStatus(401);",
+											"h.testStatus(403);",
 											"",
 											"const jsonData = JSON.parse(responseBody);",
-											"tests[\"error exists\"] = jsonData.error === 'invalid_client';",
+											"tests[\"error exists\"] = jsonData.error === 'invalid_client_secret';",
 											""
-										]
+										],
+										"type": "text/javascript"
 									}
 								}
 							],
@@ -1204,16 +1204,16 @@
 							"listen": "test",
 							"script": {
 								"id": "9e6c4276-9202-4885-95c5-70a2bca67006",
-								"type": "text/javascript",
 								"exec": [
 									"const h = eval(globals.loadHelpers);",
 									"h.printResponseBody();",
-									"h.testStatus(401);",
+									"h.testStatus(403);",
 									"",
 									"const jsonData = JSON.parse(responseBody);",
-									"tests[\"error exists\"] = jsonData.error === 'invalid_client';",
+									"tests[\"error exists\"] = jsonData.error === 'invalid_client_secret';",
 									""
-								]
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -1260,7 +1260,7 @@
 					"response": []
 				},
 				{
-					"name": "[400] 잘못된 refresh token 사용",
+					"name": "[401] 잘못된 refresh token 사용",
 					"event": [
 						{
 							"listen": "test",
@@ -1269,10 +1269,10 @@
 								"exec": [
 									"const h = eval(globals.loadHelpers);",
 									"h.printResponseBody();",
-									"h.testStatus(400);",
+									"h.testStatus(403);",
 									"",
 									"const jsonData = JSON.parse(responseBody);",
-									"tests[\"error exists\"] = jsonData.error === 'invalid_grant';",
+									"tests[\"error exists\"] = jsonData.error === 'invalid_refresh_token';",
 									""
 								],
 								"type": "text/javascript"

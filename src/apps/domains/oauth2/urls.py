@@ -1,6 +1,5 @@
 from django.urls import path
-from oauth2_provider.views import TokenView
-from apps.domains.oauth2.views import AuthorizationView
+from apps.domains.oauth2.views import AuthorizationView, TokenView
 
 app_name = 'oauth2_app'
 
