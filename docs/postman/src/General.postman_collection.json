@@ -406,16 +406,9 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "https://account.ridibook.com/ridi/complete",
-									"protocol": "https",
+									"raw": "{{host}}{{complete_path}}",
 									"host": [
-										"account",
-										"ridibook",
-										"com"
-									],
-									"path": [
-										"ridi",
-										"complete"
+										"{{host}}{{complete_path}}"
 									]
 								}
 							},
