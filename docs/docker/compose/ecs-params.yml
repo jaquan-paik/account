@@ -1,0 +1,14 @@
+version: 1
+
+task_definition:
+  task_execution_role: accountEcsTaskExecutionRoleArn
+  services:
+    account:
+      secrets:
+        - value_from: /account/secret_file_crypto_key/0000
+          name: SECRET_FILE_CRYPTO_KEY
+
+    account-cron:
+      secrets:
+        - value_from: /account/secret_file_crypto_key/0000
+          name: SECRET_FILE_CRYPTO_KEY

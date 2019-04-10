@@ -20,10 +20,10 @@ npm-install:
 	@npm install
 
 settings:
-	@cp docs/dev/settings/secrets.json ./secrets.json && python3.6 src/script/handle_secret_file.py -a encrypt
+	@python3.6 src/scripts/generate_secret_file.py -e local -p docs/dev/settings/secrets.json
 
 ci-settings:
-	@python3.6 src/script/handle_secret_file.py -a generate -e $(ns)
+	@python3.6 src/scripts/generate_secret_file.py -e $(ns)
 
 global-python-package-install-development:
 	@pip3.6 install -U pip pipenv && pipenv install --system --deploy --dev

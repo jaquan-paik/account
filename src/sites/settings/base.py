@@ -11,25 +11,25 @@ from lib.settings.asserts import assert_allowed_hosts_with_cookie_root_domain
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # src dir
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = Secret().get(SecretKeyName.SECRET_KEY)
+SECRET_KEY = Secret.get(SecretKeyName.SECRET_KEY)
 
-ENVIRONMENT = Secret().get(SecretKeyName.ENVIRONMENT)
+ENVIRONMENT = Secret.get(SecretKeyName.ENVIRONMENT)
 
-setup_logging(Secret().get(SecretKeyName.SENTRY_DSN))
+setup_logging(Secret.get(SecretKeyName.SENTRY_DSN))
 
-SITE_DOMAIN = Secret().get(SecretKeyName.SITE_DOMAIN)
+SITE_DOMAIN = Secret.get(SecretKeyName.SITE_DOMAIN)
 
-ALLOWED_HOSTS = Secret().get(SecretKeyName.ALLOWED_HOSTS).split()
+ALLOWED_HOSTS = Secret.get(SecretKeyName.ALLOWED_HOSTS).split()
 
-STORE_URL = Secret().get(SecretKeyName.STORE_URL)
+STORE_URL = Secret.get(SecretKeyName.STORE_URL)
 
-STORE_API_URL = Secret().get(SecretKeyName.STORE_API_URL)
+STORE_API_URL = Secret.get(SecretKeyName.STORE_API_URL)
 
-RIDIBOOKS_LOGIN_URL = Secret().get(SecretKeyName.RIDIBOOKS_LOGIN_URL)
+RIDIBOOKS_LOGIN_URL = Secret.get(SecretKeyName.RIDIBOOKS_LOGIN_URL)
 
-CORS_ORIGIN_REGEX_WHITELIST = (rf"{Secret().get(SecretKeyName.CORS_ORIGIN_REGEX_WHITELIST)}",)
+CORS_ORIGIN_REGEX_WHITELIST = (rf"{Secret.get(SecretKeyName.CORS_ORIGIN_REGEX_WHITELIST)}",)
 
-COOKIE_ROOT_DOMAIN = Secret().get(SecretKeyName.COOKIE_ROOT_DOMAIN)
+COOKIE_ROOT_DOMAIN = Secret.get(SecretKeyName.COOKIE_ROOT_DOMAIN)
 
 # allowed hosts 안에 있는 호스트 들은 쿠키 루트 도메인으로 이루어져있음을 보장해야한다.
 assert_allowed_hosts_with_cookie_root_domain(ALLOWED_HOSTS, COOKIE_ROOT_DOMAIN)
@@ -106,9 +106,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'account',
-        'USER': Secret().get(SecretKeyName.WRITE_DB_ACCOUNT),
-        'PASSWORD': Secret().get(SecretKeyName.WRITE_DB_PASSWORD),
-        'HOST': Secret().get(SecretKeyName.WRITE_DB_HOST),
+        'USER': Secret.get(SecretKeyName.WRITE_DB_ACCOUNT),
+        'PASSWORD': Secret.get(SecretKeyName.WRITE_DB_PASSWORD),
+        'HOST': Secret.get(SecretKeyName.WRITE_DB_HOST),
         'PORT': '3306',
         'CONN_MAX_AGE': 1024,
         'OPTIONS': {
@@ -188,13 +188,13 @@ OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'oauth2_app.RefreshToken'
 OAUTH2_PROVIDER_REFRESH_MODEL = 'oauth2_app.RefreshToken'
 
 # RIDI Django OAuth2 Setting
-RIDI_OAUTH2_CLIENT_ID = Secret().get(SecretKeyName.RIDI_CLIENT_ID)
-RIDI_OAUTH2_CLIENT_SECRET = Secret().get(SecretKeyName.RIDI_CLIENT_SECRET)
-RIDI_OAUTH2_JWT_SECRET = Secret().get(SecretKeyName.RIDI_JWT_SECRET)
+RIDI_OAUTH2_CLIENT_ID = Secret.get(SecretKeyName.RIDI_CLIENT_ID)
+RIDI_OAUTH2_CLIENT_SECRET = Secret.get(SecretKeyName.RIDI_CLIENT_SECRET)
+RIDI_OAUTH2_JWT_SECRET = Secret.get(SecretKeyName.RIDI_JWT_SECRET)
 
 # RIDI Internal Server Auth
 RIDI_INTERNAL_AUTH_DATA = InternalServerAuthConfigHelper.generate_auth_data({
-    AuthList.ACCOUNT_TO_STORE: Secret().get(SecretKeyName.RIDI_INTERNAL_AUTH_ACCOUNT_TO_STORE),
+    AuthList.ACCOUNT_TO_STORE: Secret.get(SecretKeyName.RIDI_INTERNAL_AUTH_ACCOUNT_TO_STORE),
 })
 
 RIDI_INTERNAL_AUTH_REQUIRE_EXP = False
@@ -214,7 +214,7 @@ CORS_URLS_REGEX = r'^/(ridi|oauth2|health|accounts)/.*$'
 
 # Sentry
 RAVEN_CONFIG = {
-    'dsn': Secret().get(SecretKeyName.SENTRY_DSN),
+    'dsn': Secret.get(SecretKeyName.SENTRY_DSN),
     'release': '',
     'ignore_exceptions': [
         'django.exceptions.http.Http404',
@@ -234,8 +234,8 @@ REST_FRAMEWORK = {
     ),
 }
 
-STATE_CRYPTO_KEY = Secret().get(SecretKeyName.STATE_CRYPTO_KEY)
+STATE_CRYPTO_KEY = Secret.get(SecretKeyName.STATE_CRYPTO_KEY)
 
-SSO_OTP_KEY = Secret().get(SecretKeyName.SSO_OTP_KEY)
-SSO_REDIRECT_ROOT_DOMAIN = Secret().get(SecretKeyName.SSO_REDIRECT_ROOT_DOMAIN)
-SSO_STORE_LOGIN_URL = Secret().get(SecretKeyName.SSO_STORE_LOGIN_URL)
+SSO_OTP_KEY = Secret.get(SecretKeyName.SSO_OTP_KEY)
+SSO_REDIRECT_ROOT_DOMAIN = Secret.get(SecretKeyName.SSO_REDIRECT_ROOT_DOMAIN)
+SSO_STORE_LOGIN_URL = Secret.get(SecretKeyName.SSO_STORE_LOGIN_URL)
