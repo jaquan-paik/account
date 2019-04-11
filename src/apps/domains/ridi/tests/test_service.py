@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.core.exceptions import PermissionDenied
 from django.test import TestCase
 from django_dynamic_fixture import G
@@ -16,7 +14,7 @@ class TokenRefreshServiceTestCase(TestCase):
         in_house_client = G(Application, skip_authorization=True, user=None, is_in_house=True)
         self.refresh_token = G(
             RefreshToken, application=in_house_client, user=user, scope='all', token='this-is-refresh-token',
-            access_token=None, expires=datetime(year=9999, month=12, day=31)
+            access_token=None
         )
 
         not_in_house_client = G(Application, skip_authorization=True, user=None, is_in_house=False)
