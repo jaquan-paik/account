@@ -1,6 +1,5 @@
 # pylint: disable=line-too-long
 # flake8: noqa
-import requests_mock
 from django.core.exceptions import PermissionDenied
 from django.http.response import HttpResponseBase
 from django.test import TestCase
