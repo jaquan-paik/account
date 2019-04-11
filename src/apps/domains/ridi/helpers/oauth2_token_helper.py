@@ -11,7 +11,7 @@ from apps.domains.ridi.dtos import TokenData
 from infra.network.constants.http_status_code import HttpStatusCodes
 
 
-class Oauth2TokenHelper:
+class OAuth2TokenHelper:
     @classmethod
     def get_tokens_data_by_authorization_code_grant(cls, client: Client, code: str, redirect_uri: str) -> Tuple[TokenData, TokenData]:
         try:
