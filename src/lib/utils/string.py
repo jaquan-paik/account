@@ -10,7 +10,9 @@ _emoji_pattern = re.compile(
     u'\U0001F1E0-\U0001F1FF'  # flags (iOS)
     ']+', flags=re.UNICODE
 )
-
+_UNICODE_ASCII_CHARACTER_SET = ('abcdefghijklmnopqrstuvwxyz'
+                                'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                                '0123456789')
 _HANGUL_CODE_MIN = 0xAC00
 _HANGUL_CODE_MAX = 0xD7A3
 
@@ -23,7 +25,6 @@ def is_include_emoji(string: str) -> bool:
 
 
 def is_last_char_has_batchim(char: str) -> bool:
-
     if len(char) != 1:
         char = char[-1]
 
@@ -36,7 +37,9 @@ def is_last_char_has_batchim(char: str) -> bool:
     return True
 
 
-def generate_random_str(n: int) -> str:
+def generate_random_str(n: int, alphabet_and_number_only=False) -> str:
+    if alphabet_and_number_only:
+        return ''.join(random.choices(_UNICODE_ASCII_CHARACTER_SET, k=n))
     return ''.join(random.choices(_filter_generatable_char(string_lib.ascii_letters + string_lib.digits + string_lib.punctuation), k=n))
 
 
