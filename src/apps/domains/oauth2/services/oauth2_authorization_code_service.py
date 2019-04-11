@@ -1,3 +1,5 @@
+from typing import Dict
+
 from apps.domains.oauth2.constants import DEFAULT_SCOPE, GrantType
 from apps.domains.oauth2.exceptions import DisallowedGrantType
 from apps.domains.oauth2.repositories.grant_repository import GrantRepository
@@ -24,7 +26,7 @@ class OAuth2AuthorizationCodeService:
         return code
 
     @staticmethod
-    def get_tokens(client_id: str, client_secret: str, code: str, redirect_uri: str):
+    def get_tokens(client_id: str, client_secret: str, code: str, redirect_uri: str) -> Dict:
         client = ClientService.get_confidential_client(client_id, client_secret)
         grant = GrantService.get_grant(client, code, redirect_uri)
         return TokenService.generate(client, grant.user, [DEFAULT_SCOPE])

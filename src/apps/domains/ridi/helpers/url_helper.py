@@ -11,11 +11,6 @@ class UrlHelper:
     def get_callback_view_url() -> str:
         return f'https://{GeneralConfig.get_site_domain()}{reverse("ridi:callback")}'
 
-    @staticmethod
-    @memorize
-    def get_oauth2_token_url() -> str:
-        return f'https://{GeneralConfig.get_site_domain()}{reverse("oauth2_provider:token")}'
-
     @classmethod
     @memorize
     def get_redirect_url(cls, in_house_redirect_uri: str, client_id: str) -> str:
