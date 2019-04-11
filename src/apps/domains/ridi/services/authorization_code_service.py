@@ -31,6 +31,6 @@ class AuthorizationCodeService:
     @staticmethod
     def get_tokens(code: str, client_id: str, in_house_redirect_uri: str) -> Tuple[TokenData, TokenData]:
         access_token, refresh_token = Oauth2TokenHelper.get_tokens_data_by_authorization_code_grant(
-            ClientHelper.get_in_house_client(client_id), code, in_house_redirect_uri
+            ClientHelper.get_in_house_client(client_id), code, UrlHelper.get_redirect_url(in_house_redirect_uri, client_id)
         )
         return access_token, refresh_token
