@@ -8,15 +8,6 @@ from lib.utils.url import is_same_url_until_domain
 
 class ClientHelper:
     @classmethod
-    def get_client(cls, client_id: str) -> Application:
-        try:
-            client = ClientService.get_client(client_id)
-        except OAuth2Error:
-            raise PermissionDenied()
-
-        return client
-
-    @classmethod
     def get_in_house_client(cls, client_id: str) -> Application:
         try:
             client = ClientService.get_in_house_client(client_id)

@@ -31,19 +31,17 @@ class ClientHelperTestCase(TestCase):
             Application, skip_authorization=True, user=None, is_in_house=True,
             _redirect_uris='https://view.ridibooks.com/books/ https://account.ridibooks.com/ridi/callback/ app://authorized https://ridibooks.com/ https://select.ridibooks.com https://ezwel.ridibooks.com https://pay.ridibooks.com https://library.ridibooks.com/'
         )
-        self.not_implement_client = G(Application, skip_authorization=True, user=None, authorization_grant_type="implicit")
+        self.not_in_house_client = G(
+            Application, is_in_house=False, skip_authorization=True, user=None, authorization_grant_type="implicit"
+        )
 
-    def test_get_client(self):
-        client = ClientHelper.get_client(client_id=self.client.client_id)
+    def test_get_client_in_house_client(self):
+        client = ClientHelper.get_in_house_client(client_id=self.client.client_id)
         self.assertEqual(client.client_id, self.client.client_id)
 
-    def test_not_exists_client(self):
+    def test_not_in_house_client(self):
         with self.assertRaises(PermissionDenied):
-            ClientHelper.get_client(client_id='is_dummy')
-
-    def test_not_implemented(self):
-        with self.assertRaises(NotImplementedError):
-            ClientHelper.get_client(client_id=self.not_implement_client.client_id)
+            ClientHelper.get_in_house_client(client_id=self.not_in_house_client.client_id)
 
     def test_assert_redirect_uris(self):
         with self.assertRaises(PermissionDenied):
