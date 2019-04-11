@@ -11,10 +11,14 @@ TOKEN_TYPE = 'Bearer'
 # AccessToken
 ACCESS_TOKEN_EXPIRE_SECONDS = 60 * 60  # 3600, 1hour
 
-# RefershToken
+# RefreshToken
 REFRESH_TOKEN_EXPIRE_SECONDS = 30 * 24 * 60 * 60  # 2592000, 30 days
 REFRESH_TOKEN_EXPIRE_DAYS = 30
 REFRESH_TOKEN_LENGTH = 32
+
+# Client
+CLIENT_ID_LENGTH = 40
+CLIENT_SECRET_LENGTH = 128
 
 
 class JwtAlg(BaseConstant):
@@ -39,6 +43,12 @@ class GrantType(BaseConstant):
 
     SUPPORTED_LIST = [AUTHORIZATION_CODE, PASSWORD, REFRESH_TOKEN]
 
+    SUPPORTED_CHOICE = (
+        (AUTHORIZATION_CODE, 'Authorization code'),
+        (PASSWORD, 'Resource owner password-based'),
+        (CLIENT_CREDENTIALS, 'Client Credentials'),
+    )
+
 
 class ResponseType:
     CODE = 'code'
@@ -46,3 +56,9 @@ class ResponseType:
 
 class ClientType:
     CONFIDENTIAL = 'confidential'
+
+    _LIST = [CONFIDENTIAL]
+    SUPPORTED_LIST = [CONFIDENTIAL]
+    SUPPORTED_CHOICE = (
+        (CONFIDENTIAL, 'Confidential client'),
+    )
