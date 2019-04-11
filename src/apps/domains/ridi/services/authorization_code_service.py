@@ -16,13 +16,6 @@ class AuthorizationCodeService:
         client = ClientHelper.get_in_house_client(client_id)
         ClientHelper.assert_in_house_client_redirect_uri(client, redirect_uri)
 
-    @staticmethod
-    def get_tokens(code: str, client_id: str, in_house_redirect_uri: str) -> Tuple[TokenData, TokenData]:
-        access_token, refresh_token = Oauth2TokenHelper.get_tokens_by_authorization_code_grant(
-            ClientHelper.get_in_house_client(client_id), code, in_house_redirect_uri
-        )
-        return access_token, refresh_token
-
     @classmethod
     def get_oauth2_authorize_url(cls, client_id: str, redirect_uri: str, u_idx: str) -> str:
         cls._validate_client_and_redirect_uri(client_id, redirect_uri)
@@ -34,3 +27,10 @@ class AuthorizationCodeService:
         }
         url = generate_query_url(reverse('oauth2_provider:authorize'), params)
         return url
+
+    @staticmethod
+    def get_tokens(code: str, client_id: str, in_house_redirect_uri: str) -> Tuple[TokenData, TokenData]:
+        access_token, refresh_token = Oauth2TokenHelper.get_tokens_data_by_authorization_code_grant(
+            ClientHelper.get_in_house_client(client_id), code, in_house_redirect_uri
+        )
+        return access_token, refresh_token

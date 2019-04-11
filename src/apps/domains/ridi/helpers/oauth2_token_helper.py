@@ -13,10 +13,10 @@ from infra.network.constants.http_status_code import HttpStatusCodes
 
 class Oauth2TokenHelper:
     @classmethod
-    def get_tokens_by_authorization_code_grant(cls, client: Client, code: str, redirect_uri: str) -> Tuple[TokenData, TokenData]:
+    def get_tokens_data_by_authorization_code_grant(cls, client: Client, code: str, redirect_uri: str) -> Tuple[TokenData, TokenData]:
         try:
             tokens = OAuth2AuthorizationCodeService.get_tokens(client.client_id, client.client_secret, code, redirect_uri)
-            return cls._get_token_data(tokens)
+            return cls._get_tokens_data(tokens)
 
         except OAuth2Error as error:
             if error.status_code == HttpStatusCodes.C_400_BAD_REQUEST:
@@ -28,10 +28,10 @@ class Oauth2TokenHelper:
             raise error
 
     @classmethod
-    def get_tokens_by_refresh_token(cls, client: Client, refresh_token: str) -> Tuple[TokenData, TokenData]:
+    def get_tokens_data_by_refresh_token(cls, client: Client, refresh_token: str) -> Tuple[TokenData, TokenData]:
         try:
             tokens = OAuth2RefreshTokenService.get_tokens(client.client_id, client.client_secret, refresh_token)
-            return cls._get_token_data(tokens)
+            return cls._get_tokens_data(tokens)
 
         except OAuth2Error as error:
             if error.status_code == HttpStatusCodes.C_400_BAD_REQUEST:
@@ -43,7 +43,7 @@ class Oauth2TokenHelper:
             raise error
 
     @staticmethod
-    def _get_token_data(tokens: Dict) -> Tuple[TokenData, TokenData]:
+    def _get_tokens_data(tokens: Dict) -> Tuple[TokenData, TokenData]:
         access_token = tokens.get('access_token')
         access_token_expires_in = tokens.get('expires_in')
         refresh_token = tokens.get('refresh_token')
