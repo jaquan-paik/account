@@ -4,8 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from oauth2_provider.oauth2_validators import RefreshToken
 
 from apps.domains.ridi.dtos import TokenData
-from apps.domains.ridi.helpers.token_request_helper import TokenRequestHelper
-from apps.domains.oauth2.constants import GrantType
+from apps.domains.ridi.helpers.oauth2_token_helper import Oauth2TokenHelper
 
 
 class TokenRefreshService:
@@ -19,4 +18,5 @@ class TokenRefreshService:
         client = refresh_token.application
         if not client.is_in_house:
             raise PermissionDenied()
-        return TokenRequestHelper.get_tokens(grant_type=GrantType.REFRESH_TOKEN, client=client, refresh_token=refresh_token)
+
+        return Oauth2TokenHelper.get_tokens_by_refresh_token(client, refresh_token.token)
