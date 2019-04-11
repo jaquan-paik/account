@@ -24,13 +24,6 @@ class UrlHelperTestCase(TestCase):
         self.assertIn(GeneralConfig.get_site_domain(), redirect_uri)
         self.assertIn(reverse("ridi:callback"), redirect_uri)
 
-    def test_get_token(self):
-        token_url = UrlHelper.get_oauth2_token_url()
-
-        self.assertIn('https://', token_url)
-        self.assertIn(GeneralConfig.get_site_domain(), token_url)
-        self.assertIn(reverse("oauth2_provider:token"), token_url)
-
 
 class ClientHelperTestCase(TestCase):
     def setUp(self):
