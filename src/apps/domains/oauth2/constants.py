@@ -45,6 +45,7 @@ class GrantType(BaseConstant):
 
     SUPPORTED_CHOICE = (
         (AUTHORIZATION_CODE, 'Authorization code'),
+        (OLD_AUTHORIZATION_CODE, 'Old Authorization code'),  # 호환성을 위해 필요하지만 후에 제거 되어야한다.
         (PASSWORD, 'Resource owner password-based'),
         (CLIENT_CREDENTIALS, 'Client Credentials'),
     )

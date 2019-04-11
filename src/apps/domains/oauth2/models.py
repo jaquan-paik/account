@@ -4,7 +4,7 @@ from oauth2_provider.models import AbstractAccessToken, AbstractApplication, Abs
 from oauthlib.uri_validate import is_absolute_uri
 from apps.domains.account.models import OAuth2User, User
 from apps.domains.oauth2.constants import JwtAlg, ACCESS_TOKEN_EXPIRE_SECONDS, GRANT_CODE_LENGTH, GrantType, REFRESH_TOKEN_EXPIRE_DAYS, \
-    REFRESH_TOKEN_LENGTH
+    REFRESH_TOKEN_LENGTH, CLIENT_ID_LENGTH, ClientType, CLIENT_SECRET_LENGTH
 from apps.domains.oauth2.managers import ApplicationManager, GrantManager, RefreshTokenManager
 from infra.configure.config import GeneralConfig
 from lib.django.db.mysql import TinyBooleanField
@@ -35,24 +35,35 @@ def _create_random_refresh_token():
     return generate_random_str(REFRESH_TOKEN_LENGTH)
 
 
-class Application(AbstractApplication):
-    GRANT_TYPES = (
-        (AbstractApplication.GRANT_AUTHORIZATION_CODE, 'Authorization code'),
-        (AbstractApplication.GRANT_PASSWORD, 'Resource owner password-based'),
-        (GrantType.CLIENT_CREDENTIALS, 'Client Credentials'),
-    )
-    CLIENT_TYPES = ((AbstractApplication.CLIENT_CONFIDENTIAL, 'Confidential'),)
+def _create_random_client_id():
+    return generate_random_str(CLIENT_ID_LENGTH, True)
 
+
+def _create_random_client_secret():
+    return generate_random_str(CLIENT_SECRET_LENGTH, True)
+
+
+class Application(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=255, blank=True)
     user = models.ForeignKey(
         OAuth2User, db_column='oauth2_user_id', related_name='%(app_label)s_%(class)s', null=True, blank=True, on_delete=models.CASCADE
     )
+    client_id = models.CharField(
+        max_length=100, unique=True, default=_create_random_client_id, db_index=True
+    )
+    _redirect_uris = models.TextField(db_column='redirect_uris')
+    client_secret = models.CharField(
+        max_length=255, blank=True, default=_create_random_client_secret, db_index=True
+    )
+    skip_authorization = models.BooleanField(default=False)
 
     client_type = models.CharField(
-        max_length=32, choices=CLIENT_TYPES, default=AbstractApplication.CLIENT_CONFIDENTIAL, verbose_name='Client 종류',
+        max_length=32, choices=ClientType.SUPPORTED_CHOICE, default=AbstractApplication.CLIENT_CONFIDENTIAL, verbose_name='Client 종류',
         help_text='Confidential 만 지원한다.'
     )
     authorization_grant_type = MultiSelectField(
-        max_length=128, choices=GRANT_TYPES, default=AbstractApplication.GRANT_AUTHORIZATION_CODE, verbose_name='Grant 종류',
+        max_length=128, choices=GrantType.SUPPORTED_CHOICE, default=AbstractApplication.GRANT_AUTHORIZATION_CODE, verbose_name='Grant 종류',
         help_text='Authorization code와 Password 만 지원한다.'
     )
 
@@ -60,10 +71,8 @@ class Application(AbstractApplication):
     jwt_alg = models.CharField(max_length=6, choices=JwtAlg.get_choices(), default=JwtAlg.HS256, verbose_name='JWT 알고리즘')
     jwt_hs_256_secret = models.CharField(max_length=32, default=jwt_hs_256_secret, verbose_name='JWT HS256 Secret')
 
-    updated = None
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='등록일')
     last_modified = models.DateTimeField(auto_now=True, editable=False, verbose_name='수정일')
-    _redirect_uris = models.TextField(db_column='redirect_uris')
 
     @property
     def redirect_uris(self):
@@ -91,7 +100,6 @@ class Application(AbstractApplication):
         return False
 
     class Meta(AbstractApplication.Meta):
-        swappable = 'OAUTH2_PROVIDER_APPLICATION_MODEL'
         db_table = 'oauth2_application'
 
 
