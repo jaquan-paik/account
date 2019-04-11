@@ -1,7 +1,8 @@
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from oauth2_provider.models import AbstractApplication
+from django.core.exceptions import PermissionDenied
+from oauthlib.oauth2 import OAuth2Error
 
 from apps.domains.oauth2.models import Application
+from apps.domains.oauth2.services.client_service import ClientService
 from lib.utils.url import is_same_url_until_domain
 
 
@@ -9,20 +10,17 @@ class ClientHelper:
     @classmethod
     def get_client(cls, client_id: str) -> Application:
         try:
-            client = Application.objects.get(client_id=client_id)
-        except ObjectDoesNotExist:
+            client = ClientService.get_client(client_id)
+        except OAuth2Error:
             raise PermissionDenied()
-
-        if not client.allows_grant_type(AbstractApplication.GRANT_AUTHORIZATION_CODE):
-            raise NotImplementedError()
 
         return client
 
     @classmethod
     def get_in_house_client(cls, client_id: str) -> Application:
-        client = cls.get_client(client_id)
-
-        if not client.is_in_house:
+        try:
+            client = ClientService.get_in_house_client(client_id)
+        except OAuth2Error:
             raise PermissionDenied()
 
         return client
