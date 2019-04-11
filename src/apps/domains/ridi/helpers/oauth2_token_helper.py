@@ -1,7 +1,6 @@
 from typing import Dict, Tuple
 
 from django.core.exceptions import SuspiciousOperation, PermissionDenied
-from django.http import Http404
 from oauthlib.oauth2 import OAuth2Error
 
 from apps.domains.oauth2.models import Application as Client
@@ -23,8 +22,6 @@ class OAuth2TokenHelper:
                 raise SuspiciousOperation
             if error.status_code == HttpStatusCodes.C_403_FORBIDDEN:
                 raise PermissionDenied
-            if error.status_code == HttpStatusCodes.C_404_NOT_FOUND:
-                raise Http404
             raise error
 
     @classmethod
@@ -38,8 +35,6 @@ class OAuth2TokenHelper:
                 raise SuspiciousOperation
             if error.status_code == HttpStatusCodes.C_403_FORBIDDEN:
                 raise PermissionDenied
-            if error.status_code == HttpStatusCodes.C_404_NOT_FOUND:
-                raise Http404
             raise error
 
     @staticmethod
