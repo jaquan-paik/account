@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views import View
 from drf_yasg.utils import swagger_auto_schema
@@ -5,7 +6,6 @@ from rest_framework.views import APIView
 
 from apps.domains.oauth2.exceptions import JwtTokenErrorException
 from apps.domains.oauth2.token import JwtHandler
-from apps.domains.ridi.exception_handler import return_json_response_if_http_error_raised, clear_tokens_if_permission_denied_raised
 from apps.domains.ridi.forms import AuthorizeForm, CallbackForm, TokenForm
 from apps.domains.ridi.helpers.response_cookie_helper import ResponseCookieHelper
 from apps.domains.ridi.helpers.state_helper import StateHelper
@@ -17,8 +17,8 @@ from apps.domains.ridi.services.token_refresh_service import TokenRefreshService
 from infra.configure.config import GeneralConfig
 from infra.network.constants.http_status_code import HttpStatusCodes
 from lib.base.response import InHouseHttpResponseRedirect, get_invalid_form_template_response
-from lib.decorators.cookie_handler import clear_tokens_in_cookie
 from lib.decorators.session_login import ridibooks_session_login_required
+from lib.django.http.response import HttpResponseUnauthorized
 from lib.ridibooks.common.constants import AUTO_LOGIN_COOKIE_KEY, AUTO_LOGIN_ON_COOKIE_VALUE
 
 
@@ -65,8 +65,6 @@ class CompleteView(View):
 
 class TokenView(APIView):
     @swagger_auto_schema(**TokenGetSchema.to_swagger_schema())
-    @clear_tokens_if_permission_denied_raised
-    @return_json_response_if_http_error_raised
     def post(self, request):
         token_form = TokenForm(TokenHelper.get_token_data_from_cookie(request.COOKIES))
         if not token_form.is_valid():
@@ -78,20 +76,24 @@ class TokenView(APIView):
             data = TokenHelper.get_token_info(access_token)
             response = JsonResponse(data)
 
-        except JwtTokenErrorException:
-            access_token_data, refresh_token_data = TokenRefreshService.get_tokens(cleaned_data['refresh_token'])
-            response = JsonResponse(TokenHelper.get_token_data_info(access_token_data))
-            ResponseCookieHelper.add_token_cookie(response, access_token_data, refresh_token_data, is_auto_login_request(request))
+        except JwtTokenErrorException:  # access_token 이 valid 하지 않으면 refresh_token 으로 새로 토큰들을 요청한다.
+            try:
+                access_token_data, refresh_token_data = TokenRefreshService.get_tokens(cleaned_data['refresh_token'])
+                response = JsonResponse(TokenHelper.get_token_data_info(access_token_data))
+                ResponseCookieHelper.add_token_cookie(response, access_token_data, refresh_token_data, is_auto_login_request(request))
+            except PermissionDenied:
+                response = HttpResponseUnauthorized()
+                ResponseCookieHelper.clear_token_cookie(response)
 
         return response
 
 
 class LogoutView(View):
-    @clear_tokens_in_cookie
     def get(self, request):
         return_url = request.GET.get('return_url', None)
         if not return_url:
             return_url = f'https://{UrlHelper.get_root_uri()}'
 
         response = HttpResponseRedirect(return_url)
+        ResponseCookieHelper.clear_token_cookie(response)
         return response
